@@ -17,7 +17,7 @@ export class UserController {
     await runner.connect();
 
     try {
-      const { userName, name, lastName, password, email, userType, profileId } = req.body;
+      const { userName, name, lastName, password, email } = req.body;
       const user = await runner.manager.findOne(
         User,
         {
@@ -42,18 +42,7 @@ export class UserController {
             apellido: lastName,
             password: encryptedPassword,
             usuario_mail: email,
-            usuario_tipo: userType,
             usuario_salt: userSalt,
-          })
-      );
-
-
-      await runner.manager.save(
-        runner.manager.create(
-          UserProfile,
-          {
-            usuario_id,
-            perfil_id: profileId,
           })
       );
 

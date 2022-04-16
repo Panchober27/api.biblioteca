@@ -1,0 +1,19 @@
+EN esta carpeta dejare los archivos necesarios para crear la base de datos local e ingresar los usuarios de prueba.
+
+
+El archivo srcipt.sql es un dump de db.
+asique o ejecutan en su administrador de db (mysql!)
+y les creara la base de datos con los usuarios listos.
+
+Usuarios:
+1) 
+    username: fibr
+    password: pancho2106
+
+2)
+    username: carla
+    password: carla1234
+
+3)
+    username: maximiliano
+    password: maximiliano1234

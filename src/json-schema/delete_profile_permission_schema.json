@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "/src/json-schema/delete_profile_permission_schema.json",
+  "type": "object",
+  "properties": {
+    "profileId": { "type": "number" }
+  },
+  "additionalProperties": false,
+  "required": ["profileId"]
+}

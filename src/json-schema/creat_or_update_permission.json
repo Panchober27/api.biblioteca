@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "/src/json-schema/create_or_update_permission.json",
+  "type": "object",
+  "properties": {
+    "permiso_id": { "type": "number" },
+    "permiso_nombre": { "type": "string" },
+    "permiso_tag": { "type": "string" },
+    "permiso_descripcion": { "type": "string" },
+    "permiso_activo": { "type": "number" }
+  },
+  "additionalProperties": false,
+  "required": ["permiso_nombre", "permiso_tag", "permiso_descripcion"]
+}

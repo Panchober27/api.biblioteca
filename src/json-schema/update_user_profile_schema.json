@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "/src/json-schema/update_user_profile_schema.json",
+  "type": "object",
+  "properties": {
+    "profiles": { "type": "array", "minItems": 1 }
+  },
+  "additionalProperties": false,
+  "required": ["profiles"]
+}

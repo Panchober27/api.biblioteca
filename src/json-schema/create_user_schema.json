@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "/src/json-schema/signin_schema.json",
+  "type": "object",
+  "properties": {
+    "userName": { "type": "string" },
+    "name": { "type": "string" },
+    "lastName": { "type": "string" },
+    "password": { "type": "string", "minLength": 8 },
+    "email": { "type": "string", "format": "email" },
+    "userType": { "type": "string" },
+    "profileId": { "type": "number" }
+  },
+  "additionalProperties": true,
+  "required": ["userName", "name", "lastName", "email", "userType", "profileId"]
+}

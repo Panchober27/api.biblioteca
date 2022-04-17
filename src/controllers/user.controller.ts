@@ -225,7 +225,6 @@ export class UserController {
   async getUserPermissions(req: Request, res: Response) {
     try {
       if (req.user) {
-        console.log(req.user);
         return res.status(200).json(req.user.permissions);
       }
     } catch (err: any) {

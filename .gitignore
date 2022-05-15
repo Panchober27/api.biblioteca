@@ -10,6 +10,9 @@ dist/
 # Carpeta Reports
 reports/
 
+# Carpeta con configuraciones secretas.
+secrets/
+
 # Compiled Java class files
 *.class
 

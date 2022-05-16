@@ -14,7 +14,7 @@ const app: Express = express();
 // Configuraciones y Middlewares
 app.use(cors());
 app.use(bodyParser.json());
-// app.use(auth);
+app.use(auth);
 
 // Rutas del servidor.
 app.use('/api', userRoutes);

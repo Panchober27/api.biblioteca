@@ -43,25 +43,25 @@ const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
 
       userRepository
         .createQueryBuilder('user')
-        .innerJoinAndSelect('user.userProfile', 'up')
-        .innerJoinAndSelect('up.profile', 'p')
-        .innerJoinAndSelect('p.profilePermission', 'pp')
+        .innerJoinAndSelect('user.usuariosPerfiles', 'up')
+        .innerJoinAndSelect('up.perfil', 'p')
+        .innerJoinAndSelect('p.perfilesPermisos', 'pp')
         .innerJoinAndSelect(
-          'pp.permission',
-          'permission',
+          'pp.permiso',
+          'permiso',
         )
         .where('user.usuario =:usuario', {
           usuario,
         })
         .select([
-          'user.usuario_id',
+          'user.usuarioId',
           'user.usuario',
           'user.nombre',
           'user.apellido',
-          'user.usuario_mail',
-          'user.usuario_tipo',
+          'user.usuarioMail',
+          'user.usuarioTipo',
           'p.*',
-          'permission.*',
+          'permiso.*',
         ])
         .getRawMany()
         .then((user) => {

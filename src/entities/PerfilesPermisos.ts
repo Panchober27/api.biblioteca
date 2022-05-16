@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Perfiles } from "./Perfiles";
-import { Permisos } from "./Permisos";
+import { Permisos } from './Permisos';
 
 @Index("perfiles_permisos_UN", ["permisoId", "perfilId"], { unique: true })
 @Index("fk_perfiles_permisos_permisos1_idx", ["permisoId"], {})

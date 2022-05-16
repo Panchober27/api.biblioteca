@@ -55,7 +55,8 @@ CREATE TABLE usuarios (
   usuario_salt varchar(100) DEFAULT NULL,
   usuario_mail varchar(150) NOT NULL,
   usuario_opciones varchar(200) DEFAULT NULL,
-  usuario_tipo enum('USUARIO','TECNICO') DEFAULT NULL,
+  usuario_tipo enum('USUARIO','ADMINISTRADOR') DEFAULT NULL,
+  usuario_activo tinyint(1) DEFAULT 1,
   timestamp timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (usuario_id)
 );

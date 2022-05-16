@@ -3,7 +3,7 @@
 // Path: src\jobs\cronTab.ts
 import mjml2html from 'mjml';
 import { getRepository } from 'typeorm';
-import { User } from '../entities';
+import { Usuarios } from '../entities';
 import { NodeMailer } from './mailer';
 const cron = require('node-cron');
 
@@ -24,7 +24,7 @@ const task = cron.schedule(
  */
 const FlowTask = async () => {
   const mailer = new NodeMailer(); // instancia de nodemailer
-  const usersRepo = getRepository(User); // repo de usuarios para obtener su o sus correos.
+  const usersRepo = getRepository(Usuarios); // repo de usuarios para obtener su o sus correos.
   let toAddresses = null; // direcciones de correo a enviar
    
 };

@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';
-import { User } from '../entities';
+import { Usuarios } from '../entities';
 
 export class AuthController {
   /**
@@ -12,7 +12,7 @@ export class AuthController {
    * @param res
    */
   async signin(req: Request, res: Response): Promise<Response | undefined> {
-    const userRespository = getRepository(User);
+    const userRespository = getRepository(Usuarios);
 
     try {
       const { userName, password } = req.body;
@@ -27,7 +27,7 @@ export class AuthController {
 
       crypto.pbkdf2(
         password,
-        user.usuario_salt,
+        user.usuarioSalt,
         10000,
         64,
         'sha1',

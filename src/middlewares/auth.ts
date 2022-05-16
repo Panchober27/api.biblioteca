@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { getRepository, Repository } from 'typeorm';
-import { User } from '../entities';
+import { Usuarios } from '../entities';
 
 declare global {
   namespace Express {
@@ -39,7 +39,7 @@ const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
     if (decoded) {
       const usuario = decoded.user;
 
-      const userRepository: Repository<User> = getRepository(User);
+      const userRepository: Repository<Usuarios> = getRepository(Usuarios);
 
       userRepository
         .createQueryBuilder('user')

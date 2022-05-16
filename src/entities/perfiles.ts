@@ -1,37 +1,34 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  JoinColumn,
-} from 'typeorm';
-import { ProfilePermission } from './perfiles_permisos';
-import { UserProfile } from './usuarios_perfiles';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { PerfilesPermisos } from "./PerfilesPermisos";
+import { UsuariosPerfiles } from "./UsuariosPerfiles";
 
-@Entity('perfiles')
-export class Profile {
-  @PrimaryGeneratedColumn()
-  perfil_id: number;
+@Entity("perfiles", { schema: "demo_lib" })
+export class Perfiles {
+  @PrimaryGeneratedColumn({ type: "int", name: "perfil_id" })
+  perfilId: number;
 
-  @Column('varchar', { length: 45, nullable: false })
-  perfil_nombre: string;
+  @Column("varchar", { name: "perfil_nombre", length: 45 })
+  perfilNombre: string;
 
-  @Column('varchar', { length: 200 })
-  perfil_opciones: string;
+  @Column("varchar", { name: "perfil_opciones", nullable: true, length: 200 })
+  perfilOpciones: string | null;
 
-  @Column('tinyint', { default: 1, nullable: false })
-  perfil_activo: number;
+  @Column("timestamp", {
+    name: "timestamp",
+    nullable: true,
+    default: () => "CURRENT_TIMESTAMP",
+  })
+  timestamp: Date | null;
 
   @OneToMany(
-    () => ProfilePermission,
-    (profilePermission) => profilePermission.profile
+    () => PerfilesPermisos,
+    (perfilesPermisos) => perfilesPermisos.perfil
   )
-  @JoinColumn({ name: 'perfil_id' })
-  profilePermission: ProfilePermission[];
+  perfilesPermisos: PerfilesPermisos[];
 
-  @OneToMany(() => UserProfile, (userProfile) => userProfile.profile)
-  @JoinColumn({ name: 'perfil_id' })
-  userProfile: UserProfile[];
-
-  
+  @OneToMany(
+    () => UsuariosPerfiles,
+    (usuariosPerfiles) => usuariosPerfiles.perfil
+  )
+  usuariosPerfiles: UsuariosPerfiles[];
 }

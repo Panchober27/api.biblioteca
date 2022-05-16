@@ -1,7 +1,8 @@
 import crypto from 'crypto';
 import { Request, Response } from 'express';
 import { getRepository, Repository, getManager, getConnection } from 'typeorm';
-import { User, Permission, UserProfile } from '../entities';
+// import { Usuarios, Permission, UsuariosPerfiles } from '../entities';
+import { Usuarios, Permisos, UsuariosPerfiles } from '../entities';
 
 const USER_ALREADY_EXISTS: string = 'USER_ALREADY_EXISTS';
 const USER_NOT_EXIST: string = 'USER_NOT_EXIST';
@@ -19,7 +20,7 @@ export class UserController {
     try {
       const { userName, name, lastName, password, email } = req.body;
       const user = await runner.manager.findOne(
-        User,
+        Usuarios,
         {
           where: { usuario: userName },
         }
@@ -33,17 +34,19 @@ export class UserController {
       const encryptedPassword = crypto.pbkdf2Sync(password, userSalt, 10000, 64, 'sha1').toString('base64');
 
       await runner.startTransaction();
-      const { usuario_id } = await runner.manager.save(
+      const { usuarioId } = await runner.manager.save(
         runner.manager.create(
-          User,
-          {
-            usuario: userName,
-            nombre: name,
-            apellido: lastName,
-            password: encryptedPassword,
-            usuario_mail: email,
-            usuario_salt: userSalt,
-          })
+          Usuarios, {
+          usuario: userName,
+          nombre: name,
+          apellido: lastName,
+          password: encryptedPassword,
+          usuarioSalt: userSalt,
+          usuarioMail: email,
+          usuarioOpciones: '',
+          usuarioTipo: 'USUARIO',
+        }
+        )
       );
 
       await runner.commitTransaction();
@@ -74,9 +77,9 @@ export class UserController {
       const { userName, name, lastName, password, email, userType, userActive, profileId } = req.body;
 
       const user = await runner.manager.findOne(
-        User,
+        Usuarios,
         {
-          where: { usuario_id: id },
+          where: { usuarioId: id },
         }
       );
 
@@ -86,32 +89,31 @@ export class UserController {
 
       await runner.startTransaction();
 
+
       await runner.manager.update(
-        User,
-        {
-          usuario_id: id,
-        },
+        Usuarios,
+        { usuarioId: id },
         {
           usuario: userName,
           nombre: name,
           apellido: lastName,
-          usuario_mail: email,
-          usuario_tipo: userType,
-          password: password ? crypto.pbkdf2Sync(password, user.usuario_salt, 10000, 64, 'sha1').toString('base64') : user.password,
-          usuario_salt: user.usuario_salt,
-        } as User
+          usuarioMail: email,
+          usuarioTipo: userType,
+          password: password ? crypto.pbkdf2Sync(password, user.usuarioSalt, 10000, 64, 'sha1').toString('base64') : user.password,
+          usuarioActivo: userActive,
+        } as Usuarios
       );
 
-      await runner.manager.delete(UserProfile,{ usuario_id: id, perfil_id: profileId });
+      await runner.manager.delete(UsuariosPerfiles, { usuarioId: id, perfilId: profileId });
+
 
       await runner.manager.save(
         runner.manager.create(
-          UserProfile, {
-          usuario_id: Number(id),
-          perfil_id: profileId,
+          UsuariosPerfiles, {
+          usuarioId: parseInt(id),
+          perfilId: profileId,
         })
       );
-
 
       await runner.commitTransaction();
 
@@ -139,19 +141,19 @@ export class UserController {
     const user_divisions = 1; // esta es o son las divisiones del usuario loggeado
     try {
       const { neededPerm } = req.params; // variable para filtrar usuarios por permiso.
-      const userRepo = getRepository(User);
+      const userRepo = getRepository(Usuarios);
 
       // Cambiar a consulta que filtre por perfiles que tengan la division del usuario loggeado.
       const users = await userRepo.find();
 
       // AÑADIR ID DE PERFIL DEL USUARIO
-      const userProfileRepo = getRepository(UserProfile);
+      const userProfileRepo = getRepository(UsuariosPerfiles);
       const userProfiles = await userProfileRepo.find();
 
       for (let i = 0; i < users.length; i++) {
         for (let j = 0; j < userProfiles.length; j++) {
-          if (users[i].usuario_id === userProfiles[j].usuario_id) {
-            users[i].perfil_id = userProfiles[j].perfil_id;
+          if (users[i].usuarioId === userProfiles[j].usuarioId) {
+            users[i].usuarioId = userProfiles[j].usuarioId;
           }
         }
       }
@@ -160,14 +162,13 @@ export class UserController {
 
       usersList = users.map((user) => {
         return {
-          usuario_id: user.usuario_id,
+          usuario_id: user.usuarioId,
           usuario: user.usuario,
           nombre: user.nombre,
           apellido: user.apellido,
           fullName: user.nombre + ' ' + user.apellido,
-          usuario_mail: user.usuario_mail,
-          perfil_id: user.perfil_id,
-          userType: user.usuario_tipo,
+          usuario_mail: user.usuarioMail,
+          userType: user.usuarioTipo,
         }
       });
 
@@ -186,13 +187,13 @@ export class UserController {
    * @param res
    */
   async getUserById(req: Request, res: Response): Promise<Response> {
-    const response: { status: boolean; user: User | null } = {
+    const response: { status: boolean; user: Usuarios | null } = {
       status: true,
       user: null,
     };
 
     try {
-      const userRespository: Repository<User> = getRepository(User);
+      const userRespository: Repository<Usuarios> = getRepository(Usuarios);
 
       const { id } = req.params;
 

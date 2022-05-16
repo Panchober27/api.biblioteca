@@ -2,7 +2,7 @@ import request from 'supertest';
 import { getRepository } from 'typeorm';
 import app from '../app';
 import { connect } from '../database';
-import { Profile } from '../entities';
+import { Perfiles } from '../entities';
 
 const testData = {
   profileName: 'test',
@@ -79,5 +79,5 @@ describe('PUT /profiles', () => {
 });
 
 afterAll(async () => {
-  await getRepository(Profile).delete(insertedId);
+  await getRepository(Perfiles).delete(insertedId);
 });

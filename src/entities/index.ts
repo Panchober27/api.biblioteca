@@ -1,5 +1,10 @@
-export { User } from './usuarios';
-export { ProfilePermission } from './perfiles_permisos';
-export { UserProfile } from './usuarios_perfiles';
-export { Permission } from './permisos';
-export { Profile } from './perfiles';
+export { Usuarios } from './Usuarios';
+export { PerfilesPermisos } from './PerfilesPermisos';
+export { UsuariosPerfiles } from './UsuariosPerfiles';
+export { Permisos } from './Permisos';
+export { Perfiles } from './Perfiles';
+export { Libros } from './Libros';
+export { Prestamos } from './Prestamos';
+export { Carreras } from './Carreras';
+export { Alumnos } from './Alumnos';
+export { PrestamosLibros } from './PrestamosLibros';

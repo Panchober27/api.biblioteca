@@ -1,33 +1,41 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
+  Entity,
+  Index,
   OneToMany,
-  JoinColumn,
-} from 'typeorm';
-import { ProfilePermission } from './perfiles_permisos';
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { PerfilesPermisos } from "./PerfilesPermisos";
 
-@Entity('permisos')
-export class Permission {
-  @PrimaryGeneratedColumn()
-  permiso_id: number;
+@Index("permisos_tag_UN", ["permisoTag"], { unique: true })
+@Entity("permisos", { schema: "demo_lib" })
+export class Permisos {
+  @PrimaryGeneratedColumn({ type: "int", name: "permiso_id" })
+  permisoId: number;
 
-  @Column('varchar', { length: 45, nullable: false })
-  permiso_nombre: string;
+  @Column("varchar", { name: "permiso_nombre", length: 50 })
+  permisoNombre: string;
 
-  @Column('varchar', { length: 45 })
-  permiso_tag: string;
+  @Column("varchar", { name: "permiso_tag", unique: true, length: 50 })
+  permisoTag: string;
 
-  @Column('varchar', { length: 45 })
-  permiso_descripcion: string;
+  @Column("varchar", {
+    name: "permiso_descripcion",
+    nullable: true,
+    length: 100,
+  })
+  permisoDescripcion: string | null;
 
-  @Column('tinyint')
-  permiso_activo: number;
+  @Column("timestamp", {
+    name: "timestamp",
+    nullable: true,
+    default: () => "CURRENT_TIMESTAMP",
+  })
+  timestamp: Date | null;
 
   @OneToMany(
-    () => ProfilePermission,
-    (profilePermission) => profilePermission.permission
+    () => PerfilesPermisos,
+    (perfilesPermisos) => perfilesPermisos.permiso
   )
-  @JoinColumn({ name: 'permiso_id' })
-  profilePermission: ProfilePermission[];
+  perfilesPermisos: PerfilesPermisos[];
 }

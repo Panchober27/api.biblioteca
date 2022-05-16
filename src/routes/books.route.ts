@@ -1,11 +1,10 @@
 import { Router, Request, Response } from 'express';
-import { AuthController } from '../controllers';
+import { BooksController } from '../controllers';
 
 const router = Router();
+const c = new BooksController();
 
-router.get('/books', (req: Request, res: Response) => {
-    return res.send('Obtener todos los libros');
-});
+router.get('/books', c.getBooks);
 
 
 

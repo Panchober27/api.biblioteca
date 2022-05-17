@@ -7,19 +7,22 @@ import {
   userRoutes,
   authRoutes,
   booksRoutes,
+  prestamosRoutes,
 } from './routes';
+
 
 const app: Express = express();
 
 // Configuraciones y Middlewares
 app.use(cors());
 app.use(bodyParser.json());
-app.use(auth);
+// app.use(auth);
 
 // Rutas del servidor.
 app.use('/api', userRoutes);
 app.use('/api', authRoutes);
 app.use('/api', booksRoutes);
+app.use('/api', prestamosRoutes);
 
 
 // CronTab configurado para ejecutarse cada 30 segundos.

@@ -9,4 +9,6 @@ router.get('/prestamos', controller.getPrestamos);
 
 router.post('/prestamos', controller.insertPrestamo);
 
+router.put('/prestamos/:id', controller.updatePrestamo);
+
 export default router;

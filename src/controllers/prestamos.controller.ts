@@ -58,30 +58,75 @@ export class PrestamosController {
      * @param {Object} Request  
      * @returns {Response} status 200 | 500
      */
-    insertPrestamo = async (req: Request, res: Response) => {
+    insertPrestamo = async (req: Request, res: Response): Promise<Response> => {
         // en el caso de los libros sera un arreglo con los id's de los libros.
-        const { librosId = [1] } = req.body;
+        // const { librosId = [1] } = req.body;
+
+        const {
+            alumnoId,
+            usuarioId,
+            fechaInicio,
+            fechaFin,
+            fechaEntrega,
+            estado,
+            librosIds
+        } = req.body;
+
+
+
         const runner = getConnection().createQueryRunner();
         await runner.connect();
         try {
             await runner.startTransaction();
-            // obtener los libros en base a los ids
-            const libros: Libros[] = await getRepository(Libros).findByIds(librosId);
+            // obtener los libros en base a los ids | esto quizas validarlo en el fronend??
+            const libros: Libros[] = await getRepository(Libros).findByIds(librosIds);
+
+            // 1era Validacion: verificar que el alumno no tenga prestamos activos.
+            const prestamosActivos = await getRepository(Prestamos).find({
+                where: {
+                    alumnoId: alumnoId,
+                    estado: "EN_PRESTAMO_VIGENTE" || "EN_PRESTAMO_RETRASO"
+                }
+            });
+            if (prestamosActivos.length > 0) {
+                return res.status(400).json({
+                    status: false,
+                    message: "El alumno ya tiene prestamos activos"
+                });
+            }
+
+
+            // PROBAR ESTA!
+            // 2da Validacion: verificar que los libros tengan como stock minimo 1.
+            // iterar los id's de libros en librosIds y verificar que el stock sea mayor a 0.
+            // si no es asi, no se puede hacer el prestamo.
+            libros.forEach(l => {
+                if (l.stock < 1) {
+                    return res.status(400).json({
+                        status: false,
+                        message: "No hay stock suficiente para el libro: " + l.nombre
+                    });
+                }
+            });
+
+
+
+            // Ingreso de prestamo, una vez validado todo!
             const { prestamoId } = await runner.manager.save(
                 runner.manager.create(Prestamos,
                     {
-                        alumnoId: 3,
-                        usuarioId: 5,
-                        fechaInicio: '2020-01-01',
-                        fechaFin: '2020-01-01',
-                        fechaEntrega: '2020-01-01',
-                        estado: 'EN_PRESTAMO_VIGENTE'
+                        alumnoId,
+                        usuarioId,
+                        fechaInicio,
+                        fechaFin,
+                        fechaEntrega, // debemos usar logica para generar este campo!!!
+                        estado,
                     }
                 )
             );
             // ingresar los libros a la relacion de prestamos_libros
             await Promise.all(
-                librosId.map(async (libroId) => {
+                librosIds.map(async (libroId) => {
                     await runner.manager.save(
                         runner.manager.create(PrestamosLibros,
                             {
@@ -113,6 +158,33 @@ export class PrestamosController {
             await runner.release();
         }
         return res.status(200).json({ message: 'exito' });
+    }
+
+
+
+    /**
+     * Esta funcion es para realizar las DEVOLUCIONES de los prestamos!
+     * 
+     * @function updatePrestamo
+     * @param req 
+     * @param res 
+     * @returns 
+     */
+    updatePrestamo = async (req: Request, res: Response): Promise<Response> => {
+
+        // para las peticiones de tipo PUT (edits)
+        // se envia el id de la entidad a editar a traves de la url, revisen el archivo prestamos.routes.ts
+
+        try {
+
+            const { id } = req.params;
+
+            return res.send(`web service para editar prestamo/ devolucion. id recibido: ${id}`);
+        } catch (err: any) {
+            console.error(err);
+            return res.status(500).json({ error: err.message });
+        }
+
     }
 
 

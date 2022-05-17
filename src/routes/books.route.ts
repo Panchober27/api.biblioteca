@@ -6,6 +6,7 @@ const c = new BooksController();
 
 router.get('/books', c.getBooks);
 
+router.post('/books', c.insertBook);
 
 
 export default router;

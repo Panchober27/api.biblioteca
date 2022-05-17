@@ -331,7 +331,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (5,'fibr','Francisco','Berwart','ul96YjOF5QYaRBkCvrJkfWF6Dv3GYC6r075XCS6g23Fw7Mz61+FYpSNKUO1yh2t+Sk4GdowinSwSLYvPo0xikw==',NULL,'mbJ/T3+gNwTPcVdpGOYx1Q==','panchober27@gmail.com',NULL,'USUARIO',1,'2021-12-16 23:40:48'),(9,'carla','Carla','Gonzalez','RY3eJRHKctR1AaS6vYh70VrQU7V0u/S7IfKjTpcoFqs437nVrICNHxpq/g2TjcTSiC9NaSSVn0zfn+WU36WM2A==',NULL,'yUNyHneBFZXUQ37vKulQow==','carlagon64@gmail.com',NULL,NULL,1,'2022-04-17 02:58:23'),(10,'maximiliano','Carla','Gonzalez','2taDIJ+R+8PJyhsHc77pqHv/A4NElPs02d75686FM3chLftWIFIGOh6m6h/d49zXxlv52MS6cG0IWgXCiZCgWg==',NULL,'pfyYTiyvwD9ZpKNdaEogDw==','tttmaximiliano@gmail.com',NULL,NULL,1,'2022-04-17 03:00:53'),(11,'demo','DEMO','DEMO 1','F9skzjW2Bwm0mCk5zdaV5cM94+6PzG7XaI96/70gB5OlWeAohRAj3D2yWt/ZAYV+5jwYEJVEmhNQ5CGiBUCHtQ==',NULL,'8XfeElmDctFoclJ97sIavQ==','demo@mail.com','','USUARIO',1,'2022-05-16 05:41:10');
+INSERT INTO `usuarios` VALUES (5,'fibr','Francisco','Berwart','ul96YjOF5QYaRBkCvrJkfWF6Dv3GYC6r075XCS6g23Fw7Mz61+FYpSNKUO1yh2t+Sk4GdowinSwSLYvPo0xikw==',NULL,'mbJ/T3+gNwTPcVdpGOYx1Q==','panchober27@gmail.com',NULL,'USUARIO',1,'2021-12-16 23:40:48'),(9,'carla','Carla','Gonzalez','RY3eJRHKctR1AaS6vYh70VrQU7V0u/S7IfKjTpcoFqs437nVrICNHxpq/g2TjcTSiC9NaSSVn0zfn+WU36WM2A==',NULL,'yUNyHneBFZXUQ37vKulQow==','carlagon64@gmail.com',NULL,NULL,1,'2022-04-17 02:58:23'),(10,'maximiliano','Maximiliano','Machuca','2taDIJ+R+8PJyhsHc77pqHv/A4NElPs02d75686FM3chLftWIFIGOh6m6h/d49zXxlv52MS6cG0IWgXCiZCgWg==',NULL,'pfyYTiyvwD9ZpKNdaEogDw==','tttmaximiliano@gmail.com',NULL,NULL,1,'2022-04-17 03:00:53'),(11,'demo','DEMO','DEMO 1','F9skzjW2Bwm0mCk5zdaV5cM94+6PzG7XaI96/70gB5OlWeAohRAj3D2yWt/ZAYV+5jwYEJVEmhNQ5CGiBUCHtQ==',NULL,'8XfeElmDctFoclJ97sIavQ==','demo@mail.com','','USUARIO',1,'2022-05-16 05:41:10');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -377,4 +377,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-16  2:07:05
+-- Dump completed on 2022-05-16 20:50:05

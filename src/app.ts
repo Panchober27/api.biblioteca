@@ -8,6 +8,7 @@ import {
   authRoutes,
   booksRoutes,
   prestamosRoutes,
+  studentsRoutes,
 } from './routes';
 
 
@@ -23,6 +24,7 @@ app.use('/api', userRoutes);
 app.use('/api', authRoutes);
 app.use('/api', booksRoutes);
 app.use('/api', prestamosRoutes);
+app.use('/api', studentsRoutes);
 
 
 // CronTab configurado para ejecutarse cada 30 segundos.

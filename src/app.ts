@@ -1,4 +1,5 @@
 import express, { Express } from 'express';
+import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { auth } from './middlewares';
@@ -15,6 +16,9 @@ import {
 const app: Express = express();
 
 // Configuraciones y Middlewares
+if(process.env.SERVER_ENVIRONMENT === 'DEVELOPMENT'){
+  app.use(morgan('dev'));
+}
 app.use(cors());
 app.use(bodyParser.json());
 // app.use(auth);

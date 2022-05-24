@@ -16,7 +16,7 @@ import {
 const app: Express = express();
 
 // Configuraciones y Middlewares
-if(process.env.SERVER_ENVIRONMENT === 'DEVELOPMENT'){
+if (process.env.SERVER_ENVIRONMENT === 'DEVELOPMENT') {
   app.use(morgan('dev'));
 }
 app.use(cors());
@@ -32,6 +32,9 @@ app.use('/api', studentsRoutes);
 
 
 // CronTab configurado para ejecutarse cada 30 segundos.
-// app.use(FlowTask);
+if (process.env.SERVER_ENVIRONMENT === 'PRODUCTION') {
+  app.use(FlowTask);
+}
+
 
 export default app;

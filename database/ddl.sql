@@ -89,6 +89,7 @@ CREATE TABLE carreras (
 
 -- tabla para alumnos
 -- un alumno tiene una carrera y una carrera tiene muchos alumnos
+-- si el alumno se atrasa 3 veces en un mes, se bloquea por 2 semanas.
 CREATE TABLE alumnos (
     alumno_id INT PRIMARY KEY AUTO_INCREMENT,
     rut_alumno VARCHAR(15) UNIQUE NOT NULL,
@@ -96,6 +97,7 @@ CREATE TABLE alumnos (
     apellido_alumno VARCHAR(200) NOT NULL,
     email_alumno VARCHAR(200) NOT NULL,
     carrera_id INT NOT NULL,
+    alumno_activo TINYINT (1) default 1 NOT NULL,
     CONSTRAINT fk_alumno_carrera FOREIGN KEY (carrera_id) REFERENCES carreras(carrera_id)
 );
 
@@ -152,7 +154,6 @@ CREATE TABLE libro_stock (
 CREATE TABLE trabajos (
     trabajo_id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(200) NOT NULL,
-    -- autor_id VARCHAR(200) NOT NULL,
     editorial VARCHAR(200) NOT NULL,
     edicion VARCHAR(200) NOT NULL,
     fecha_publicacion VARCHAR(200) NOT NULL
@@ -244,7 +245,7 @@ CREATE TABLE prestamos (
     usuario_id INT NOT NULL,
     fecha_inicio VARCHAR(200) NOT NULL,
     fecha_fin VARCHAR(200) NOT NULL,
-    estado ENUM('PRESTADO', 'ATRASADO', 'FINALIZADO'),
+    estado ENUM('PRESTADO', 'ATRASADO', 'FINALIZADO', 'FINALIZADO_ATRASADO'),
     CONSTRAINT fk_prestamo_alumno FOREIGN KEY (alumno_id) REFERENCES alumnos(alumno_id),
     CONSTRAINT fk_prestamo_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id)
 );

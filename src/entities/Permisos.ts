@@ -8,7 +8,7 @@ import {
 import { PerfilesPermisos } from "./PerfilesPermisos";
 
 @Index("permisos_tag_UN", ["permisoTag"], { unique: true })
-@Entity("permisos", { schema: "demo_lib" })
+@Entity("permisos", { schema: "biblioteca" })
 export class Permisos {
   @PrimaryGeneratedColumn({ type: "int", name: "permiso_id" })
   permisoId: number;

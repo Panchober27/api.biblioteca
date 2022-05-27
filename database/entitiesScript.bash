@@ -1,0 +1,1 @@
+typeorm-model-generator -h "db_host" -d "database_name" -p 3306 -u "root" -x "" -e mysql

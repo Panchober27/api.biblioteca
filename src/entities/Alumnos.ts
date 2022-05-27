@@ -12,7 +12,7 @@ import { Prestamos } from "./Prestamos";
 
 @Index("rut_alumno", ["rutAlumno"], { unique: true })
 @Index("fk_alumno_carrera", ["carreraId"], {})
-@Entity("alumnos", { schema: "demo_lib" })
+@Entity("alumnos", { schema: "biblioteca" })
 export class Alumnos {
   @PrimaryGeneratedColumn({ type: "int", name: "alumno_id" })
   alumnoId: number;
@@ -31,6 +31,9 @@ export class Alumnos {
 
   @Column("int", { name: "carrera_id" })
   carreraId: number;
+
+  @Column("tinyint", { name: "alumno_activo", width: 1, default: () => "'1'" })
+  alumnoActivo: boolean;
 
   @ManyToOne(() => Carreras, (carreras) => carreras.alumnos, {
     onDelete: "RESTRICT",

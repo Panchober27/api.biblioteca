@@ -2,7 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Prestamos } from "./Prestamos";
 import { UsuariosPerfiles } from "./UsuariosPerfiles";
 
-@Entity("usuarios", { schema: "demo_lib" })
+@Entity("usuarios", { schema: "biblioteca" })
 export class Usuarios {
   @PrimaryGeneratedColumn({ type: "int", name: "usuario_id" })
   usuarioId: number;
@@ -23,23 +23,26 @@ export class Usuarios {
   usuarioToken: string | null;
 
   @Column("varchar", { name: "usuario_salt", nullable: true, length: 100 })
-  usuarioSalt: string;
+  usuarioSalt: string | null;
 
   @Column("varchar", { name: "usuario_mail", length: 150 })
   usuarioMail: string;
 
-  @Column("varchar", { name: "usuario_opciones", nullable: true, length: 200 })
-  usuarioOpciones: string | null;
 
   @Column("enum", {
     name: "usuario_tipo",
     nullable: true,
-    enum: ["USUARIO", "TECNICO"],
+    enum: ["USUARIO", "ADMINISTRADOR"],
   })
-  usuarioTipo: "USUARIO" | "TECNICO" | null;
+  usuarioTipo: "USUARIO" | "ADMINISTRADOR" | null;
 
-  @Column("tinyint", { name: "usuario_activo", width: 1, default: () => "'1'" })
-  usuarioActivo: boolean;
+  @Column("tinyint", {
+    name: "usuario_activo",
+    nullable: true,
+    width: 1,
+    default: () => "'1'",
+  })
+  usuarioActivo: boolean | null;
 
   @Column("timestamp", {
     name: "timestamp",

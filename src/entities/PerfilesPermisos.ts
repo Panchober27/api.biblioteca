@@ -12,7 +12,7 @@ import { Permisos } from "./Permisos";
 @Index("perfiles_permisos_UN", ["permisoId", "perfilId"], { unique: true })
 @Index("fk_perfiles_permisos_permisos1_idx", ["permisoId"], {})
 @Index("fk_perfiles_permisos_perfiles1_idx", ["perfilId"], {})
-@Entity("perfiles_permisos", { schema: "demo_lib" })
+@Entity("perfiles_permisos", { schema: "biblioteca" })
 export class PerfilesPermisos {
   @PrimaryGeneratedColumn({ type: "int", name: "perfil_permiso_id" })
   perfilPermisoId: number;

@@ -1,12 +1,12 @@
 import { Router, Request, Response } from 'express';
-import { BooksController } from '../controllers';
+// import { BooksController } from '../controllers';
 
 const router = Router();
-const c = new BooksController();
+// const c = new BooksController();
 
-router.get('/books', c.getBooks);
+// router.get('/books', c.getBooks);
 
-router.post('/books', c.insertBook);
+// router.post('/books', c.insertBook);
 
 
 export default router;

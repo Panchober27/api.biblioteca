@@ -27,7 +27,7 @@ export class AuthController {
 
       crypto.pbkdf2(
         password,
-        user.usuarioSalt,
+        user.usuarioSalt ? user.usuarioSalt : '',
         10000,
         64,
         'sha1',

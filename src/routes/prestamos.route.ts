@@ -1,14 +1,14 @@
 import { Router } from 'express';
-import { PrestamosController } from '../controllers'
+// import { PrestamosController } from '../controllers'
 
 const router = Router();
 
-const controller = new PrestamosController();
+// const controller = new PrestamosController();
 
-router.get('/prestamos', controller.getPrestamos);
+// router.get('/prestamos', controller.getPrestamos);
 
-router.post('/prestamos', controller.insertPrestamo);
+// router.post('/prestamos', controller.insertPrestamo);
 
-router.put('/prestamos/:id', controller.updatePrestamo);
+// router.put('/prestamos/:id', controller.updatePrestamo);
 
 export default router;

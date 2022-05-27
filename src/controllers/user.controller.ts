@@ -18,7 +18,7 @@ export class UserController {
     await runner.connect();
 
     try {
-      const { userName, name, lastName, password, email } = req.body;
+      const { userName, name, lastName, password, email, userType, profileId } = req.body;
       const user = await runner.manager.findOne(
         Usuarios,
         {
@@ -43,11 +43,20 @@ export class UserController {
           password: encryptedPassword,
           usuarioSalt: userSalt,
           usuarioMail: email,
-          usuarioOpciones: '',
-          usuarioTipo: 'USUARIO',
+          usuarioTipo: userType,
+          usuarioActivo: true,
         }
         )
       );
+
+      // await runner.manager.save(
+      //   runner.manager.create(
+      //     UsuariosPerfiles, {
+      //     usuarioId,
+      //     perfilId: profileId,
+      //   }
+      //   )
+      // );
 
       await runner.commitTransaction();
 
@@ -99,7 +108,7 @@ export class UserController {
           apellido: lastName,
           usuarioMail: email,
           usuarioTipo: userType,
-          password: password ? crypto.pbkdf2Sync(password, user.usuarioSalt, 10000, 64, 'sha1').toString('base64') : user.password,
+          password: password ? crypto.pbkdf2Sync(password, user.usuarioSalt ? user.usuarioSalt : '', 10000, 64, 'sha1').toString('base64') : user.password,
           usuarioActivo: userActive,
         } as Usuarios
       );

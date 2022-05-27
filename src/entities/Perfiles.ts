@@ -2,7 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { PerfilesPermisos } from "./PerfilesPermisos";
 import { UsuariosPerfiles } from "./UsuariosPerfiles";
 
-@Entity("perfiles", { schema: "demo_lib" })
+@Entity("perfiles", { schema: "biblioteca" })
 export class Perfiles {
   @PrimaryGeneratedColumn({ type: "int", name: "perfil_id" })
   perfilId: number;

@@ -9,11 +9,11 @@ import {
 } from "typeorm";
 import { Alumnos } from "./Alumnos";
 import { Usuarios } from "./Usuarios";
-import { PrestamosLibros } from "./PrestamosLibros";
+import { PrestamoEjemplar } from "./PrestamoEjemplar";
 
 @Index("fk_prestamo_alumno", ["alumnoId"], {})
 @Index("fk_prestamo_usuario", ["usuarioId"], {})
-@Entity("prestamos", { schema: "demo_lib" })
+@Entity("prestamos", { schema: "biblioteca" })
 export class Prestamos {
   @PrimaryGeneratedColumn({ type: "int", name: "prestamo_id" })
   prestamoId: number;
@@ -30,15 +30,12 @@ export class Prestamos {
   @Column("varchar", { name: "fecha_fin", length: 200 })
   fechaFin: string;
 
-  @Column("varchar", { name: "fecha_entrega", length: 200 })
-  fechaEntrega: string;
-
   @Column("enum", {
     name: "estado",
     nullable: true,
-    enum: ["EN_STOCK", "EN_PRESTAMO_VIGENTE", "EN_PRESTAMO_RETRASO"],
+    enum: ["PRESTADO", "ATRASADO", "FINALIZADO", "FINALIZADO_ATRASADO"],
   })
-  estado: "EN_STOCK" | "EN_PRESTAMO_VIGENTE" | "EN_PRESTAMO_RETRASO" | null;
+  estado: "PRESTADO" | "ATRASADO" | "FINALIZADO" | "FINALIZADO_ATRASADO" | null;
 
   @ManyToOne(() => Alumnos, (alumnos) => alumnos.prestamos, {
     onDelete: "RESTRICT",
@@ -55,8 +52,8 @@ export class Prestamos {
   usuario: Usuarios;
 
   @OneToMany(
-    () => PrestamosLibros,
-    (prestamosLibros) => prestamosLibros.prestamo
+    () => PrestamoEjemplar,
+    (prestamoEjemplar) => prestamoEjemplar.prestamo
   )
-  prestamosLibros: PrestamosLibros[];
+  prestamoEjemplars: PrestamoEjemplar[];
 }

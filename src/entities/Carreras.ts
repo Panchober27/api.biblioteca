@@ -11,7 +11,7 @@ import { Alumnos } from "./Alumnos";
 import { Facultades } from "./Facultades";
 
 @Index("fk_carrera_facultad", ["facultadId"], {})
-@Entity("carreras", { schema: "demo_lib" })
+@Entity("carreras", { schema: "biblioteca" })
 export class Carreras {
   @PrimaryGeneratedColumn({ type: "int", name: "carrera_id" })
   carreraId: number;

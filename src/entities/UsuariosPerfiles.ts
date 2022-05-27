@@ -11,7 +11,7 @@ import { Usuarios } from "./Usuarios";
 
 @Index("fk_usuarios_perfiles_perfiles1_idx", ["perfilId"], {})
 @Index("fk_usuarios_perfiles_usuarios1_idx", ["usuarioId"], {})
-@Entity("usuarios_perfiles", { schema: "demo_lib" })
+@Entity("usuarios_perfiles", { schema: "biblioteca" })
 export class UsuariosPerfiles {
   @PrimaryGeneratedColumn({ type: "int", name: "usuario_perfil_id" })
   usuarioPerfilId: number;

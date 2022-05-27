@@ -3,8 +3,20 @@ export { PerfilesPermisos } from './PerfilesPermisos';
 export { UsuariosPerfiles } from './UsuariosPerfiles';
 export { Permisos } from './Permisos';
 export { Perfiles } from './Perfiles';
-export { Libros } from './Libros';
-export { Prestamos } from './Prestamos';
+
+
+export {Facultades} from './Facultades';
 export { Carreras } from './Carreras';
 export { Alumnos } from './Alumnos';
-export { PrestamosLibros } from './PrestamosLibros';
+
+
+
+export { Libros } from './Libros';
+export {LibroStock} from './LibroStock';
+
+export { Prestamos } from './Prestamos';
+export { PrestamoEjemplar } from './PrestamoEjemplar';
+
+export {Ejemplar} from './Ejemplar';
+
+export {Autor} from './Autor';

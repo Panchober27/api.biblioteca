@@ -2,17 +2,15 @@ import {
   Column,
   Entity,
   Index,
-  JoinColumn,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { TipoLibro } from "./TipoLibro";
-import { PrestamosLibros } from "./PrestamosLibros";
+import { Ejemplar } from "./Ejemplar";
+import { LibroAutores } from "./LibroAutores";
+import { LibroStock } from "./LibroStock";
 
 @Index("isbn", ["isbn"], { unique: true })
-@Index("fk_libro_tipo_libro", ["tipoLibro"], {})
-@Entity("libros", { schema: "demo_lib" })
+@Entity("libros", { schema: "biblioteca" })
 export class Libros {
   @PrimaryGeneratedColumn({ type: "int", name: "libro_id" })
   libroId: number;
@@ -26,9 +24,6 @@ export class Libros {
   @Column("varchar", { name: "nombre", length: 200 })
   nombre: string;
 
-  @Column("varchar", { name: "autor", length: 200 })
-  autor: string;
-
   @Column("varchar", { name: "editorial", length: 200 })
   editorial: string;
 
@@ -38,19 +33,12 @@ export class Libros {
   @Column("varchar", { name: "fecha_publicacion", length: 200 })
   fechaPublicacion: string;
 
-  @Column("int", { name: "tipo_libro" })
-  tipoLibro: number;
+  @OneToMany(() => Ejemplar, (ejemplar) => ejemplar.libro)
+  ejemplars: Ejemplar[];
 
-  @Column("int", { name: "stock" })
-  stock: number;
+  @OneToMany(() => LibroAutores, (libroAutores) => libroAutores.libro)
+  libroAutores: LibroAutores[];
 
-  @ManyToOne(() => TipoLibro, (tipoLibro) => tipoLibro.libros, {
-    onDelete: "RESTRICT",
-    onUpdate: "RESTRICT",
-  })
-  @JoinColumn([{ name: "tipo_libro", referencedColumnName: "tipoLibroId" }])
-  tipoLibro2: TipoLibro;
-
-  @OneToMany(() => PrestamosLibros, (prestamosLibros) => prestamosLibros.libro)
-  prestamosLibros: PrestamosLibros[];
+  @OneToMany(() => LibroStock, (libroStock) => libroStock.libro)
+  libroStocks: LibroStock[];
 }

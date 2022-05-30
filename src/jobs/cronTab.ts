@@ -26,7 +26,7 @@ const FlowTask = async () => {
   const mailer = new NodeMailer(); // instancia de nodemailer
   const usersRepo = getRepository(Usuarios); // repo de usuarios para obtener su o sus correos.
   let toAddresses = null; // direcciones de correo a enviar
-   
+
 };
 
 // Si el ambiente del servidor es produccion se ejecuta el cronTab.

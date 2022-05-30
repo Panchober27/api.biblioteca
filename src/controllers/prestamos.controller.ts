@@ -7,8 +7,8 @@
 // export class PrestamosController {
 //     /**
 //      * @function getPrestamos
-//      * @param req 
-//      * @param res 
+//      * @param req
+//      * @param res
 //      * @returns {Response} Listado de prestamos, con usuario, alumno y libros asociados.
 //      */
 //     getPrestamos = async (req: Request, res: Response): Promise<Response> => {
@@ -55,7 +55,7 @@
 
 //     /**
 //      * @function insertPrestamo
-//      * @param {Object} Request  
+//      * @param {Object} Request
 //      * @returns {Response} status 200 | 500
 //      */
 //     insertPrestamo = async (req: Request, res: Response): Promise<Response> => {
@@ -164,11 +164,11 @@
 
 //     /**
 //      * Esta funcion es para realizar las DEVOLUCIONES de los prestamos!
-//      * 
+//      *
 //      * @function updatePrestamo
-//      * @param req 
-//      * @param res 
-//      * @returns 
+//      * @param req
+//      * @param res
+//      * @returns
 //      */
 //     updatePrestamo = async (req: Request, res: Response): Promise<Response> => {
 

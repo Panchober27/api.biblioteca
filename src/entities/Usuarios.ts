@@ -28,7 +28,6 @@ export class Usuarios {
   @Column("varchar", { name: "usuario_mail", length: 150 })
   usuarioMail: string;
 
-
   @Column("enum", {
     name: "usuario_tipo",
     nullable: true,

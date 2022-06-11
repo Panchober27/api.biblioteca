@@ -24,11 +24,11 @@ export class Prestamos {
   @Column("int", { name: "usuario_id" })
   usuarioId: number;
 
-  @Column("varchar", { name: "fecha_inicio", length: 200 })
-  fechaInicio: string;
+  @Column("datetime", { name: "fecha_inicio" })
+  fechaInicio: Date;
 
-  @Column("varchar", { name: "fecha_fin", length: 200 })
-  fechaFin: string;
+  @Column("datetime", { name: "fecha_fin" })
+  fechaFin: Date;
 
   @Column("enum", {
     name: "estado",

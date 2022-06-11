@@ -33,14 +33,14 @@ export class Ejemplar {
   @Column("int", { name: "trabajo_id", nullable: true })
   trabajoId: number | null;
 
-  @Column("date", { name: "fecha_entrga", nullable: true })
-  fechaEntrga: string | null;
+  @Column("datetime", { name: "fecha_entrga", nullable: true })
+  fechaEntrga: Date | null;
 
-  @Column("date", { name: "fecha_fin", nullable: true })
-  fechaFin: string | null;
+  @Column("datetime", { name: "fecha_fin", nullable: true })
+  fechaFin: Date | null;
 
-  @Column("date", { name: "fecha_devolucion", nullable: true })
-  fechaDevolucion: string | null;
+  @Column("datetime", { name: "fecha_devolucion", nullable: true })
+  fechaDevolucion: Date | null;
 
   @Column("enum", {
     name: "estado",

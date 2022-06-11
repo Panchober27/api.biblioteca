@@ -17,7 +17,7 @@ export class Trabajos {
   @Column("varchar", { name: "edicion", length: 200 })
   edicion: string;
 
-  @Column("varchar", { name: "fecha_publicacion", length: 200 })
+  @Column("date", { name: "fecha_publicacion" })
   fechaPublicacion: string;
 
   @OneToMany(() => Ejemplar, (ejemplar) => ejemplar.trabajo)

@@ -123,7 +123,7 @@ CREATE TABLE libros (
     -- autor_id VARCHAR(200) NOT NULL,
     editorial VARCHAR(200) NOT NULL,
     edicion VARCHAR(200) NOT NULL,
-    fecha_publicacion VARCHAR(200) NOT NULL
+    fecha_publicacion DATE NOT NULL
 );
 
 
@@ -155,7 +155,7 @@ CREATE TABLE trabajos (
     nombre VARCHAR(200) NOT NULL,
     editorial VARCHAR(200) NOT NULL,
     edicion VARCHAR(200) NOT NULL,
-    fecha_publicacion VARCHAR(200) NOT NULL
+    fecha_publicacion DATE NOT NULL
 );
 
 CREATE TABLE trabajo_autor (
@@ -187,7 +187,7 @@ CREATE TABLE revistas (
     nombre VARCHAR(200) NOT NULL,
     editorial VARCHAR(200) NOT NULL,
     edicion VARCHAR(200) NOT NULL,
-    fecha_publicacion VARCHAR(200) NOT NULL
+    fecha_publicacion DATE NOT NULL
 );
 
 
@@ -224,9 +224,9 @@ CREATE TABLE ejemplar (
     libro_id INT,
     revista_id INT,
     trabajo_id INT,
-    fecha_entrga DATE,
-    fecha_fin DATE,
-    fecha_devolucion DATE,
+    fecha_entrga DATETIME,
+    fecha_fin DATETIME,
+    fecha_devolucion DATETIME,
     estado ENUM('DISPONIBLE', 'PRESTADO', 'ATRASADO'),
     KEY fk_ejemplar_libro (libro_id),
     KEY fk_ejemplar_revista (revista_id),
@@ -242,8 +242,8 @@ CREATE TABLE prestamos (
     prestamo_id INT PRIMARY KEY AUTO_INCREMENT,
     alumno_id INT NOT NULL,
     usuario_id INT NOT NULL,
-    fecha_inicio VARCHAR(200) NOT NULL,
-    fecha_fin VARCHAR(200) NOT NULL,
+    fecha_inicio DATETIME NOT NULL,
+    fecha_fin DATETIME NOT NULL,
     estado ENUM('PRESTADO', 'ATRASADO', 'FINALIZADO', 'FINALIZADO_ATRASADO'),
     CONSTRAINT fk_prestamo_alumno FOREIGN KEY (alumno_id) REFERENCES alumnos(alumno_id),
     CONSTRAINT fk_prestamo_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id)

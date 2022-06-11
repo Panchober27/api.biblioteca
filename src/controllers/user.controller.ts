@@ -82,7 +82,8 @@ export class UserController {
 
     try {
       const { id } = req.params;
-      const { userName, name, lastName, password, email, userType, userActive, profileId } = req.body;
+      // const { usuario, nombre, apellido, password, usuario_mail, userType, userActive, profileId } = req.body;
+      const { usuario, nombre, apellido, password, usuario_mail, userType, userActive } = req.body;
 
       const user = await runner.manager.findOne(
         Usuarios,
@@ -102,26 +103,26 @@ export class UserController {
         Usuarios,
         { usuarioId: id },
         {
-          usuario: userName,
-          nombre: name,
-          apellido: lastName,
-          usuarioMail: email,
+          usuario: usuario,
+          nombre: nombre,
+          apellido: apellido,
+          usuarioMail: usuario_mail,
           usuarioTipo: userType,
           password: password ? crypto.pbkdf2Sync(password, user.usuarioSalt ? user.usuarioSalt : '', 10000, 64, 'sha1').toString('base64') : user.password,
           usuarioActivo: userActive,
         } as Usuarios
       );
 
-      await runner.manager.delete(UsuariosPerfiles, { usuarioId: id, perfilId: profileId });
+      // await runner.manager.delete(UsuariosPerfiles, { usuarioId: id, perfilId: profileId });
 
 
-      await runner.manager.save(
-        runner.manager.create(
-          UsuariosPerfiles, {
-          usuarioId: parseInt(id),
-          perfilId: profileId,
-        })
-      );
+      // await runner.manager.save(
+      //   runner.manager.create(
+      //     UsuariosPerfiles, {
+      //     usuarioId: parseInt(id),
+      //     perfilId: profileId,
+      //   })
+      // );
 
       await runner.commitTransaction();
 

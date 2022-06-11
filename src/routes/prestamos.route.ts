@@ -1,11 +1,12 @@
 import { Router } from 'express';
-// import { PrestamosController } from '../controllers'
+import { PrestamosController } from '../controllers'
+
 
 const router = Router();
+const c = new PrestamosController();
 
-// const controller = new PrestamosController();
 
-// router.get('/prestamos', controller.getPrestamos);
+router.get('/prestamos', c.getPrestamos);
 
 // router.post('/prestamos', controller.insertPrestamo);
 

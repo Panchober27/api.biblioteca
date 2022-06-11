@@ -41,6 +41,46 @@ const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
 
       const userRepository: Repository<Usuarios> = getRepository(Usuarios);
 
+      userRepository.findOne(
+        { where: { usuario } },
+      ).then((user) => {
+        if (user) {
+          req.user = user;
+          return next();
+
+        } else {
+          return res.sendStatus(401);
+        }
+      });
+    };
+  });
+}
+
+
+const isAuthenticatedOriginal = (req: Request, res: Response, next: NextFunction) => {
+  const token: string | undefined = req.headers.authorization;
+
+  const exceptionsRoutes: string[] = ['/api/signin', '/api/demo'];
+
+  if (exceptionsRoutes.includes(req.path)) {
+    return next();
+  }
+
+  if (!token) {
+    // return res.sendStatus(401);
+    return res.status(401).json({ status: false, message: 'no hay token!!!!' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET || '', (err, decoded) => {
+    if (err) {
+      return res.sendStatus(401);
+    }
+
+    if (decoded) {
+      const usuario = decoded.user;
+
+      const userRepository: Repository<Usuarios> = getRepository(Usuarios);
+
       userRepository
         .createQueryBuilder('user')
         .innerJoinAndSelect('user.usuariosPerfiles', 'up')

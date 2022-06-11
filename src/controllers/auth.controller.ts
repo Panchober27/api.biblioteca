@@ -18,7 +18,7 @@ export class AuthController {
       const { userName, password } = req.body;
 
       const user = await userRespository.findOne({
-        where: { usuario: userName },
+        where: { usuario: userName, usuarioActivo: true },
       });
 
       if (!user) {

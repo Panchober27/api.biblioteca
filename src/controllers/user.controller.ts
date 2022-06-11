@@ -22,7 +22,7 @@ export class UserController {
       const user = await runner.manager.findOne(
         Usuarios,
         {
-          where: { usuario: usuario },
+          where: { usuario },
         }
       );
 
@@ -37,9 +37,9 @@ export class UserController {
       const { usuarioId } = await runner.manager.save(
         runner.manager.create(
           Usuarios, {
-          usuario: usuario,
-          nombre: nombre,
-          apellido: apellido,
+          usuario,
+          nombre,
+          apellido,
           password: encryptedPassword,
           usuarioSalt: userSalt,
           usuarioMail: usuario_mail,
@@ -103,9 +103,9 @@ export class UserController {
         Usuarios,
         { usuarioId: id },
         {
-          usuario: usuario,
-          nombre: nombre,
-          apellido: apellido,
+          usuario,
+          nombre,
+          apellido,
           usuarioMail: usuario_mail,
           usuarioTipo: userType,
           password: password ? crypto.pbkdf2Sync(password, user.usuarioSalt ? user.usuarioSalt : '', 10000, 64, 'sha1').toString('base64') : user.password,
@@ -149,6 +149,10 @@ export class UserController {
 
     const user_divisions = 1; // esta es o son las divisiones del usuario loggeado
     try {
+
+      console.log('req.user');
+      console.log(req.user);
+
       const { neededPerm } = req.params; // variable para filtrar usuarios por permiso.
       const userRepo = getRepository(Usuarios);
 

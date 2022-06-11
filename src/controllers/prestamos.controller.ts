@@ -7,13 +7,46 @@ export class PrestamosController {
 
     /**
      * @function getPrestamos
-     * @param req 
-     * @param res 
-     * @returns 
+     * @param req
+     * @param res
+     * @returns
      */
     getPrestamos = async (req: Request, res: Response) => {
         return res.json({ message: 'getPrestamos' });
     }
+
+
+
+
+    getPrestamoByLoggedUser = async (req: Request, res: Response) => {
+        try {
+
+            // obtener req.user
+
+            const prestamosRepository = getRepository(Prestamos);
+            const prestamos = await prestamosRepository.createQueryBuilder('p')
+                .leftJoinAndSelect('p.usuario', 'u')
+                .leftJoinAndSelect('p.ejemplares', 'e')
+                .leftJoinAndSelect('e.libro', 'l')
+                .leftJoinAndSelect('e.trabajo', 't')
+                .leftJoinAndSelect('e.revista', 'r')
+                .where('u.usuario_id = :id', { id: req.user.usuario_id })
+                .getMany();
+
+            if (!prestamos || prestamos.length === 0) {
+                return res.status(404).json({ message: 'No se encontraron prestamos' });
+            }
+
+            return res.status(200).json(prestamos);
+
+        } catch (err: any) {
+            console.error(err);
+            return res.status(500).json({ error: err.message });
+        }
+
+    }
+
+
 
 
 

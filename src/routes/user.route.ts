@@ -7,7 +7,7 @@ const userController = new UserController();
 
 router.post(
   '/users',
-  schemaValidator('CREATE_USER'),
+  // schemaValidator('CREATE_USER'),
   userController.createUser
 );
 

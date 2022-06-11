@@ -18,11 +18,11 @@ export class UserController {
     await runner.connect();
 
     try {
-      const { userName, name, lastName, password, email, userType, profileId } = req.body;
+      const { usuario, nombre, apellido, password, usuario_mail, userType, profileId } = req.body;
       const user = await runner.manager.findOne(
         Usuarios,
         {
-          where: { usuario: userName },
+          where: { usuario: usuario },
         }
       );
 
@@ -37,16 +37,15 @@ export class UserController {
       const { usuarioId } = await runner.manager.save(
         runner.manager.create(
           Usuarios, {
-          usuario: userName,
-          nombre: name,
-          apellido: lastName,
+          usuario: usuario,
+          nombre: nombre,
+          apellido: apellido,
           password: encryptedPassword,
           usuarioSalt: userSalt,
-          usuarioMail: email,
+          usuarioMail: usuario_mail,
           usuarioTipo: userType,
           usuarioActivo: true,
-        }
-        )
+        })
       );
 
       // await runner.manager.save(
@@ -178,6 +177,7 @@ export class UserController {
           fullName: user.nombre + ' ' + user.apellido,
           usuario_mail: user.usuarioMail,
           userType: user.usuarioTipo,
+          userActive: user.usuarioActivo,
         }
       });
 

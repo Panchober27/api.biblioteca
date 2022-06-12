@@ -18,11 +18,8 @@ export class PrestamosController {
 
 
 
-    getPrestamoByLoggedUser = async (req: Request, res: Response) => {
+    getPrestamosByLoggedUser = async (req: Request, res: Response) => {
         try {
-
-            // obtener req.user
-
             const prestamosRepository = getRepository(Prestamos);
             const prestamos = await prestamosRepository.createQueryBuilder('p')
                 .leftJoinAndSelect('p.usuario', 'u')
@@ -50,6 +47,9 @@ export class PrestamosController {
 
 
 
+    /**
+     * Para generar un nuevo prestamo.
+     */
     insertPrestamo = async (req: Request, res: Response) => {
 
         const runner = getConnection().createQueryRunner();
@@ -79,5 +79,15 @@ export class PrestamosController {
 
     }
 
+    /**
+     * @function updatePrestamo
+     * @param req 
+     * @param res 
+     * 
+     * Para finalizar? un prestamo.
+     * 
+     */
+    updatePrestamo = async (req: Request, res: Response) => {
+    }
 
 }

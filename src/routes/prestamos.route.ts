@@ -6,7 +6,8 @@ const router = Router();
 const c = new PrestamosController();
 
 
-router.get('/prestamos', c.getPrestamos);
+router.get('/prestamos', c.getPrestamos); // todos los prestamos del sistema
+router.get('/user-prestamos', c.getPrestamosByLoggedUser); // prestamos del usuario en sesion.
 
 // router.post('/prestamos', controller.insertPrestamo);
 

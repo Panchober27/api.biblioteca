@@ -8,9 +8,7 @@ export class StudentsController {
 
     getStudents = async (req: Request, res: Response) => {
         try {
-
             const userLogged = req.user;
-
             console.log(userLogged);
 
             const studentsRepository = getRepository(Alumnos);
@@ -18,6 +16,11 @@ export class StudentsController {
                 .leftJoinAndSelect('a.prestamos', 'prestamos')
                 .innerJoinAndSelect('a.carrera', 'carr')
                 .innerJoinAndSelect('carr.facultad', 'fac')
+                .leftJoinAndSelect('prestamos.prestamoEjemplars', 'prestamoEjemplars')
+                .leftJoinAndSelect('prestamoEjemplars.ejemplar', 'ejemplar')
+                .leftJoinAndSelect('ejemplar.libro', 'libro')
+                .leftJoinAndSelect('ejemplar.revista', 'revista')
+                .leftJoinAndSelect('ejemplar.trabajo', 'trabajo')
                 .getMany();
 
             if (!alumnos || alumnos.length === 0) {

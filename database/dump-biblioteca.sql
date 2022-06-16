@@ -34,7 +34,7 @@ CREATE TABLE `alumnos` (
   UNIQUE KEY `rut_alumno` (`rut_alumno`),
   KEY `fk_alumno_carrera` (`carrera_id`),
   CONSTRAINT `fk_alumno_carrera` FOREIGN KEY (`carrera_id`) REFERENCES `carreras` (`carrera_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,6 +43,7 @@ CREATE TABLE `alumnos` (
 
 LOCK TABLES `alumnos` WRITE;
 /*!40000 ALTER TABLE `alumnos` DISABLE KEYS */;
+INSERT INTO `alumnos` VALUES (1,'1111111-1','Daniel','Munoz','d.munoza@gmail.com',5,1),(2,'22222222-2','Benjamin','Meneses','japz@gmail.com',1,1),(3,'33333333-3','Barbara','Fuentealba','barbijs@gmail.com',6,1);
 /*!40000 ALTER TABLE `alumnos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,7 +89,7 @@ CREATE TABLE `carreras` (
   PRIMARY KEY (`carrera_id`),
   KEY `fk_carrera_facultad` (`facultad_id`),
   CONSTRAINT `fk_carrera_facultad` FOREIGN KEY (`facultad_id`) REFERENCES `facultades` (`facultad_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,6 +98,7 @@ CREATE TABLE `carreras` (
 
 LOCK TABLES `carreras` WRITE;
 /*!40000 ALTER TABLE `carreras` DISABLE KEYS */;
+INSERT INTO `carreras` VALUES (1,'Ing Informatica','Carrera de ingieneria informatica',1),(2,'Ing Industrial','Carrera de ingieneria informatica',1),(3,'Ing Comercial','Carrera de ingieneria informatica',1),(4,'Enfermeria','Carrera de ingieneria Enfermeria',2),(5,'Medicina','Carrera de ingieneria Medicina',2),(6,'Terapia Ocupacional','Carrera de Terapia Ocupacional',2);
 /*!40000 ALTER TABLE `carreras` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,9 +115,9 @@ CREATE TABLE `ejemplar` (
   `libro_id` int(11) DEFAULT NULL,
   `revista_id` int(11) DEFAULT NULL,
   `trabajo_id` int(11) DEFAULT NULL,
-  `fecha_entrga` date DEFAULT NULL,
-  `fecha_fin` date DEFAULT NULL,
-  `fecha_devolucion` date DEFAULT NULL,
+  `fecha_entrega` datetime DEFAULT NULL,
+  `fecha_fin` datetime DEFAULT NULL,
+  `fecha_devolucion` datetime DEFAULT NULL,
   `estado` enum('DISPONIBLE','PRESTADO','ATRASADO') DEFAULT NULL,
   PRIMARY KEY (`ejemplar_id`),
   UNIQUE KEY `isbn` (`isbn`),
@@ -125,7 +127,7 @@ CREATE TABLE `ejemplar` (
   CONSTRAINT `fk_ejemplar_libro` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`libro_id`),
   CONSTRAINT `fk_ejemplar_revista` FOREIGN KEY (`revista_id`) REFERENCES `revistas` (`revista_id`),
   CONSTRAINT `fk_ejemplar_trabajo` FOREIGN KEY (`trabajo_id`) REFERENCES `trabajos` (`trabajo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,6 +136,7 @@ CREATE TABLE `ejemplar` (
 
 LOCK TABLES `ejemplar` WRITE;
 /*!40000 ALTER TABLE `ejemplar` DISABLE KEYS */;
+INSERT INTO `ejemplar` VALUES (1,1231312,1,NULL,NULL,NULL,NULL,NULL,'PRESTADO'),(2,565464,1,NULL,NULL,NULL,NULL,NULL,'DISPONIBLE'),(3,868484,1,NULL,NULL,NULL,NULL,NULL,'DISPONIBLE'),(4,987498496,1,NULL,NULL,NULL,NULL,NULL,'DISPONIBLE');
 /*!40000 ALTER TABLE `ejemplar` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -149,7 +152,7 @@ CREATE TABLE `facultades` (
   `nombre_facultad` varchar(200) NOT NULL,
   `descripcion_facultad` varchar(500) NOT NULL,
   PRIMARY KEY (`facultad_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,6 +161,7 @@ CREATE TABLE `facultades` (
 
 LOCK TABLES `facultades` WRITE;
 /*!40000 ALTER TABLE `facultades` DISABLE KEYS */;
+INSERT INTO `facultades` VALUES (1,'Ingenieria','Facultad de ingienerias'),(2,'Salud','Facultad salud'),(3,'Humanidades','Facultad de humanidades'),(4,'Educacion','Facultad de educacion');
 /*!40000 ALTER TABLE `facultades` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -203,7 +207,7 @@ CREATE TABLE `libro_stock` (
   PRIMARY KEY (`libro_stock_id`),
   KEY `fk_libro_stock_libros1_idx` (`libro_id`),
   CONSTRAINT `fk_libro_stock_libros1` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`libro_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -212,6 +216,7 @@ CREATE TABLE `libro_stock` (
 
 LOCK TABLES `libro_stock` WRITE;
 /*!40000 ALTER TABLE `libro_stock` DISABLE KEYS */;
+INSERT INTO `libro_stock` VALUES (1,1,3);
 /*!40000 ALTER TABLE `libro_stock` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -229,10 +234,10 @@ CREATE TABLE `libros` (
   `nombre` varchar(200) NOT NULL,
   `editorial` varchar(200) NOT NULL,
   `edicion` varchar(200) NOT NULL,
-  `fecha_publicacion` varchar(200) NOT NULL,
+  `fecha_publicacion` date NOT NULL,
   PRIMARY KEY (`libro_id`),
   UNIQUE KEY `isbn` (`isbn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -241,6 +246,7 @@ CREATE TABLE `libros` (
 
 LOCK TABLES `libros` WRITE;
 /*!40000 ALTER TABLE `libros` DISABLE KEYS */;
+INSERT INTO `libros` VALUES (1,'9789878000107','tapa dura','Harry Potter y la Piedra Filosofal','Salamandra','101101','1990-01-02');
 /*!40000 ALTER TABLE `libros` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -314,7 +320,7 @@ CREATE TABLE `permisos` (
   `timestamp` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`permiso_id`),
   UNIQUE KEY `permisos_tag_UN` (`permiso_tag`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -323,7 +329,6 @@ CREATE TABLE `permisos` (
 
 LOCK TABLES `permisos` WRITE;
 /*!40000 ALTER TABLE `permisos` DISABLE KEYS */;
-INSERT INTO `permisos` VALUES (1,'Crud-Usuarios','crud-usuarios',NULL,'2022-05-27 06:33:40');
 /*!40000 ALTER TABLE `permisos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -343,7 +348,7 @@ CREATE TABLE `prestamo_ejemplar` (
   KEY `fk_prestamo_ejemplar_ejemplar1_idx` (`ejemplar_id`),
   CONSTRAINT `fk_prestamo_ejemplar_ejemplar1` FOREIGN KEY (`ejemplar_id`) REFERENCES `ejemplar` (`ejemplar_id`),
   CONSTRAINT `fk_prestamo_ejemplar_prestamos1` FOREIGN KEY (`prestamo_id`) REFERENCES `prestamos` (`prestamo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -352,6 +357,7 @@ CREATE TABLE `prestamo_ejemplar` (
 
 LOCK TABLES `prestamo_ejemplar` WRITE;
 /*!40000 ALTER TABLE `prestamo_ejemplar` DISABLE KEYS */;
+INSERT INTO `prestamo_ejemplar` VALUES (1,1,1);
 /*!40000 ALTER TABLE `prestamo_ejemplar` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -366,15 +372,15 @@ CREATE TABLE `prestamos` (
   `prestamo_id` int(11) NOT NULL AUTO_INCREMENT,
   `alumno_id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
-  `fecha_inicio` varchar(200) NOT NULL,
-  `fecha_fin` varchar(200) NOT NULL,
+  `fecha_inicio` datetime NOT NULL,
+  `fecha_fin` datetime NOT NULL,
   `estado` enum('PRESTADO','ATRASADO','FINALIZADO','FINALIZADO_ATRASADO') DEFAULT NULL,
   PRIMARY KEY (`prestamo_id`),
   KEY `fk_prestamo_alumno` (`alumno_id`),
   KEY `fk_prestamo_usuario` (`usuario_id`),
   CONSTRAINT `fk_prestamo_alumno` FOREIGN KEY (`alumno_id`) REFERENCES `alumnos` (`alumno_id`),
   CONSTRAINT `fk_prestamo_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`usuario_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -383,6 +389,7 @@ CREATE TABLE `prestamos` (
 
 LOCK TABLES `prestamos` WRITE;
 /*!40000 ALTER TABLE `prestamos` DISABLE KEYS */;
+INSERT INTO `prestamos` VALUES (1,1,2,'2022-06-16 08:40:55','2022-06-23 02:40:55','PRESTADO');
 /*!40000 ALTER TABLE `prestamos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -455,7 +462,7 @@ CREATE TABLE `revistas` (
   `nombre` varchar(200) NOT NULL,
   `editorial` varchar(200) NOT NULL,
   `edicion` varchar(200) NOT NULL,
-  `fecha_publicacion` varchar(200) NOT NULL,
+  `fecha_publicacion` date NOT NULL,
   PRIMARY KEY (`revista_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -538,7 +545,7 @@ CREATE TABLE `trabajos` (
   `nombre` varchar(200) NOT NULL,
   `editorial` varchar(200) NOT NULL,
   `edicion` varchar(200) NOT NULL,
-  `fecha_publicacion` varchar(200) NOT NULL,
+  `fecha_publicacion` date NOT NULL,
   PRIMARY KEY (`trabajo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -572,7 +579,7 @@ CREATE TABLE `usuarios` (
   `usuario_activo` tinyint(1) DEFAULT 1,
   `timestamp` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -581,7 +588,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'carla','Carla','Gonzalez','y45zODUTx6Bx3JPqn4qlJkZBIynTQkEW0GncYO3Ig0gyuvEW6Y6rfNx7OefueZAoC0QbprfS/XytVLyNFrEYQg==',NULL,'RRNU+CgJVR/7I7pZuZFCsA==','carlagon64@gmail.com','ADMINISTRADOR',1,'2022-05-27 06:36:04'),(2,'maxi','Maximiliano','Maximiliano','pi+tcvOn1QmRxw4vWGHkeDET836IJdP36Vby6wa+mA+Z2eRQKf1ZVBE5G7sKPsUunHN+w1bzFtqzRfK4Xf2sRA==',NULL,'p3RacfMFHwKV/mazLUuSDw==','tttmaximiliano@gmail.com','ADMINISTRADOR',1,'2022-05-27 06:37:14'),(3,'pancho','Francisco','Berwart','jdC+68LyPgrtz2D3Vu5pCEd9tIR6KGUc0tE86cal5oQgPdLZvqJB11JA22vIcwSA5E+/OL3I4VuPzfx+35KgjA==',NULL,'2fV7a+6qhYzxJIGi63hMmA==','panchober27@gmail.com','ADMINISTRADOR',1,'2022-05-27 06:37:40');
+INSERT INTO `usuarios` VALUES (1,'carla','Carla','Gonzalez','9OQislUkF/gYQjCO4R78gfyDMDtmdpQGlxKyoCNy5PWASP8iD0eDG6VpMLIwQ8bJkXi5fLtfw7oqFmeWI3VKgA==',NULL,'lGxQCW49SWl7uFEfQuB5DQ==','carlagon@gmail.com','ADMINISTRADOR',1,'2022-06-16 06:24:01'),(2,'pancho','Francisco','Gonzalez','/4TT+KVPMCtG8QAGney8y2Q5L5Ge4EcidzmrtIGbKlPxv5FWb13CmY5fKWUtX3DHO83uUXqP384+gYKqS9xAXw==',NULL,'NMnDAdPkXv/hdx2m8Fwb5A==','panchober27@gmail.com','ADMINISTRADOR',1,'2022-06-16 06:35:05');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -627,4 +634,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-10 19:45:22
+-- Dump completed on 2022-06-16  2:42:49

@@ -1,11 +1,5 @@
 -- TODO:
--- - Asignar timestamp a las tablas faltantes
--- - Modificar los tipos de datos para las fechas!
--- - Agregar Tablas:
---   - Atrasos
---   - Devoluciones??
---   - Rankings??
---   - Reportes??
+-- - Cambiar en la tabla libros (nombre x titulo.) usar alter
 CREATE DATABASE biblioteca;
 
 USE biblioteca;

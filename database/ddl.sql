@@ -224,7 +224,7 @@ CREATE TABLE ejemplar (
     libro_id INT,
     revista_id INT,
     trabajo_id INT,
-    fecha_entrga DATETIME,
+    fecha_entrega DATETIME,
     fecha_fin DATETIME,
     fecha_devolucion DATETIME,
     estado ENUM('DISPONIBLE', 'PRESTADO', 'ATRASADO'),

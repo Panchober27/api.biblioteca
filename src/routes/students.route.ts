@@ -5,6 +5,18 @@ import { StudentsController } from '../controllers';
 const router = Router();
 const controller = new StudentsController();
 
+
+
 router.get('/students', controller.getStudents);
+
+
+router.get('/students', controller.getStudents);
+
+
+router.get('/students', controller.getStudents);
+
+
+router.get('/students', controller.getStudents);
+
 
 export default router;

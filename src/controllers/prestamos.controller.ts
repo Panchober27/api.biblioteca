@@ -41,7 +41,6 @@ export class PrestamosController {
             if (!prestamos || prestamos.length === 0) {
                 return res.sendStatus(204);
             }
-
             return res.status(200).json(prestamos);
 
         } catch (err: any) {
@@ -52,9 +51,6 @@ export class PrestamosController {
     }
 
 
-
-
-
     /**
      * Para generar un nuevo prestamo.
      */
@@ -62,12 +58,15 @@ export class PrestamosController {
 
         const runner = getConnection().createQueryRunner();
         await runner.connect();
+        // el usuario que genera el prestamo se recupera desde req.user
+        const userId = 2;
 
         try {
             const {
                 // usuarioId,
-                // alumnoId,
-                // ejemplares [ids]
+                alumnoId,
+                ejemplares, // [{Ejemplar}]
+                fechaInicioPrestamo,
             } = req.body;
 
             await runner.startTransaction();
@@ -99,5 +98,17 @@ export class PrestamosController {
      */
     updatePrestamo = async (req: Request, res: Response) => {
     }
+
+
+    /**
+     * @function returnEjemlparOfPrestamo
+     * @param req 
+     * @param res 
+     * 
+     * Esta funcion es para realizar la devolucion de 1 o mas ejemplares de un prestamo.
+     */
+    returnEjemlparOfPrestamo = async (req: Request, res: Response) => {
+    };
+
 
 }

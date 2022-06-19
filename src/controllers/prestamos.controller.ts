@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getRepository, Repository, getManager, getConnection } from 'typeorm';
-import { Prestamos, Libros, PrestamoEjemplar, Trabajos, Revistas } from '../entities';
+import { Prestamos, Libros, PrestamoEjemplar, Trabajos, Revistas, Ejemplar, LibroStock, RevistaStock } from '../entities';
 
 
 export class PrestamosController {
@@ -35,8 +35,8 @@ export class PrestamosController {
                 .leftJoinAndSelect('e.revista', 'r')
                 .where('u.usuario_id = :id', { id: userLogged.usuarioId })
                 .getMany();
-                // TODO: 
-                // 1. Filtrar datos de usuario.
+            // TODO: 
+            // 1. Filtrar datos de usuario.
 
             if (!prestamos || prestamos.length === 0) {
                 return res.sendStatus(204);
@@ -63,7 +63,7 @@ export class PrestamosController {
 
         try {
             const {
-                // usuarioId,
+                usuarioId,
                 alumnoId,
                 ejemplares, // [{Ejemplar}]
                 fechaInicioPrestamo,
@@ -71,12 +71,81 @@ export class PrestamosController {
 
             await runner.startTransaction();
 
-            // pasos para crear un nuevo prestamo.
 
-            // 1. Crear un nuevo prestamo. Asociar: usurio,alumno,[ejemplares]
+            // pasos para crear un nuevo prestamo.
+            // 1. Crear un nuevo prestamo. Asociar: usurio,alumno,[ejemplares] [alterar por cda ejemplar el stock]
+            const { prestamoId } = await runner.manager.save(Prestamos, {
+                alumnoId,
+                usuarioId,
+                fechaInicio: new Date(), // fechaInicioPrestamo,
+                fechaFin: new Date(), // 
+                estado: 'PRESTADO',
+            });
+
             // 2. Crear un nuevo prestamoEjemplar. Asociar: prestamo,ejemplar
+            if (ejemplares) {
+                await ejemplares.forEach(async ejemplar => {
+                    const { prestamoEjemplarId } = await runner.manager.save(PrestamoEjemplar, {
+                        prestamoId,
+                        ejemplarId: ejemplar.ejemplarId,
+                    });
+                });
+            } else {
+                return res.status(400).json({ error: 'No se encontraron ejemplares' });
+            }
+
+
             // 3. Actualizar el estado de los ejemplares a prestado.
-            // 4. Actualizar el stock de los ejemplares restando 1 al stock.
+            await ejemplares.forEach(async ejemplar => {
+                await runner.manager.update(Ejemplar, { ejemplarId: ejemplar.ejemplarId }, { estado: 'PRESTADO' });
+            });
+
+
+            // PROBLEMAS CON EL STOCK!!!
+            // 4. Obtner de cada ejemplar si es libro o revista o trabajo y restar -1 al stock de ese libro, revista o trabajo.
+            await ejemplares.forEach(async ejemplar => {
+                if (ejemplar.libroId) {
+
+                    const libroStockRepository = getRepository(LibroStock);
+                    const libroStock = await libroStockRepository.createQueryBuilder('ls')
+                        .leftJoinAndSelect('ls.libro', 'l')
+                        .where('l.libroId = :id', { id: ejemplar.libroId })
+                        .getOne();
+
+                    if (libroStock) {
+                        await runner.manager.update(LibroStock, { libroStockId: libroStock.libroStockId }, { stock: libroStock.stock - 1 });
+                    }
+                } 
+                // else if (ejemplar.revistaId) {
+                //     const revistaStockRepository = getRepository(Revistas);
+                //     const revistaStock = await revistaStockRepository.createQueryBuilder('rs')
+                //         .leftJoinAndSelect('rs.revista', 'r')
+                //         .where('r.revistaId = :id', { id: ejemplar.revistaId })
+                //         .getOne();
+
+                //     if (revistaStock) {
+                //         await runner.manager.update(RevistaStock, { revistaStockId: revistaStock.revistaStockId }, { stock: revistaStock.stock - 1 });
+                //     }
+                // } else if (ejemplar.trabajoId) {
+                //     const trabajoStockRepository = getRepository(Trabajos);
+                //     const trabajoStock = await trabajoStockRepository.createQueryBuilder('ts')
+                //         .leftJoinAndSelect('ts.trabajo', 't')
+                //         .where('t.trabajoId = :id', { id: ejemplar.trabajoId })
+                //         .getOne();
+
+                //     if (trabajoStock) {
+                //         await runner.manager.update(Trabajos, { trabajoId: trabajoStock.trabajoId }, { stock: trabajoStock.stock - 1 });
+                //     }
+                // }
+            });
+
+
+
+
+
+            // Como ultimo paso 
+
+
 
             await runner.commitTransaction();
         } catch (err: any) {

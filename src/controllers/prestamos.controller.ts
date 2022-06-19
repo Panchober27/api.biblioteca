@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getRepository, Repository, getManager, getConnection } from 'typeorm';
-import { Prestamos, Libros, PrestamoEjemplar, Trabajos, Revistas, Ejemplar, LibroStock, RevistaStock } from '../entities';
+import { Prestamos, Libros, PrestamoEjemplar, Trabajos, Revistas, Ejemplar, LibroStock, RevistaStock, TrabajoStock } from '../entities';
 
 
 export class PrestamosController {
@@ -51,22 +51,36 @@ export class PrestamosController {
     }
 
 
+
+
+    insertPrestamo = async (req: Request, res: Response) => {
+        const {
+            usuarioId = 2,
+            alumnoId,
+            ejemplares, // [{Ejemplar}]
+            fechaInicioPrestamo,
+        } = req.body;
+
+        return res.send(`insertPrestamo ${usuarioId} ${alumnoId} ${JSON.stringify(ejemplares)} ${fechaInicioPrestamo}`);
+    }
+
+
+
     /**
      * Para generar un nuevo prestamo.
      */
-    insertPrestamo = async (req: Request, res: Response) => {
+    insertPrestamo___ = async (req: Request, res: Response) => {
 
         const runner = getConnection().createQueryRunner();
         await runner.connect();
         // el usuario que genera el prestamo se recupera desde req.user
-        const userId = 2;
 
         try {
             const {
                 usuarioId,
                 alumnoId,
-                ejemplares, // [{Ejemplar}]
-                fechaInicioPrestamo,
+                ejemplares,
+                fechaInicioPrestamo = new Date(),
             } = req.body;
 
             await runner.startTransaction();
@@ -77,7 +91,7 @@ export class PrestamosController {
             const { prestamoId } = await runner.manager.save(Prestamos, {
                 alumnoId,
                 usuarioId,
-                fechaInicio: new Date(), // fechaInicioPrestamo,
+                fechaInicio:  fechaInicioPrestamo,
                 fechaFin: new Date(), // 
                 estado: 'PRESTADO',
             });
@@ -105,7 +119,6 @@ export class PrestamosController {
             // 4. Obtner de cada ejemplar si es libro o revista o trabajo y restar -1 al stock de ese libro, revista o trabajo.
             await ejemplares.forEach(async ejemplar => {
                 if (ejemplar.libroId) {
-
                     const libroStockRepository = getRepository(LibroStock);
                     const libroStock = await libroStockRepository.createQueryBuilder('ls')
                         .leftJoinAndSelect('ls.libro', 'l')
@@ -113,38 +126,65 @@ export class PrestamosController {
                         .getOne();
 
                     if (libroStock) {
-                        await runner.manager.update(LibroStock, { libroStockId: libroStock.libroStockId }, { stock: libroStock.stock - 1 });
+                        await runner.manager.update(LibroStock,
+                            { libroStockId: libroStock.libroStockId },
+                            {
+                                total: libroStock.total - 1,
+                                enPrestamo: libroStock.enPrestamo + 1,
+                                enBiblioteca: libroStock.enBiblioteca - 1,
+                            }
+                        );
                     }
-                } 
-                // else if (ejemplar.revistaId) {
-                //     const revistaStockRepository = getRepository(Revistas);
-                //     const revistaStock = await revistaStockRepository.createQueryBuilder('rs')
-                //         .leftJoinAndSelect('rs.revista', 'r')
-                //         .where('r.revistaId = :id', { id: ejemplar.revistaId })
-                //         .getOne();
+                } else if (ejemplar.revistaId) {
+                    const revistaStockRepository = getRepository(RevistaStock);
+                    const revistaStock = await revistaStockRepository.createQueryBuilder('rs')
+                        .leftJoinAndSelect('rs.revista', 'r')
+                        .where('r.revistaId = :id', { id: ejemplar.revistaId })
+                        .getOne();
 
-                //     if (revistaStock) {
-                //         await runner.manager.update(RevistaStock, { revistaStockId: revistaStock.revistaStockId }, { stock: revistaStock.stock - 1 });
-                //     }
-                // } else if (ejemplar.trabajoId) {
-                //     const trabajoStockRepository = getRepository(Trabajos);
-                //     const trabajoStock = await trabajoStockRepository.createQueryBuilder('ts')
-                //         .leftJoinAndSelect('ts.trabajo', 't')
-                //         .where('t.trabajoId = :id', { id: ejemplar.trabajoId })
-                //         .getOne();
+                    if (revistaStock) {
+                        await runner.manager.update(RevistaStock,
+                            { revistaStockId: revistaStock.revistaStockId },
+                            {
+                                total: revistaStock.total - 1,
+                                enPrestamo: revistaStock.enPrestamo + 1,
+                                enBiblioteca: revistaStock.enBiblioteca - 1,
+                            }
+                        );
+                    }
+                } else if (ejemplar.trabajoId) {
+                    const trabajoStockRepository = getRepository(TrabajoStock);
+                    const trabajoStock = await trabajoStockRepository.createQueryBuilder('ts')
+                        .leftJoinAndSelect('ts.trabajo', 't')
+                        .where('t.trabajoId = :id', { id: ejemplar.trabajoId })
+                        .getOne();
 
-                //     if (trabajoStock) {
-                //         await runner.manager.update(Trabajos, { trabajoId: trabajoStock.trabajoId }, { stock: trabajoStock.stock - 1 });
-                //     }
-                // }
+                    if (trabajoStock) {
+                        await runner.manager.update(TrabajoStock,
+                            { trabajoStockId: trabajoStock.trabajoStockId },
+                            {
+                                total: trabajoStock.total - 1,
+                                enPrestamo: trabajoStock.enPrestamo + 1,
+                                enBiblioteca: trabajoStock.enBiblioteca - 1,
+                            }
+                        );
+                    }
+                }
             });
 
 
-
-
-
-            // Como ultimo paso 
-
+            // Como ultimo paso editar el prestamo la fecha de fin
+            // porque esa fecha se calcula en base a la fecha de entrega(devolucion) del ultimo ejemplar.
+            // recorrer ejemplares y buscar la fecha mas tardia para usarla como la fecha fin del prestamo.
+            // let fechaFinPrestamo = new Date();
+            // ejemplares.forEach(ejemplar => {
+            //     if (ejemplar.fechaDevolucion > fechaFinPrestamo) {
+            //         fechaFinPrestamo = ejemplar.fechaDevolucion;
+            //     }
+            // });
+            // await runner.manager.update(Prestamos, { prestamoId }, {
+            //     fechaFin: fechaFinPrestamo,
+            // });
 
 
             await runner.commitTransaction();

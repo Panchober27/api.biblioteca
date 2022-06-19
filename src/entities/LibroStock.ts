@@ -17,8 +17,17 @@ export class LibroStock {
   @Column("int", { name: "libro_id" })
   libroId: number;
 
-  @Column("int", { name: "stock" })
-  stock: number;
+  @Column("int", { name: "total" })
+  total: number;
+
+  @Column("int", { name: "en_biblioteca" })
+  enBiblioteca: number;
+
+  @Column("int", { name: "en_prestamo" })
+  enPrestamo: number;
+
+  @Column("int", { name: "en_atraso" })
+  enAtraso: number;
 
   @ManyToOne(() => Libros, (libros) => libros.libroStocks, {
     onDelete: "RESTRICT",

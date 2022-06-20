@@ -1,8 +1,5 @@
 import { Router, Request, Response } from 'express';
-// import { BooksController } from '../controllers';
-
-
-
+import { EjemplaresController } from '../controllers';
 /**
  * Este archivo contiene las rutas para las peticiones de los ejemplares.
  * Libros
@@ -11,18 +8,16 @@ import { Router, Request, Response } from 'express';
  */
 
 const router = Router();
+const c = new (EjemplaresController);
 
 
+router.get('/ejemplares', c.getEjemplares);
 
-
-
-
-
-// const c = new BooksController();
-
-// router.get('/books', c.getBooks);
 
 // router.post('/books', c.insertBook);
+
+
+
 
 
 export default router;

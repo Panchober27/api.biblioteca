@@ -54,14 +54,45 @@ export class PrestamosController {
 
 
     insertPrestamo = async (req: Request, res: Response) => {
-        const {
-            usuarioId = 2,
-            alumnoId,
-            ejemplares, // [{Ejemplar}]
-            fechaInicioPrestamo,
-        } = req.body;
+        // const {
+        //     usuarioId = 2,
+        //     alumnoId,
+        //     ejemplares, // [{Ejemplar}]
+        //     fechaInicioPrestamo,
+        // } = req.body;
 
-        return res.send(`insertPrestamo ${usuarioId} ${alumnoId} ${JSON.stringify(ejemplares)} ${fechaInicioPrestamo}`);
+        try {
+
+            const data = req.body;
+
+            const userLogged = req.user;
+            const usuarioId = userLogged.usuarioId;
+
+
+            console.log(data);
+
+
+
+            // const prestamo = new Prestamos();
+            // prestamo.usuario = req.user;
+            // prestamo.alumno = alumno;
+            // prestamo.fechaInicio = new Date();
+            // prestamo.fechaFin.setDate(prestamo.fechaInicio.getDate() + 7);
+            // prestamo.estado = 'PRESTADO';
+            // prestamo.prestamoEjemplars = ejemplares;
+            // const prestamoRepository = getRepository(Prestamos);
+            // await prestamoRepository.save(prestamo);
+
+
+            // return res.status(201).json(prestamo);
+            return res.sendStatus(200);
+
+
+        } catch (err: any) {
+            console.error(err);
+            return res.status(500).json({ error: err.message });
+        }
+
     }
 
 
@@ -91,7 +122,7 @@ export class PrestamosController {
             const { prestamoId } = await runner.manager.save(Prestamos, {
                 alumnoId,
                 usuarioId,
-                fechaInicio:  fechaInicioPrestamo,
+                fechaInicio: fechaInicioPrestamo,
                 fechaFin: new Date(), // 
                 estado: 'PRESTADO',
             });

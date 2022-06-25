@@ -13,8 +13,12 @@ const c = new (EjemplaresController);
 
 router.get('/ejemplares', c.getEjemplares);
 
+// Esta es la nueva ruta que deberia funcionar con un algoritmo de busqueda por burbuja.
 
-// router.post('/books', c.insertBook);
+// router.get('/ejemplares', c.getLibrosRevTrab);
+
+
+router.post('/books', );
 
 
 

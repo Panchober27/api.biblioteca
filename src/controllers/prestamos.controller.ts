@@ -160,7 +160,7 @@ export class PrestamosController {
                         await runner.manager.update(LibroStock,
                             { libroStockId: libroStock.libroStockId },
                             {
-                                total: libroStock.total - 1,
+                                // total: libroStock.total - 1,
                                 enPrestamo: libroStock.enPrestamo + 1,
                                 enBiblioteca: libroStock.enBiblioteca - 1,
                             }

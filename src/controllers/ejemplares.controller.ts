@@ -73,7 +73,8 @@ export class EjemplaresController {
     };
 
 
-    addLibroDemo = async (req: Request, res: Response) => {
+ 
+    addLibro = async (req: Request, res: Response) => {
         // insert para un nuevo libro.
         // 1- registro en libro.
         // 2- registro en ejemplar.
@@ -81,34 +82,7 @@ export class EjemplaresController {
         // 4- registro en libroStock (corresponde a la cantidad de ejemplares. por libro!)
         //     4.1 - el registro de stocks debe ser asi.
         //         - en enBiblioteca colocar la canntiad de ejemplares. registrados.
-
-        try {
-
-            const libroRepo = getRepository(Libros);
-            const ejemplarRepo = getRepository(Ejemplar);
-            const libroStockRepo = getRepository(LibroStock);
-
-            const l = new Libros();
-            l.nombre = 'Libro de prueba';
-            l.isbn = '123456789';
-            l.isbnTipo = 'TAPA DURA';
-            l.editorial = 'Editorial de prueba';
-            l.edicion = 'Edicion de prueba';
-            l.fechaPublicacion = new Date().toString();
-
-            // guardar el libro y recuperar su id
-            const libro = await libroRepo.save(l);
-
-            // crear un nuevo ejemplar           
-        } catch (err: any) {
-            console.error(err);
-            return res.status(500).json({ error: err.message });
-        }
-
-    }
-
-
-    addLibro = async (req: Request, res: Response) => {
+        
         // usar transacciones.
         const runner = getConnection().createQueryRunner();
         await runner.connect();
@@ -154,6 +128,8 @@ export class EjemplaresController {
 
             await runner.commitTransaction();
 
+            console.log(`libro: ${libroId} ejemplar: ${ejemplarId} libroStock: ${libroStockId}`);
+
         } catch (err: any) {
             console.error(err);
             return res.status(500).json({ error: err.message });
@@ -163,6 +139,85 @@ export class EjemplaresController {
 
         // Funcion ejecutada sin problemas.
         res.sendStatus(200);
+
+    };
+
+
+
+
+    /**
+     * Funcion para crear un nuevo libro y 5 ejemplares de este, mas libroStock
+     * 
+     */
+     addLibroSSS = async (req: Request, res: Response) => {
+        // insert para un nuevo libro.
+        // 1- registro en libro.
+        // 2- registro en ejemplar.
+        // 3- registro en libroEjemplar
+        // 4- registro en libroStock (corresponde a la cantidad de ejemplares. por libro!)
+        //     4.1 - el registro de stocks debe ser asi.
+        //         - en enBiblioteca colocar la canntiad de ejemplares. registrados.
+        
+        // usar transacciones.
+        const runner = getConnection().createQueryRunner();
+        await runner.connect();
+
+        try {
+
+            await runner.startTransaction();
+
+
+            // primero crear el libro recupeando el id desestructurando el objeto.
+            const { libroId } = await runner.manager.save(Libros, {
+                nombre: 'Libro de prueba (5)',
+                isbn: '846546844',
+                isbnTipo: 'TAPA DURA',
+                editorial: 'Editorial de demo',
+                edicion: 'Edicion de demo',
+                fechaPublicacion: new Date().toString()
+            });
+
+
+            // TODO: Loopear y manejar esto para generar mas de un ejemplar de este libro con datos random.
+            const cantidadEjemplares = 5;
+            for (let i = 0; i < cantidadEjemplares; i++) {
+                // crear un nuevo ejemplar
+                const { ejemplarId } = await runner.manager.save(Ejemplar, {
+                    libroId: libroId,
+                    trabajoId: null,
+                    revistaId: null,
+                    estado: 'DISPONIBLE',
+                    isbn: 2235 + (i++),
+                    fechaDevolucion: null,
+                    fechaEntrega: null,
+                    fechaFin: null,
+                });
+            };
+
+            // crear un nuevo libroStock
+            const { libroStockId } = await runner.manager.save(LibroStock, {
+                libroId: libroId,
+                total: 5,
+                enBiblioteca: 5,
+                enPrestamo: 0,
+                enAtraso: 0,
+            });
+
+
+            await runner.commitTransaction();
+
+
+        } catch (err: any) {
+            console.error(err);
+            return res.status(500).json({ error: err.message });
+        } finally {
+            await runner.release();
+        }
+
+        // Funcion ejecutada sin problemas.
+        res.status(200).send({
+            message: 'Libro y 5 ejemplares creados.'
+        });
 
     };
 

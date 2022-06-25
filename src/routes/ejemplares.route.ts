@@ -18,7 +18,8 @@ router.get('/ejemplares', c.getEjemplares);
 // router.get('/ejemplares', c.getLibrosRevTrab);
 
 
-router.post('/books', );
+// funcion para añadir un libro y 5 ejemplares asociados a este!
+router.post('/books', c.addLibroSSS);
 
 
 

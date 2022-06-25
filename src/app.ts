@@ -6,6 +6,7 @@ import { auth } from './middlewares';
 import FlowTask from './jobs/cronTab';
 import {
   baseRoutes,
+  demoRoutes,
   userRoutes,
   authRoutes,
   booksRoutes,
@@ -26,6 +27,7 @@ app.use(auth);
 
 // Rutas del servidor.
 app.use('/api', baseRoutes);
+app.use('/api', demoRoutes);
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', booksRoutes);

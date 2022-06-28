@@ -7,8 +7,8 @@ const c = new DemoController();
 
 // Rutas para pronar funciones con postman sin desactivar middleware de auth.
 router.get('/demo', c.getLibrosRevTrab);
-router.post('demo')
-router.put('demo')
+router.post('/demo', c.addLibroSSS);
+router.put('/demo')
 
 
 export default router;

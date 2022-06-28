@@ -8,15 +8,8 @@ const controller = new StudentsController();
 
 
 router.get('/students', controller.getStudents);
+router.get('/studentsAdmin', controller.getAllStudents);
 
-
-router.get('/students', controller.getStudents);
-
-
-router.get('/students', controller.getStudents);
-
-
-router.get('/students', controller.getStudents);
 
 
 export default router;

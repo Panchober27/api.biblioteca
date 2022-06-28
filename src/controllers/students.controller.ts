@@ -10,11 +10,9 @@ export class StudentsController {
         try {
 
             // filtros para busqueda de estudiantes.
-            const { nombreAlumno } = req.params;
+            const { nombreAlumno, isAdmin = false } = req.query;
 
-
-            const userLogged = req.user;
-            console.log(userLogged);
+            console.log(req.query);
 
             const studentsRepository = getRepository(Alumnos);
             const alumnosQuery = studentsRepository.createQueryBuilder('a')
@@ -27,6 +25,10 @@ export class StudentsController {
                 .leftJoinAndSelect('ejemplar.revista', 'revista')
                 .leftJoinAndSelect('ejemplar.trabajo', 'trabajo')
 
+            if (isAdmin == false) {
+                alumnosQuery.where('a.alumnoActivo = :alumnoActivo', { alumnoActivo: true })
+            }
+
             if (nombreAlumno) {
                 console.log(`nombreAlumno: ${nombreAlumno}`);
                 alumnosQuery.andWhere(' a.nombreAlumno LIKE :nombreAlumno', {
@@ -34,9 +36,8 @@ export class StudentsController {
                 });
             }
 
+
             const alumnos = await alumnosQuery.getMany();
-
-
 
             if (!alumnos || alumnos.length === 0) {
                 return res.status(404).json({ message: 'No se encontraron alumnos' });
@@ -51,6 +52,36 @@ export class StudentsController {
     }
 
 
+
+    /**
+     * Funcion que retorna el listado de todos los alumnos registrados en el sistema.
+     * esta funcion puede recibir varios prametros de busqueda!!!
+     * 
+     * definicion de los parametros:
+     *  nombreAlumno: string
+     * carrera: string
+     * facultad: string
+     * 
+     * 
+     * 
+     * @function getAllStudents
+     * @param req 
+     * @param res 
+     */
+    getAllStudents = async (req: Request, res: Response) => {
+        try {
+            const studentsRepo = getRepository(Alumnos);
+            const students = await studentsRepo.find();
+
+            if (!students || students.length === 0) {
+                return res.status(404).json({ message: 'No se encontraron alumnos' });
+            }
+            return res.status(200).send(students);
+        } catch (err: any) {
+            console.error(err);
+            return res.status(500).json({ error: err.message });
+        }
+    }
 
     /**
      * @function findStudent

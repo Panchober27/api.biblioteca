@@ -80,17 +80,17 @@ export class DemoController {
 
             // primero crear el libro recupeando el id desestructurando el objeto.
             const { libroId } = await runner.manager.save(Libros, {
-                nombre: 'Libro de prueba (5)',
-                isbn: '846546844',
+                nombre: 'AAAA',
+                isbn: '8946AAAA',
                 isbnTipo: 'TAPA DURA',
-                editorial: 'Editorial de demo',
-                edicion: 'Edicion de demo',
+                editorial: 'Editorial aaaaa',
+                edicion: 'Edicion de asasasasas',
                 fechaPublicacion: new Date().toString()
             });
 
 
             // TODO: Loopear y manejar esto para generar mas de un ejemplar de este libro con datos random.
-            const cantidadEjemplares = 5;
+            const cantidadEjemplares = 3;
             for (let i = 0; i < cantidadEjemplares; i++) {
                 // crear un nuevo ejemplar
                 const { ejemplarId } = await runner.manager.save(Ejemplar, {
@@ -98,18 +98,19 @@ export class DemoController {
                     trabajoId: null,
                     revistaId: null,
                     estado: 'DISPONIBLE',
-                    isbn: 2235 + (i++),
+                    isbn: 222 + (i++),
                     fechaDevolucion: null,
                     fechaEntrega: null,
                     fechaFin: null,
                 });
+                console.log(`crado ejemlar con id: ${ejemplarId}`);
             };
 
             // crear un nuevo libroStock
             const { libroStockId } = await runner.manager.save(LibroStock, {
                 libroId: libroId,
-                total: 5,
-                enBiblioteca: 5,
+                total: 3,
+                enBiblioteca: 3,
                 enPrestamo: 0,
                 enAtraso: 0,
             });
@@ -127,9 +128,55 @@ export class DemoController {
 
         // Funcion ejecutada sin problemas.
         res.status(200).send({
-            message: 'Libro y 5 ejemplares creados.'
+            message: 'Libro y 4 ejemplares creados.'
         });
 
     };
+
+
+    // Funcion para a{adir uno o mas ejemplares de un libro(ya creado)
+    addEjemplaresToBook = async (req: Request, res: Response) => {
+        const libroId = 0; // hardcodear.
+
+        // usar transacciones.
+        const runner = getConnection().createQueryRunner();
+        await runner.connect();
+
+        try {
+
+            await runner.startTransaction();
+
+            // crear un nuevo ejemplar
+            const { ejemplarId } = await runner.manager.save(Ejemplar, {
+                libroId: libroId,
+                trabajoId: null,
+                revistaId: null,
+                estado: 'DISPONIBLE',
+                isbn: 222,
+                fechaDevolucion: null,
+                fechaEntrega: null,
+                fechaFin: null,
+            });
+            console.log(`crado ejemlar con id: ${ejemplarId}`);
+
+            // crear un nuevo libroStock
+            // const { libroStockId } = await runner.manager.save(LibroStock, {
+            //     libroId: libroId,
+            //     total: 3,
+            //     enBiblioteca: 3,
+            //     enPrestamo: 0,
+            //     enAtraso: 0,
+            // });
+
+            await runner.commitTransaction();
+
+        } catch (err: any) {
+            console.error(err);
+            return res.status(500).json({ error: err.message });
+        } finally {
+            await runner.release();
+        }
+
+    }
 
 }

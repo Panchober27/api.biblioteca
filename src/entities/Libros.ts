@@ -9,14 +9,10 @@ import { Ejemplar } from "./Ejemplar";
 import { LibroAutores } from "./LibroAutores";
 import { LibroStock } from "./LibroStock";
 
-@Index("isbn", ["isbn"], { unique: true })
 @Entity("libros", { schema: "biblioteca" })
 export class Libros {
   @PrimaryGeneratedColumn({ type: "int", name: "libro_id" })
   libroId: number;
-
-  @Column("varchar", { name: "isbn", unique: true, length: 200 })
-  isbn: string;
 
   @Column("varchar", { name: "isbn_tipo", length: 200 })
   isbnTipo: string;

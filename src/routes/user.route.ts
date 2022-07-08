@@ -18,8 +18,6 @@ router.post(
 router.get('/users', userController.getUsers);
 // router.post('/usersList', userController.getUsers);
 
-
-
 router.get('/users/:id', userController.getUserById);
 
 

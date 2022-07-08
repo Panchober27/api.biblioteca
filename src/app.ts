@@ -12,6 +12,7 @@ import {
   booksRoutes,
   prestamosRoutes,
   studentsRoutes,
+  uploadersRoutes,
 } from './routes';
 
 
@@ -23,7 +24,7 @@ if (process.env.SERVER_ENVIRONMENT === 'DEVELOPMENT') {
 }
 app.use(cors());
 app.use(bodyParser.json());
-app.use(auth);
+// app.use(auth);
 
 // Rutas del servidor.
 app.use('/api', baseRoutes);
@@ -33,6 +34,7 @@ app.use('/api', userRoutes);
 app.use('/api', booksRoutes);
 app.use('/api', prestamosRoutes);
 app.use('/api', studentsRoutes);
+app.use('/api', uploadersRoutes);
 
 
 // CronTab configurado para ejecutarse cada 30 segundos.

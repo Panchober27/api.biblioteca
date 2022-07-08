@@ -60,39 +60,43 @@ export class PrestamosController {
         //     ejemplares, // [{Ejemplar}]
         //     fechaInicioPrestamo,
         // } = req.body;
+        const runner = getConnection().createQueryRunner();
+        await runner.connect();
 
         try {
-
-            const data = req.body;
-
-            const userLogged = req.user;
-            const usuarioId = userLogged.usuarioId;
+            
+            const {usuarioId} = req.user; // recupero el id del usuario en sesion.
 
 
-            console.log(data);
+            // quizas los libros se deban cambiar por los ejemplares!. o se le entrega el primer ejemplar disponible.
+
+
+            const {libros, alumno} = req.body; // desestructuro libros y alumno para generar el prestamo.
+
+
+            // console.log(alumno);
+            // console.log(libros);
+
+            // await runner.startTransaction();
 
 
 
-            // const prestamo = new Prestamos();
-            // prestamo.usuario = req.user;
-            // prestamo.alumno = alumno;
-            // prestamo.fechaInicio = new Date();
-            // prestamo.fechaFin.setDate(prestamo.fechaInicio.getDate() + 7);
-            // prestamo.estado = 'PRESTADO';
-            // prestamo.prestamoEjemplars = ejemplares;
-            // const prestamoRepository = getRepository(Prestamos);
-            // await prestamoRepository.save(prestamo);
 
 
-            // return res.status(201).json(prestamo);
-            return res.sendStatus(200);
+
+            // await runner.commitTransaction();
 
 
+            
+            
         } catch (err: any) {
             console.error(err);
             return res.status(500).json({ error: err.message });
+        } finally {
+            await runner.release();
         }
-
+        
+        return res.sendStatus(200);
     }
 
 

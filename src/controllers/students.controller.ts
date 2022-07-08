@@ -12,7 +12,7 @@ export class StudentsController {
             // filtros para busqueda de estudiantes.
             const { nombreAlumno, isAdmin = false } = req.query;
 
-            console.log(req.query);
+            // console.log(req.query);
 
             const studentsRepository = getRepository(Alumnos);
             const alumnosQuery = studentsRepository.createQueryBuilder('a')
@@ -30,12 +30,18 @@ export class StudentsController {
             }
 
             if (nombreAlumno) {
-                console.log(`nombreAlumno: ${nombreAlumno}`);
+                // console.log(`nombreAlumno: ${nombreAlumno}`);
                 alumnosQuery.andWhere(' a.nombreAlumno LIKE :nombreAlumno', {
                     nombreAlumno: `%${nombreAlumno}%`,
                 });
             }
 
+            if(req.user){
+                const userLogged = req.user;
+                console.log(userLogged);
+            } else {
+                console.log('No hay usuario loggeado');
+            }
 
             const alumnos = await alumnosQuery.getMany();
 

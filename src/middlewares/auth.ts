@@ -38,9 +38,29 @@ const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
 
     if (decoded) {
       const usuario = decoded.user;
-
       const userRepository: Repository<Usuarios> = getRepository(Usuarios);
-
+      // consulta para obtener los permisos del usaurio.
+      // userRepository.createQueryBuilder('u')
+      //   .innerJoinAndSelect('u.usuariosPerfiles', 'up')
+      //   .innerJoinAndSelect('up.perfil', 'p')
+      //   .innerJoinAndSelect('p.perfilesPermisos', 'pp')
+      //   .innerJoinAndSelect('pp.permiso', 'permiso')
+      //   .select([
+      //     'u.usuarioId',
+      //     'u.usuario',
+      //     'u.usuarioNombre',
+      //     'u.usuarioApellido',
+      //     'u.usuarioEmail',
+      //     'u.usuarioActivo',
+      //     'p.*',
+      //     'permiso.*',
+      //   ])
+      //   .getMany()
+      //   .then((user) => {
+      //     const userObj: any = {
+      //       permissions: [],
+      //     }
+      //   })
       userRepository.findOne(
         { where: { usuario } },
       ).then((user) => {

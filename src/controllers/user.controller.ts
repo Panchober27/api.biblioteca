@@ -48,15 +48,6 @@ export class UserController {
         })
       );
 
-      // await runner.manager.save(
-      //   runner.manager.create(
-      //     UsuariosPerfiles, {
-      //     usuarioId,
-      //     perfilId: profileId,
-      //   }
-      //   )
-      // );
-
       await runner.commitTransaction();
 
     } catch (err: any) {
@@ -114,8 +105,6 @@ export class UserController {
       );
 
       // await runner.manager.delete(UsuariosPerfiles, { usuarioId: id, perfilId: profileId });
-
-
       // await runner.manager.save(
       //   runner.manager.create(
       //     UsuariosPerfiles, {
@@ -240,12 +229,10 @@ export class UserController {
   async getUserPermissions(req: Request, res: Response) {
     try {
       if (req.user) {
-        return res.status(200).json(req.user.permissions);
-        // retornar todos los permisos del usuario loggeado.
-
-
-
-        
+        let permissions: any = [];
+        req.user && req.user.usuarioTipo === 'ADMINISTRADOR' ? permissions = ['admin']
+          : permissions = ['user'];
+        return res.status(200).send(permissions);
       }
     } catch (err: any) {
       return res.status(500).send({ status: false, error: err.message });

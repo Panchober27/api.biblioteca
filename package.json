@@ -10,7 +10,7 @@
     "start": "node .",
     "test": "jest --detectOpenHandles",
     "test-dev": "jest --watchAll",
-    "dev": "tsc-watch --onSuccess \"node build/src/index.js\""
+    "dev": "tsc-watch --onSuccess \"node build/index.js\""
   },
   "keywords": [],
   "author": "",

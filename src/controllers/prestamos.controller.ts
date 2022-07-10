@@ -64,20 +64,40 @@ export class PrestamosController {
         await runner.connect();
 
         try {
-            
-            const {usuarioId} = req.user; // recupero el id del usuario en sesion.
-
-
+            // const {usuarioId} = req.user; // recupero el id del usuario en sesion.
             // quizas los libros se deban cambiar por los ejemplares!. o se le entrega el primer ejemplar disponible.
+            // const {libros, alumno, fechaInicioPrestamo = new Date() } = req.body; // desestructuro libros y alumno para generar el prestamo.
+
+            const { libros } = req.body;
+
+            const usuarioId = 2;
+            const alumnoId = 1;
+            const fechaInicioPrestamo = new Date();
 
 
-            const {libros, alumno} = req.body; // desestructuro libros y alumno para generar el prestamo.
+            const { prestamoId } = await runner.manager.save(Prestamos, {
+                usuarioId,
+                alumnoId,
+                fechaInicioPrestamo,
+            });
 
 
-            // console.log(alumno);
-            // console.log(libros);
 
-            // await runner.startTransaction();
+            if(libros) {
+                // 1era iteracion, recupera los id's de los ejemplares de cada libro del prestamo.
+                // se usan esos ejemplares para generar la relacion prestamoEjemplars
+                libros.forEach(l => {
+
+                    // recuperar los ids de los ejemplares y añadirlos a un array de id's
+
+                    // la validacion de esto es que la cantidad de id's (ejemplares) sea igual a la cantidad de libros.
+
+                });
+            }
+
+
+
+            await runner.startTransaction();
 
 
 
@@ -87,15 +107,15 @@ export class PrestamosController {
             // await runner.commitTransaction();
 
 
-            
-            
+
+
         } catch (err: any) {
             console.error(err);
             return res.status(500).json({ error: err.message });
         } finally {
             await runner.release();
         }
-        
+
         return res.sendStatus(200);
     }
 

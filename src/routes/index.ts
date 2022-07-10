@@ -6,3 +6,4 @@ export { default as booksRoutes } from './ejemplares.route';
 export { default as prestamosRoutes } from './prestamos.route';
 export { default as studentsRoutes } from './students.route';
 export { default as uploadersRoutes } from './uploaders.route';
+export { default as rankingsRoutes } from './rankings.route';

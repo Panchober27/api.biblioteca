@@ -4,11 +4,17 @@ import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';
 import { Usuarios } from '../entities';
 
+
+/**
+ * WebService para autenticar usuarios
+ * @module AuthController
+ */
+
+
 export class AuthController {
   
 
   /**
-   * @global 
    * @function signin
    * @description Función que permite iniciar sesión.
    * @param {string} userName Nombre de usuario

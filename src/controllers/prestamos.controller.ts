@@ -12,9 +12,8 @@
 
 
 /**
- * ActionRequest
- * @memberof Action
- * @alias ActionRequest
+ * @module PrestamosController
+ * @description Controlador de Prestamos
  */
 
 

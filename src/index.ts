@@ -1,12 +1,3 @@
-
-
-// /**
-//  * @file index.js Archivo principal de la aplicación dasjdljadj dasjdljadjdasjdljadjdasjdljadjdasjdljadjdasjdljadj dasjdljadj dasjdljadjdasjdljadj dasjdljadj
-//  * dasjdljadjdasjdljadjdasjdljadjdasjdljadjdasjdljadjdasjdljadj dasjdljadjdasjdljadjdasjdljadj dasjdljadj dasjdljadj PANCHO
-//  * @author Francisco Berwart
-//  */
-
-
 require('dotenv').config();
 import app from './app';
 import { connect } from './database';

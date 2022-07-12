@@ -4,14 +4,15 @@ import { Ejemplar, Libros, PrestamoEjemplar, Trabajos, Revistas, LibroStock, Rev
 
 
 /**
- * @export EjemplaresController
+ * Web service para los prestamos
+ * @module EjemplaresController
+ * @memberof module:controllers
  */
 
 export class EjemplaresController {
 
 
     /**
-     * @memberof EjemplaresController
      * @function getEjemplares
      * @description Función que permite obtener los libros y sus ejemplares, cuando los ejemplares estan disponibles.
      * @returns {Array<Libros>} Array de objetos con los libros y sus ejemplares.

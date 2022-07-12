@@ -1,3 +1,23 @@
+
+// /**
+//  * Controlador de Prestamos
+//  * @module PrestamosController
+//  */
+
+// /**
+//  * Pants module.
+//  * @module my/pants
+//  * @see module:my/shirt
+//  */
+
+
+/**
+ * ActionRequest
+ * @memberof Action
+ * @alias ActionRequest
+ */
+
+
 import { Request, Response } from 'express';
 import { getRepository, Repository, getManager, getConnection } from 'typeorm';
 import { Prestamos, Libros, PrestamoEjemplar, Trabajos, Revistas, Ejemplar, LibroStock, RevistaStock, TrabajoStock } from '../entities';
@@ -5,12 +25,7 @@ import { Prestamos, Libros, PrestamoEjemplar, Trabajos, Revistas, Ejemplar, Libr
 
 export class PrestamosController {
 
-    /**
-     * @function getPrestamos
-     * @param req
-     * @param res
-     * @returns
-     */
+  
     getPrestamos = async (req: Request, res: Response) => {
         return res.json({ message: 'getPrestamos' });
     }
@@ -52,7 +67,13 @@ export class PrestamosController {
 
 
 
-
+    /** 
+     * @function insertPrestamo
+     * @description Función que permite insertar un nuevo prestamo.
+     * @param {Request} req Objeto con los datos de la petición.
+     * @param {Response} res Objeto con los datos de la respuesta.
+     * @returns {Prestamos} Objeto con el prestamo insertado.
+     */
     insertPrestamo = async (req: Request, res: Response): Promise<Response>=> {
         // const runner = getConnection().createQueryRunner();
         // await runner.connect();
@@ -85,9 +106,6 @@ export class PrestamosController {
 
 
 
-    /**
-     * Para generar un nuevo prestamo.
-     */
     insertPrestamo___ = async (req: Request, res: Response) => {
 
         const runner = getConnection().createQueryRunner();
@@ -216,25 +234,12 @@ export class PrestamosController {
 
     }
 
-    /**
-     * @function updatePrestamo
-     * @param req 
-     * @param res 
-     * 
-     * Para finalizar? un prestamo.
-     * 
-     */
+   
     updatePrestamo = async (req: Request, res: Response) => {
     }
 
 
-    /**
-     * @function returnEjemlparOfPrestamo
-     * @param req 
-     * @param res 
-     * 
-     * Esta funcion es para realizar la devolucion de 1 o mas ejemplares de un prestamo.
-     */
+   
     returnEjemlparOfPrestamo = async (req: Request, res: Response) => {
     };
 

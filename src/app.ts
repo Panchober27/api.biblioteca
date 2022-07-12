@@ -16,7 +16,11 @@ import {
   rankingsRoutes,
 } from './routes';
 
-
+/**
+ * @constant {Express} app
+ * @description Instancia de express
+ * @see {@link https://expressjs.com/en/api.html#express}
+ */
 const app: Express = express();
 
 // Configuraciones y Middlewares

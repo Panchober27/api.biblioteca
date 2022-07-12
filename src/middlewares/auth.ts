@@ -11,12 +11,7 @@ declare global {
   }
 }
 
-/**
- * Verifica estado de autenticación de usuario para el acceso de rutas en servidor.
- * @param {Request}req
- * @param {Response}res
- * @param {NextFunction}next
- */
+
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   const token: string | undefined = req.headers.authorization;
 

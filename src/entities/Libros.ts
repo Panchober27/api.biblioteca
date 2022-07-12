@@ -9,6 +9,20 @@ import { Ejemplar } from "./Ejemplar";
 import { LibroAutores } from "./LibroAutores";
 import { LibroStock } from "./LibroStock";
 
+/**
+ * @class Libros
+ * @description Clase que representa la tabla libros de la base de datos
+ * @property {number} libroId
+ * @property {string} titulo
+ * @property {string} isbn
+ * @property {string} editorial
+ * @property {string} edicion
+ * @property {string} fechaPublicacion
+ * @property {boolean} libroActivo
+ * @property {Ejemplar[]} ejemplares
+ * @property {LibroAutores[]} libroAutores
+ * @property {LibroStock[]} libroStock
+ */
 @Entity("libros", { schema: "biblioteca" })
 export class Libros {
   @PrimaryGeneratedColumn({ type: "int", name: "libro_id" })

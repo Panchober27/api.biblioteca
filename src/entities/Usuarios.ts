@@ -2,6 +2,24 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Prestamos } from "./Prestamos";
 import { UsuariosPerfiles } from "./UsuariosPerfiles";
 
+
+/**
+ * @class Usuarios
+ * @description Clase que representa la tabla usuarios de la base de datos
+ * @property {number} usuarioId Id de la tabla
+ * @property {string} usuario Nombre de usuario
+ * @property {string} nombre Nombre del usuario
+ * @property {string} apellido Apellido del usuario
+ * @property {string} password Contraseña del usuario
+ * @property {string} usuarioToken Token de acceso del usuario, se resetea cada 24 horas
+ * @property {string} usuarioSalt Salt de la contraseña del usuario
+ * @property {string} usuarioMail Correo electronico del usuario
+ * @property {enum} usuarioTipo Tipo de usuario, puede ser "ADMINISTRADOR", "USUARIO"
+ * @property {boolean} usuarioActivo Indica si el usuario esta activo o no
+ * @property {date} timestamp Fecha de creacion del usuario
+ * @property {Prestamos[]} prestamos Prestamos que estan asociados al usuario
+ * @property {UsuariosPerfiles[]} usuariosPerfiles Perfiles que tiene asociado el usuario
+ */
 @Entity("usuarios", { schema: "biblioteca" })
 export class Usuarios {
   @PrimaryGeneratedColumn({ type: "int", name: "usuario_id" })

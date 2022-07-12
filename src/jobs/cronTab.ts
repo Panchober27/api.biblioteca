@@ -18,10 +18,7 @@ const task = cron.schedule(
   { scheduled: false }
 );
 
-/**
- * @function FlowTask
- * @returns Status de ejecucion
- */
+
 const FlowTask = async () => {
   const mailer = new NodeMailer(); // instancia de nodemailer
   const usersRepo = getRepository(Usuarios); // repo de usuarios para obtener su o sus correos.

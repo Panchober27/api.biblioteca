@@ -51,11 +51,7 @@ type SchemaType =
   | 'CREATE_CERTIFICATION_REGISTER'
   | 'CREATE_OR_UPDATE_PERMISSION';
 
-/**
- * Valida esquema json en peticiones de servidor. Si validación no es exitosa
- * se retorna un código de estado 400
- * @param {SchemaType} schemaType
- */
+
 export default (schemaType: SchemaType) =>
   (req: Request, res: Response, next: NextFunction) => {
     try {

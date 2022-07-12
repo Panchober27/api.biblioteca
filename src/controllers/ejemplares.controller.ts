@@ -2,9 +2,20 @@ import { Request, Response } from 'express';
 import { getRepository, Repository, getManager, getConnection } from 'typeorm';
 import { Ejemplar, Libros, PrestamoEjemplar, Trabajos, Revistas, LibroStock, RevistaStock, TrabajoStock } from '../entities';
 
+
+/**
+ * @export EjemplaresController
+ */
+
 export class EjemplaresController {
 
 
+    /**
+     * @memberof EjemplaresController
+     * @function getEjemplares
+     * @description Función que permite obtener los libros y sus ejemplares, cuando los ejemplares estan disponibles.
+     * @returns {Array<Libros>} Array de objetos con los libros y sus ejemplares.
+     */
     getEjemplares = async (req: Request, res: Response) => {
         try {
             // obtener libros, revistas, trabajos cuyos stocks no esten agotados.

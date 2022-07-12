@@ -7,12 +7,7 @@ import { Usuarios, Permisos, UsuariosPerfiles } from '../entities';
 const USER_ALREADY_EXISTS: string = 'USER_ALREADY_EXISTS';
 const USER_NOT_EXIST: string = 'USER_NOT_EXIST';
 export class UserController {
-  /**
-   * Función encargada de la creacion de nuevos usuarios.
-   * @param req
-   * @param res
-   * @returns
-   */
+ 
   async createUser(req: Request, res: Response): Promise<Response> {
     const runner = getConnection().createQueryRunner();
     await runner.connect();
@@ -61,11 +56,7 @@ export class UserController {
     return res.sendStatus(200);
   }
 
-  /**
-   * Actualiza datos de usuario seleccionado por id
-   * @param req
-   * @param res
-   */
+  
   async updateUser(req: Request, res: Response): Promise<Response> {
     const runner = getConnection().createQueryRunner();
     await runner.connect();
@@ -127,13 +118,7 @@ export class UserController {
 
   }
 
-  /**
-   * Obtiene listado de todos los usuarios ingresados en base de datos.
-   * contiene parametros opcionales, 1 o más permisos.
-   * si no trae parametros retornar todos los usuarios.
-   * @param req
-   * @param res
-   */
+
   async getUsers(req: Request, res: Response) {
 
     const user_divisions = 1; // esta es o son las divisiones del usuario loggeado
@@ -184,11 +169,6 @@ export class UserController {
   }
 
 
-  /**
-   * Obtiene datos de usuario según id seleccionado
-   * @param req
-   * @param res
-   */
   async getUserById(req: Request, res: Response): Promise<Response> {
     const response: { status: boolean; user: Usuarios | null } = {
       status: true,
@@ -220,12 +200,6 @@ export class UserController {
 
 
 
-  /**
-   * @function getUserPermissions
-   * @param req
-   * @param res
-   * @returns
-   */
   async getUserPermissions(req: Request, res: Response) {
     try {
       if (req.user) {

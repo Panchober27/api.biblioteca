@@ -5,11 +5,15 @@ import { Request, Response } from 'express';
 import { Usuarios } from '../entities';
 
 export class AuthController {
+  
+
   /**
-   * Verifica usuario y contraseña en la base de datos, si usuario es autenticado retorna
-   * token de sesion
-   * @param req
-   * @param res
+   * @global 
+   * @function signin
+   * @description Función que permite iniciar sesión.
+   * @param {string} userName Nombre de usuario
+   * @param {string}  password Contraseña
+   * @returns {string} token JWT
    */
   async signin(req: Request, res: Response): Promise<Response | undefined> {
     const userRespository = getRepository(Usuarios);

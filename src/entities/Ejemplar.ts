@@ -12,6 +12,24 @@ import { Revistas } from "./Revistas";
 import { Trabajos } from "./Trabajos";
 import { PrestamoEjemplar } from "./PrestamoEjemplar";
 
+
+/**
+ * @class Ejemplar
+ * @description Clase que representa la tabla ejemplares de la base de datos
+ * @property {number} ejemplarId
+ * @property {number} isbn ISBN del ejemplar
+ * @property {number} libroId Id del libro al que pertenece el ejemplar
+ * @property {number} revistaId Id de la revista al que pertenece el ejemplar
+ * @property {number} trabajoId Id del trabajo al que pertenece el ejemplar
+ * @property {date} fechaEntrega Fecha en la que se entrega el ejemplar a un alumno mediante un prestamo
+ * @property {date} fechaFin Fecha en la que debe retorna el ejemplar a la biblioteca
+ * @property {date} fechaDevolucion Fecha en la que el alumno devuelve el ejemplar a la biblioteca
+ * @property {enum} estado { "DISPONIBLE", "PRESTADO", "ATRASADO" } 
+ * @property {Libros} libro Libro al que pertenece el ejemplar
+ * @property {Revistas} revista Revista al que pertenece el ejemplar
+ * @property {Trabajos} trabajo Trabajo al que pertenece el ejemplar
+ * @property {PrestamoEjemplar[]} prestamoEjemplars Prestamos a los que se a asociado este ejemplar.
+ */
 @Index("isbn", ["isbn"], { unique: true })
 @Index("fk_ejemplar_libro", ["libroId"], {})
 @Index("fk_ejemplar_revista", ["revistaId"], {})

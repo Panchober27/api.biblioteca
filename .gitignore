@@ -10,6 +10,9 @@ dist/
 # Carpeta Reports
 reports/
 
+# Carpeta con documentación.
+docs/
+
 # Carpeta con configuraciones secretas.
 secrets/
 

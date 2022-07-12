@@ -10,10 +10,20 @@ import {
 import { Carreras } from "./Carreras";
 import { Prestamos } from "./Prestamos";
 
+
+/**
+ * @class Alumnos
+ * @description Clase que representa la tabla alumnos de la base de datos
+ */
 @Index("rut_alumno", ["rutAlumno"], { unique: true })
 @Index("fk_alumno_carrera", ["carreraId"], {})
 @Entity("alumnos", { schema: "biblioteca" })
 export class Alumnos {
+  
+  /**
+   * @type {number}
+   * @description Id de la tabla
+   */
   @PrimaryGeneratedColumn({ type: "int", name: "alumno_id" })
   alumnoId: number;
 

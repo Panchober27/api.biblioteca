@@ -11,6 +11,20 @@ import { Alumnos } from "./Alumnos";
 import { Usuarios } from "./Usuarios";
 import { PrestamoEjemplar } from "./PrestamoEjemplar";
 
+
+/**
+ * @class Prestamos
+ * @description Clase que representa la tabla prestamos de la base de datos
+ * @property {number} prestamoId Id del prestamo
+ * @property {number} alumnoId Id del alumno al que esta asociado el prestamo
+ * @property {number} usuarioId Id del usuario que realiza el prestamo
+ * @property {string} fechaInicio Fecha de inicio del prestamo
+ * @property {string} fechaFin Fecha de fin del prestamo ...
+ * @property {enum} estado {"PRESTADO", "ATRASADO", "FINALIZADO", "FINALIZADO_ATRASADO"} 
+ * @property {Alumnos} alumno Alumno al que esta asociado el prestamo
+ * @property {Usuarios} usuario Usuario que realiza el prestamo
+ * @property {PrestamoEjemplar[]} prestamoEjemplars Ejemplares que estan asociados al prestamo.
+ */
 @Index("fk_prestamo_alumno", ["alumnoId"], {})
 @Index("fk_prestamo_usuario", ["usuarioId"], {})
 @Entity("prestamos", { schema: "biblioteca" })

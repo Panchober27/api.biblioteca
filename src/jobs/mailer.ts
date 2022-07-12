@@ -1,13 +1,7 @@
 const nodemailer = require('nodemailer');
 
 export class NodeMailer {
-    /**
-     * @function sendMail
-     * @param toAddresses correos a los que se envia el mail.
-     * @param subject asunto del correo
-     * @param body cuerpo del correo
-     * @returns true | false  En caso de exito o error.
-     */
+
     sendMail(toAddresses, subject, body_html): boolean {
 
         try {

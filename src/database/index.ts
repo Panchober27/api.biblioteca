@@ -1,7 +1,9 @@
 import { createConnection } from 'typeorm';
 
 /**
- * Función que conecta base de datos
+ * @function createConnection
+ * @description Función que permite crear la conexión a la base de datos.
+ * @returns {Promise<Connection>}
  */
 const connect = async () => {
   try {

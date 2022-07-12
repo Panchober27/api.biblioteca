@@ -1,4 +1,4 @@
-# API Librería.
+# API Biblioteca.
 
 _Asignatura: Taller Integracion de Software.
 Profesor: Miguel Esteban Aranda Macias.

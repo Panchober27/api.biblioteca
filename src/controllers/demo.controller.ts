@@ -7,13 +7,7 @@ export class DemoController {
 
 
 
-    /**
-     * Funcion para validar los insert de abajo.
-     * @function validateCounts
-     * @param req 
-     * @param res 
-     * @returns 
-     */
+    
     validateCounts = async (req: Request, res: Response): Promise<Response>=> {
         try {
            
@@ -47,15 +41,7 @@ export class DemoController {
 
 
 
-    /**
-     * Funcion para crear libros en carga masiva.
-     * se insertan 5 ejemplares por cada libro.
-     * 
-     * @function insertLibros
-     * @param req 
-     * @param res 
-     * @returns 
-     */
+    
     insertLibros = async (req: Request, res: Response): Promise<Response> => {
         const runner = getConnection().createQueryRunner();
         await runner.connect();

@@ -7,12 +7,10 @@ export class StudentsController {
 
 
     /**
-     * Funcion que retorna listado de alumnos para generar un prestamo
-     * 
+     * @global
      * @function getStudents
-     * @param req.nombreAlumno nombre de alumni a biscar 
-     * @returns {Object} alumno o [Object] alumnos
-     * @returns [Object] 
+     * @description Función que permite obtener todos los alumnos.
+     * @returns {Array<Alumnos>} Array de objetos con los alumnos.
      */
     getStudents = async (req: Request, res: Response) => {
         try {
@@ -56,21 +54,7 @@ export class StudentsController {
 
 
 
-    /**
-     * Funcion que retorna el listado de todos los alumnos registrados en el sistema.
-     * esta funcion puede recibir varios prametros de busqueda!!!
-     * 
-     * definicion de los parametros:
-     *  nombreAlumno: string
-     * carrera: string
-     * facultad: string
-     * 
-     * 
-     * 
-     * @function getAllStudents
-     * @param req 
-     * @param res 
-     */
+
     getAllStudents = async (req: Request, res: Response) => {
         try {
             const studentsRepo = getRepository(Alumnos);
@@ -86,10 +70,7 @@ export class StudentsController {
         }
     }
 
-    /**
-     * @function findStudent
-     * Funcion para encontrar un alumno en un sistema de busqueda.
-     */
+
     findStudent = async (req: Request, res: Response) => {
     }
 

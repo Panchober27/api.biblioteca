@@ -7,7 +7,7 @@ const c = new RankingController();
 
 
 // direnciamos rutas por verbo, pero post no realiza inserciones
-router.get('/rankings', c.getBadStudents);
+router.get('/rankings', c.getEjemplaresPrestado);
 router.post('/rankings');
 
 

@@ -25,14 +25,12 @@ CREATE TABLE facultades (
 
 CREATE TABLE libros (
   libro_id int(11) NOT NULL AUTO_INCREMENT,
-  isbn varchar(200) NOT NULL,
   isbn_tipo varchar(200) NOT NULL,
   nombre varchar(200) NOT NULL,
   editorial varchar(200) NOT NULL,
   edicion varchar(200) NOT NULL,
   fecha_publicacion date NOT NULL,
   PRIMARY KEY (libro_id),
-  UNIQUE KEY isbn (isbn)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 

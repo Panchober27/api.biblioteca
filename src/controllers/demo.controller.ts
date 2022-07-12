@@ -1,182 +1,228 @@
 import { Request, Response } from 'express';
 import { getRepository, Repository, getManager, getConnection } from 'typeorm';
-import { Ejemplar, Libros, PrestamoEjemplar, Trabajos, Revistas, LibroStock, RevistaStock, TrabajoStock } from '../entities';
+import { Ejemplar, Libros, PrestamoEjemplar, Trabajos, Revistas, LibroStock, RevistaStock, TrabajoStock, Prestamos } from '../entities';
 
 export class DemoController {
 
 
 
+
     /**
-     * Funcion para obtener un listado con libros, revistas, trabajos.
-     * basados en que tengan ejemplares con stock valido en bilbioteca.
-     * 
-     * Formular de mejor manera este algoritmo.
-     * 
-     * @function getLibrosRevTrab 
+     * Funcion para validar los insert de abajo.
+     * @function validateCounts
      * @param req 
      * @param res 
+     * @returns 
      */
-    getLibrosRevTrab = async (req: Request, res: Response) => {
+    validateCounts = async (req: Request, res: Response): Promise<Response>=> {
         try {
-            // obtener libros, revistas, trabajos cuyos stocks no esten agotados.
-            const librosRepo = getRepository(Libros);
-            const revistasRepo = getRepository(Revistas);
-            const trabajosRepo = getRepository(Trabajos);
+           
+            const librosRepository: Repository<Libros> = getRepository(Libros);
+            const ejemplaresRepository: Repository<Ejemplar> = getRepository(Ejemplar);
 
-            // revisar que el valor enBiblioteca de [revistaStock, trabajoStock, libroStock] sea mayor a 0.
-            const libros = await librosRepo.createQueryBuilder('l')
-                // .leftJoinAndSelect(' l.ejemplars', 'e')
-                .innerJoinAndSelect('l.ejemplars', 'e')
-                .leftJoinAndSelect('l.libroStocks', 'ls')
-                .where('ls.enBiblioteca > 0')
-                .andWhere('e.estado = :estado', { estado: 'DISPONIBLE' })
-                .getMany();
+            const libros = await librosRepository.findOne({where : {libroId : 38}});
+    
+            const ejemplares = await ejemplaresRepository.find({where : {libroId : 37}});
+            
+            const stocks = await getRepository(LibroStock).find({where : {libroId : 37}});
+            
+            // ahora contar que stock total === cantidad de ejemplares
 
-            // const revistas = await revistasRepo.createQueryBuilder('r')
-            //     .leftJoinAndSelect('r.ejemplars', 'e')
-            //     .leftJoinAndSelect('r.revistaStocks', 'rs')
-            //     .where('rs.enBiblioteca > 0')
-            //     .getMany();
-            // const trabajos = await trabajosRepo.createQueryBuilder('t')
-            //     .leftJoinAndSelect('t.ejemplars', 'e')
-            //     .leftJoinAndSelect('t.trabajoStocks', 'ts')
-            //     .where('ts.enBiblioteca > 0')
-            //     .getMany();
-            // const librosRevTrab = [...libros, ...revistas, ...trabajos];
+            console.log(`stockTotal: ${stocks[0].total}  ||  cantidad de ejemplares: ${ejemplares.length}  || del libro ${libros?.nombre}`);
 
-            const librosRevTrab = [...libros];
-
-            librosRevTrab.length === 0 ? res.sendStatus(204) : res.status(200).json(librosRevTrab);
-
-        } catch (err: any) {
-            console.error(err);
-            return res.status(500).json({ error: err.message });
-        }
-
-    };
-
-
-    /**
-   * Funcion para crear un nuevo libro y 5 ejemplares de este, mas libroStock
-   * 
-   */
-    addLibroSSS = async (req: Request, res: Response) => {
-        // insert para un nuevo libro.
-        // 1- registro en libro.
-        // 2- registro en ejemplar.
-        // 3- registro en libroEjemplar
-        // 4- registro en libroStock (corresponde a la cantidad de ejemplares. por libro!)
-        //     4.1 - el registro de stocks debe ser asi.
-        //         - en enBiblioteca colocar la canntiad de ejemplares. registrados.
-
-        // usar transacciones.
-        const runner = getConnection().createQueryRunner();
-        await runner.connect();
-
-        try {
-
-            await runner.startTransaction();
-
-
-            // primero crear el libro recupeando el id desestructurando el objeto.
-            const { libroId } = await runner.manager.save(Libros, {
-                nombre: 'AAAA',
-                isbn: '8946AAAA',
-                isbnTipo: 'TAPA DURA',
-                editorial: 'Editorial aaaaa',
-                edicion: 'Edicion de asasasasas',
-                fechaPublicacion: new Date().toString()
+            return res.status(200).json({
+                message: 'ok',
+                stockTotal: stocks[0].total,
+                cantidadEjemplares: ejemplares.length,
+                libro: libros?.libroId
             });
 
-
-            // TODO: Loopear y manejar esto para generar mas de un ejemplar de este libro con datos random.
-            const cantidadEjemplares = 3;
-            for (let i = 0; i < cantidadEjemplares; i++) {
-                // crear un nuevo ejemplar
-                const { ejemplarId } = await runner.manager.save(Ejemplar, {
-                    libroId: libroId,
-                    trabajoId: null,
-                    revistaId: null,
-                    estado: 'DISPONIBLE',
-                    isbn: 222 + (i++),
-                    fechaDevolucion: null,
-                    fechaEntrega: null,
-                    fechaFin: null,
-                });
-                console.log(`crado ejemlar con id: ${ejemplarId}`);
-            };
-
-            // crear un nuevo libroStock
-            const { libroStockId } = await runner.manager.save(LibroStock, {
-                libroId: libroId,
-                total: 3,
-                enBiblioteca: 3,
-                enPrestamo: 0,
-                enAtraso: 0,
-            });
-
-
-            await runner.commitTransaction();
-
-
         } catch (err: any) {
-            console.error(err);
-            return res.status(500).json({ error: err.message });
-        } finally {
-            await runner.release();
-        }
-
-        // Funcion ejecutada sin problemas.
-        res.status(200).send({
-            message: 'Libro y 4 ejemplares creados.'
-        });
-
-    };
-
-
-    // Funcion para a{adir uno o mas ejemplares de un libro(ya creado)
-    addEjemplaresToBook = async (req: Request, res: Response) => {
-        const libroId = 0; // hardcodear.
-
-        // usar transacciones.
-        const runner = getConnection().createQueryRunner();
-        await runner.connect();
-
-        try {
-
-            await runner.startTransaction();
-
-            // crear un nuevo ejemplar
-            const { ejemplarId } = await runner.manager.save(Ejemplar, {
-                libroId: libroId,
-                trabajoId: null,
-                revistaId: null,
-                estado: 'DISPONIBLE',
-                isbn: 222,
-                fechaDevolucion: null,
-                fechaEntrega: null,
-                fechaFin: null,
+            return res.status(500).json({
+                message: err.message
             });
-            console.log(`crado ejemlar con id: ${ejemplarId}`);
-
-            // crear un nuevo libroStock
-            // const { libroStockId } = await runner.manager.save(LibroStock, {
-            //     libroId: libroId,
-            //     total: 3,
-            //     enBiblioteca: 3,
-            //     enPrestamo: 0,
-            //     enAtraso: 0,
-            // });
-
-            await runner.commitTransaction();
-
-        } catch (err: any) {
-            console.error(err);
-            return res.status(500).json({ error: err.message });
-        } finally {
-            await runner.release();
         }
 
     }
+
+
+
+    /**
+     * Funcion para crear libros en carga masiva.
+     * se insertan 5 ejemplares por cada libro.
+     * 
+     * @function insertLibros
+     * @param req 
+     * @param res 
+     * @returns 
+     */
+    insertLibros = async (req: Request, res: Response): Promise<Response> => {
+        const runner = getConnection().createQueryRunner();
+        await runner.connect();
+
+        try {
+
+            await runner.startTransaction();
+            let librosIds: number[] = [];
+
+            const libros = [
+                { isbnTipo: 'tapa_dura', nombre: 'Matematicas 1', editorial: 'Google', edicion: 'Estudiantil', fechaPublicacion: new Date().toDateString() },
+                { isbnTipo: 'tapa_dura', nombre: 'Matematicas 2', editorial: 'Google', edicion: 'Estudiantil', fechaPublicacion: new Date().toDateString() },
+                { isbnTipo: 'tapa_dura', nombre: 'Lenguaje 1', editorial: 'Google', edicion: 'Estudiantil', fechaPublicacion: new Date().toDateString() },
+                { isbnTipo: 'tapa_dura', nombre: 'Lenguaje 2', editorial: 'Google', edicion: 'Estudiantil', fechaPublicacion: new Date().toDateString() },
+                { isbnTipo: 'tapa_dura', nombre: 'Ciencias 1', editorial: 'Google', edicion: 'Estudiantil', fechaPublicacion: new Date().toDateString() },
+                { isbnTipo: 'tapa_dura', nombre: 'Ciencias 2', editorial: 'Google', edicion: 'Estudiantil', fechaPublicacion: new Date().toDateString() },
+                { isbnTipo: 'tapa_dura', nombre: 'Historia 1', editorial: 'Google', edicion: 'Estudiantil', fechaPublicacion: new Date().toDateString() },
+                { isbnTipo: 'tapa_dura', nombre: 'Historia 2', editorial: 'Google', edicion: 'Estudiantil', fechaPublicacion: new Date().toDateString() },
+                { isbnTipo: 'tapa_dura', nombre: 'Musica 1', editorial: 'Google', edicion: 'Estudiantil', fechaPublicacion: new Date().toDateString() },
+                { isbnTipo: 'tapa_dura', nombre: 'Musica 2', editorial: 'Google', edicion: 'Estudiantil', fechaPublicacion: new Date().toDateString() },
+            ];
+
+            for(let i = 0; i < libros.length; i++) {
+                const {libroId} = await runner.manager.save(Libros, {
+                    isbnTipo: libros[i].isbnTipo,
+                    nombre: libros[i].nombre,
+                    editorial: libros[i].editorial,
+                    edicion: libros[i].edicion,
+                    fechaPublicacion: libros[i].fechaPublicacion,
+                });
+                librosIds.push(libroId);
+            }
+
+            for(let i = 0; i < librosIds.length; i++){
+                console.log(`Id de nuevo libro: ${librosIds[i]}`);
+            }
+            
+            // por cada libro se generaran 5 ejemplares.
+            for(let i = 0; i < 5; i++) {
+                for(let i = 0; i < librosIds.length; i++){
+                    // crear variable que aumente en base a la iteracion para asignar distintos isbn a cada ejemplar.
+                    const { ejemplarId } = await runner.manager.save(Ejemplar, {
+                        libroId: librosIds[i],
+                        trabajoId: null,
+                        revistaId: null,
+                        estado: 'DISPONIBLE',
+                        isbn: Math.floor(Math.random() * 1000000),
+                        fechaDevolucion: null,
+                        fechaEntrega: null,
+                        fechaFin: null,
+                    });
+                }
+            }
+
+            // por cada libro generar la relacion libro stock.
+            for(let i = 0; i < librosIds.length; i++){
+                const { libroStockId } = await runner.manager.save(LibroStock, {
+                    libroId: librosIds[i],
+                    total: 5,
+                    enBiblioteca: 5,
+                    enPrestamo: 0,
+                    enAtraso: 0,
+                });
+            }
+
+            await runner.commitTransaction();
+
+            return res.sendStatus(200);
+
+        } catch (err: any) {
+            await runner.rollbackTransaction();
+            console.error(err);
+            return res.status(500).json({ error: err.message });
+        } finally {
+            await runner.release();
+        }
+    };
+
+
+
+
+
+    // funcion para gnerar prestamos.
+    generarPrestamo = async (req: Request, res: Response): Promise<Response> => {
+        
+        // Para generar el prestamo debo tener las fechas de cada ejemplar
+        // el prestamo tendra 3 ejemplares. mat, leng, ciencias.
+        const runner = getConnection().createQueryRunner();
+        await runner.connect();
+        try {
+
+            await runner.startTransaction();
+
+
+            // ejemplar de leng, mar, ciencias
+
+            const prestamosRepository = getRepository(Prestamos);
+
+            // alumno que genera el prestamo.
+            const alumnoId = 1; // Daniel Muñoz
+            // usuario que genera el prestamo.
+            const usuarioId = 2; // Francisco Berwart
+
+            // libro que se presta.
+            const matId = 37; // Matematicas 1
+            const lengId = 39; // Lenguaje 1
+            const cienId = 41; // Ciencias 1
+
+            // obtener 1 ejemplar por cada libro.
+            const matEjemplar = await getRepository(Ejemplar).findOne({
+                where: {
+                    libroId: matId,
+                },
+            });
+            const lengEjemplar = await getRepository(Ejemplar).findOne({
+                where: {
+                    libroId: lengId,
+                },
+            });
+            const cienEjemplar = await getRepository(Ejemplar).findOne({
+                where: {
+                    libroId: cienId,
+                },
+            });
+
+            // crear prestamo.
+
+
+
+
+
+            // se crea el prestamo.
+            const { prestamoId } = await runner.manager.save(Prestamos, {
+                alumnoId,
+                usuarioId,
+                fechaInicio: new Date().toDateString(),
+
+            });
+
+
+
+
+            
+
+
+
+
+
+
+
+            await runner.commitTransaction();
+
+            return res.sendStatus(200);
+
+        } catch (err: any) {
+            await runner.rollbackTransaction();
+            console.error(err);
+            return res.status(500).json({
+                message: err.message
+            });
+        } finally {
+            await runner.release();
+        }
+            
+    }
+
+
+    
 
 }

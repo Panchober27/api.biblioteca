@@ -14,7 +14,6 @@ export class EjemplaresController {
 
             // revisar que el valor enBiblioteca de [revistaStock, trabajoStock, libroStock] sea mayor a 0.
             const libros = await librosRepo.createQueryBuilder('l')
-                // .leftJoinAndSelect(' l.ejemplars', 'e')
                 .innerJoinAndSelect('l.ejemplars', 'e')
                 .leftJoinAndSelect('l.libroStocks', 'ls')
                 .where('ls.enBiblioteca > 0')

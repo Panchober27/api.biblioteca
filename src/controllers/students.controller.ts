@@ -6,14 +6,18 @@ import {
 export class StudentsController {
 
 
+    /**
+     * Funcion que retorna listado de alumnos para generar un prestamo
+     * 
+     * @function getStudents
+     * @param req.nombreAlumno nombre de alumni a biscar 
+     * @returns {Object} alumno o [Object] alumnos
+     * @returns [Object] 
+     */
     getStudents = async (req: Request, res: Response) => {
         try {
-
             // filtros para busqueda de estudiantes.
             const { nombreAlumno, isAdmin = false } = req.query;
-
-            // console.log(req.query);
-
             const studentsRepository = getRepository(Alumnos);
             const alumnosQuery = studentsRepository.createQueryBuilder('a')
                 .leftJoinAndSelect('a.prestamos', 'prestamos')
@@ -24,25 +28,18 @@ export class StudentsController {
                 .leftJoinAndSelect('ejemplar.libro', 'libro')
                 .leftJoinAndSelect('ejemplar.revista', 'revista')
                 .leftJoinAndSelect('ejemplar.trabajo', 'trabajo')
-
-            if (isAdmin == false) {
-                alumnosQuery.where('a.alumnoActivo = :alumnoActivo', { alumnoActivo: true })
-            }
-
+            // if (isAdmin == false) {
+            //     alumnosQuery.where('a.alumnoActivo = :alumnoActivo', { alumnoActivo: true })
+            // }
             if (nombreAlumno) {
                 // console.log(`nombreAlumno: ${nombreAlumno}`);
                 alumnosQuery.andWhere(' a.nombreAlumno LIKE :nombreAlumno', {
                     nombreAlumno: `%${nombreAlumno}%`,
                 });
             }
-
-            if(req.user){
-                const userLogged = req.user;
-                console.log(userLogged);
-            } else {
-                console.log('No hay usuario loggeado');
-            }
-
+            // if(!req.user){
+            //     console.log('No hay usuario loggeado');
+            // }
             const alumnos = await alumnosQuery.getMany();
 
             if (!alumnos || alumnos.length === 0) {

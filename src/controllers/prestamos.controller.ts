@@ -53,70 +53,34 @@ export class PrestamosController {
 
 
 
-    insertPrestamo = async (req: Request, res: Response) => {
-        // const {
-        //     usuarioId = 2,
-        //     alumnoId,
-        //     ejemplares, // [{Ejemplar}]
-        //     fechaInicioPrestamo,
-        // } = req.body;
-        const runner = getConnection().createQueryRunner();
-        await runner.connect();
+    insertPrestamo = async (req: Request, res: Response): Promise<Response>=> {
+        // const runner = getConnection().createQueryRunner();
+        // await runner.connect();
 
         try {
-            // const {usuarioId} = req.user; // recupero el id del usuario en sesion.
-            // quizas los libros se deban cambiar por los ejemplares!. o se le entrega el primer ejemplar disponible.
-            // const {libros, alumno, fechaInicioPrestamo = new Date() } = req.body; // desestructuro libros y alumno para generar el prestamo.
+            // await runner.startTransaction();
 
-            const { libros } = req.body;
+            const prestamo = req.body;
 
-            const usuarioId = 2;
-            const alumnoId = 1;
-            const fechaInicioPrestamo = new Date();
-
-
-            const { prestamoId } = await runner.manager.save(Prestamos, {
-                usuarioId,
-                alumnoId,
-                fechaInicioPrestamo,
-            });
-
-
-
-            if(libros) {
-                // 1era iteracion, recupera los id's de los ejemplares de cada libro del prestamo.
-                // se usan esos ejemplares para generar la relacion prestamoEjemplars
-                libros.forEach(l => {
-
-                    // recuperar los ids de los ejemplares y añadirlos a un array de id's
-
-                    // la validacion de esto es que la cantidad de id's (ejemplares) sea igual a la cantidad de libros.
-
-                });
+            const dataObject = {
+                ...prestamo,
+                usuario: {
+                    usuarioId: req.user.usuarioId,
+                    usuario: req.user.usuario
+                }
             }
 
-
-
-            await runner.startTransaction();
-
-
-
-
-
-
+            return res.send(dataObject);
             // await runner.commitTransaction();
-
-
-
-
         } catch (err: any) {
+            // await runner.rollbackTransaction();
             console.error(err);
             return res.status(500).json({ error: err.message });
-        } finally {
-            await runner.release();
-        }
+        } 
+        // finally {
+            // await runner.release();
+        // }
 
-        return res.sendStatus(200);
     }
 
 

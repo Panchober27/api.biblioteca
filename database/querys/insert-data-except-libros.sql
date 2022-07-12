@@ -113,19 +113,7 @@ CREATE TABLE `ejemplar` (
 -- Volcado de datos para la tabla `ejemplar`
 --
 
-INSERT INTO `ejemplar` (`ejemplar_id`, `isbn`, `libro_id`, `revista_id`, `trabajo_id`, `fecha_entrega`, `fecha_fin`, `fecha_devolucion`, `estado`) VALUES
-(1, 1231312, 1, NULL, NULL, NULL, NULL, NULL, 'PRESTADO'),
-(2, 565464, 1, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(3, 868484, 1, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(4, 987498496, 1, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(5, 12345, 2, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(6, 2235, 3, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(7, 2237, 3, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(8, 2239, 3, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(9, 10100, 4, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(10, 10102, 4, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(12, 222, 6, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(13, 224, 6, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE');
+
 
 -- --------------------------------------------------------
 
@@ -168,12 +156,6 @@ CREATE TABLE `libros` (
 -- Volcado de datos para la tabla `libros`
 --
 
-INSERT INTO `libros` (`libro_id`, `isbn_tipo`, `nombre`, `editorial`, `edicion`, `fecha_publicacion`) VALUES
-(1, 'tapa dura', 'Harry Potter y la Piedra Filosofal', 'Salamandra', '101101', '1990-01-02'),
-(2, 'TAPA DURA', 'Libro de prueba', 'Editorial de prueba', 'Edicion de prueba', '0000-00-00'),
-(3, 'TAPA DURA', 'Libro de prueba (5)', 'Editorial de demo', 'Edicion de demo', '0000-00-00'),
-(4, 'TAPA DURA', 'Libro Pancho (3)', 'Editorial panchito', 'Edicion de Panchober27', '0000-00-00'),
-(6, 'TAPA DURA', 'AAAA', 'Editorial aaaaa', 'Edicion de asasasasas', '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -206,12 +188,7 @@ CREATE TABLE `libro_stock` (
 -- Volcado de datos para la tabla `libro_stock`
 --
 
-INSERT INTO `libro_stock` (`libro_stock_id`, `libro_id`, `total`, `en_biblioteca`, `en_prestamo`, `en_atraso`) VALUES
-(1, 1, 0, 0, 0, 0),
-(2, 2, 1, 1, 0, 0),
-(3, 3, 5, 5, 0, 0),
-(4, 4, 4, 4, 0, 0),
-(5, 6, 3, 3, 0, 0);
+
 
 -- --------------------------------------------------------
 
@@ -296,8 +273,6 @@ CREATE TABLE `prestamos` (
 -- Volcado de datos para la tabla `prestamos`
 --
 
-INSERT INTO `prestamos` (`prestamo_id`, `alumno_id`, `usuario_id`, `fecha_inicio`, `fecha_fin`, `estado`) VALUES
-(1, 1, 2, '2022-06-16 08:40:55', '2022-06-23 02:40:55', 'PRESTADO');
 
 -- --------------------------------------------------------
 
@@ -315,8 +290,7 @@ CREATE TABLE `prestamo_ejemplar` (
 -- Volcado de datos para la tabla `prestamo_ejemplar`
 --
 
-INSERT INTO `prestamo_ejemplar` (`prestamo_ejemplar_id`, `prestamo_id`, `ejemplar_id`) VALUES
-(1, 1, 1);
+
 
 -- --------------------------------------------------------
 

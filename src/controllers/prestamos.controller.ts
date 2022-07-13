@@ -54,6 +54,8 @@ export class PrestamosController {
     /** 
      * @function insertPrestamo
      * @description Función que permite insertar un nuevo prestamo.
+     * Todo funciona bien, excepto un par de casos a revisar:
+     * 1. el manejo de stocks parece estar complicado.
      * @param {Request} req Objeto con los datos de la petición.
      * @param {Response} res Objeto con los datos de la respuesta.
      * @returns {object} Objeto con el status de la petición.
@@ -66,6 +68,10 @@ export class PrestamosController {
             const prestamo = req.body;
             const { libros, alumno } = prestamo;
             const fechaInicioPrestamo = new Date();
+
+            // se iteran los ejemplares y se guarda el primero en el array.
+            libros.forEach(l => ejemplaresArr.push(l.ejemplars.shift()));
+
 
             // logica para encontrar la fecha mas tardia, para ser asginada como la fecha fin del prestamo.
             const fechaDevolucion = libros.reduce((fechaDev, l) => {
@@ -84,13 +90,23 @@ export class PrestamosController {
                 fechaFin: fechaDevolucion, // 
                 estado: 'PRESTADO',
             });
+            // 4. Actualizar el stock de los ejemplares.
+            await ejemplaresArr.forEach(async ejemplar => {
+                const libroStock = await runner.manager.findOne(LibroStock, {
+                    where: {
+                        libroId: ejemplar.libroId,
+                    },
+                })
+                if (libroStock) {
+                    await runner.manager.update(LibroStock, { libroStockId: libroStock.libroStockId },
+                        {
+                            enBiblioteca: libroStock.enBiblioteca - 1,
+                            enPrestamo: libroStock.enPrestamo + 1,
+                        });
+                }
 
+            });
 
-            // Ahora logica de ejemplares.
-            // obtener desde la base de datos los ejeplares que estan disponibles de cada libro, y asignar el primero que se encuentre.
-
-            // se iteran los ejemplares y se guarda el primero en el array.
-            libros.forEach(l => ejemplaresArr.push(l.ejemplars.shift()));
             // ejemplaresArr array de con los ejemplares a relacionar en prestamoEjemplar.
             await ejemplaresArr.forEach(async ejemplar => {
                 const { prestamoEjemplarId } = await runner.manager.save(PrestamoEjemplar, {
@@ -99,18 +115,22 @@ export class PrestamosController {
                 });
             });
 
-
             // 3. Actualizar el estado de los ejemplares a prestado.
             await ejemplaresArr.forEach(async ejemplar => {
-                await runner.manager.update(Ejemplar, { ejemplarId: ejemplar.ejemplarId }, { estado: 'PRESTADO' });
+                await runner.manager.update(Ejemplar,
+                    { ejemplarId: ejemplar.ejemplarId },
+                    {
+                        estado: 'PRESTADO',
+                        fechaEntrega: fechaInicioPrestamo,
+                        fechaFin: '25-12-2020',
+                    }
+                );
             });
 
 
             await runner.commitTransaction();
 
             return res.sendStatus(200);
-            // return res.send(ejemplares);
-
 
         } catch (err: any) {
             await runner.rollbackTransaction();

@@ -1,30 +1,15 @@
-
-// /**
-//  * Controlador de Prestamos
-//  * @module PrestamosController
-//  */
-
-// /**
-//  * Pants module.
-//  * @module my/pants
-//  * @see module:my/shirt
-//  */
-
-
-/**
- * @module PrestamosController
- * @description Controlador de Prestamos
- */
-
-
 import { Request, Response } from 'express';
 import { getRepository, Repository, getManager, getConnection } from 'typeorm';
 import { Prestamos, Libros, PrestamoEjemplar, Trabajos, Revistas, Ejemplar, LibroStock, RevistaStock, TrabajoStock } from '../entities';
+import moment from 'moment';
 
-
+/**
+ * @module Prestamos
+ * @description Controlador de Prestamos
+ */
 export class PrestamosController {
 
-  
+
     getPrestamos = async (req: Request, res: Response) => {
         return res.json({ message: 'getPrestamos' });
     }
@@ -71,35 +56,69 @@ export class PrestamosController {
      * @description Función que permite insertar un nuevo prestamo.
      * @param {Request} req Objeto con los datos de la petición.
      * @param {Response} res Objeto con los datos de la respuesta.
-     * @returns {Prestamos} Objeto con el prestamo insertado.
+     * @returns {object} Objeto con el status de la petición.
      */
-    insertPrestamo = async (req: Request, res: Response): Promise<Response>=> {
-        // const runner = getConnection().createQueryRunner();
-        // await runner.connect();
-
+    insertPrestamo = async (req: Request, res: Response): Promise<Response> => {
+        const runner = getConnection().createQueryRunner();
+        await runner.connect();
+        let ejemplaresArr: any[] = [];
         try {
-            // await runner.startTransaction();
-
             const prestamo = req.body;
+            const { libros, alumno } = prestamo;
+            const fechaInicioPrestamo = new Date();
 
-            const dataObject = {
-                ...prestamo,
-                usuario: {
-                    usuarioId: req.user.usuarioId,
-                    usuario: req.user.usuario
-                }
-            }
+            // logica para encontrar la fecha mas tardia, para ser asginada como la fecha fin del prestamo.
+            const fechaDevolucion = libros.reduce((fechaDev, l) => {
+                // console.log(l.fechaRetorno)
+                const fecha = moment(l.fechaRetorno, "DD-MM-YYYY").valueOf()
+                return fecha > fechaDev ? fecha : fechaDev
+            }, 0)
+            console.log('fecha de devolucion: ' + moment(fechaDevolucion).format("DD-MM-YYYY"))
 
-            return res.send(dataObject);
-            // await runner.commitTransaction();
+            await runner.startTransaction();
+
+            const { prestamoId } = await runner.manager.save(Prestamos, {
+                alumnoId: alumno.alumnoId,
+                usuarioId: req.user.usuarioId,
+                fechaInicio: fechaInicioPrestamo,
+                fechaFin: fechaDevolucion, // 
+                estado: 'PRESTADO',
+            });
+
+
+            // Ahora logica de ejemplares.
+            // obtener desde la base de datos los ejeplares que estan disponibles de cada libro, y asignar el primero que se encuentre.
+
+            // se iteran los ejemplares y se guarda el primero en el array.
+            libros.forEach(l => ejemplaresArr.push(l.ejemplars.shift()));
+            // ejemplaresArr array de con los ejemplares a relacionar en prestamoEjemplar.
+            await ejemplaresArr.forEach(async ejemplar => {
+                const { prestamoEjemplarId } = await runner.manager.save(PrestamoEjemplar, {
+                    prestamoId,
+                    ejemplarId: ejemplar.ejemplarId,
+                });
+            });
+
+
+            // 3. Actualizar el estado de los ejemplares a prestado.
+            await ejemplaresArr.forEach(async ejemplar => {
+                await runner.manager.update(Ejemplar, { ejemplarId: ejemplar.ejemplarId }, { estado: 'PRESTADO' });
+            });
+
+
+            await runner.commitTransaction();
+
+            return res.sendStatus(200);
+            // return res.send(ejemplares);
+
+
         } catch (err: any) {
-            // await runner.rollbackTransaction();
+            await runner.rollbackTransaction();
             console.error(err);
             return res.status(500).json({ error: err.message });
-        } 
-        // finally {
-            // await runner.release();
-        // }
+        } finally {
+            await runner.release();
+        }
 
     }
 
@@ -233,12 +252,12 @@ export class PrestamosController {
 
     }
 
-   
+
     updatePrestamo = async (req: Request, res: Response) => {
     }
 
 
-   
+
     returnEjemlparOfPrestamo = async (req: Request, res: Response) => {
     };
 

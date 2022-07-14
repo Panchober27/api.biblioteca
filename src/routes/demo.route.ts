@@ -7,7 +7,8 @@ const c = new DemoController();
 
 // Rutas para pronar funciones con postman si n desactivar middleware de auth.
 // router.get('/demo', c.insertLibros);
-router.get('/demo', c.validateCounts);
+// router.get('/demo', c.validateCounts);
+router.get('/demo', c.validarEjemplar);
 
 // funcion para incertar libros con ejemplares.
 router.post('/demo', c.insertLibros);

@@ -1,833 +1,616 @@
--- phpMyAdmin SQL Dump
--- version 5.1.3
--- https://www.phpmyadmin.net/
---
--- Servidor: 127.0.0.1
--- Tiempo de generación: 11-07-2022 a las 04:07:58
--- Versión del servidor: 10.4.24-MariaDB
--- Versión de PHP: 7.4.28
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Base de datos: `biblioteca`
---
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `alumnos`
---
-
-CREATE TABLE `alumnos` (
-  `alumno_id` int(11) NOT NULL,
-  `rut_alumno` varchar(15) NOT NULL,
-  `nombre_alumno` varchar(200) NOT NULL,
-  `apellido_alumno` varchar(200) NOT NULL,
-  `email_alumno` varchar(200) NOT NULL,
-  `carrera_id` int(11) NOT NULL,
-  `alumno_activo` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `alumnos`
---
-
-INSERT INTO `alumnos` (`alumno_id`, `rut_alumno`, `nombre_alumno`, `apellido_alumno`, `email_alumno`, `carrera_id`, `alumno_activo`) VALUES
-(1, '1111111-1', 'Daniel', 'Munoz', 'd.munoza@gmail.com', 5, 1),
-(2, '22222222-2', 'Benjamin', 'Meneses', 'japz@gmail.com', 1, 1),
-(3, '33333333-3', 'Barbara', 'Fuentealba', 'barbijs@gmail.com', 6, 0),
-(4, '333333-3', 'Eric', 'Cartman', 'ecartman@southpark.com', 6, 1),
-(9, '44444-4', 'Kyle', 'Brofolwsky', 'kbrofolwsky@southpark.com', 1, 1),
-(10, '55555-5', 'Kenneth', 'Mccormic', 'kmccormic@southpark.com', 3, 1),
-(11, '666666-6', 'Stan', 'Marsh', 'smarsh@southpark.com', 5, 1),
-(12, '7777777-7', 'Butters', 'Stotch', 'bstotch@southpark.com', 4, 1);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `autor`
---
-
-CREATE TABLE `autor` (
-  `autor_id` int(11) NOT NULL,
-  `nombres` varchar(100) NOT NULL,
-  `apellidos` varchar(100) NOT NULL,
-  `nacionalidad` varchar(100) NOT NULL,
-  `fecha_nacimiento` date NOT NULL,
-  `fecha_fallecimiento` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `carreras`
---
-
-CREATE TABLE `carreras` (
-  `carrera_id` int(11) NOT NULL,
-  `nombre_carrera` varchar(200) NOT NULL,
-  `descripcion_carrera` varchar(500) NOT NULL,
-  `facultad_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `carreras`
---
-
-INSERT INTO `carreras` (`carrera_id`, `nombre_carrera`, `descripcion_carrera`, `facultad_id`) VALUES
-(1, 'Ing Informatica', 'Carrera de ingieneria informatica', 1),
-(2, 'Ing Industrial', 'Carrera de ingieneria informatica', 1),
-(3, 'Ing Comercial', 'Carrera de ingieneria informatica', 1),
-(4, 'Enfermeria', 'Carrera de ingieneria Enfermeria', 2),
-(5, 'Medicina', 'Carrera de ingieneria Medicina', 2),
-(6, 'Terapia Ocupacional', 'Carrera de Terapia Ocupacional', 2);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ejemplar`
---
-
-CREATE TABLE `ejemplar` (
-  `ejemplar_id` int(11) NOT NULL,
-  `isbn` int(20) DEFAULT NULL,
-  `libro_id` int(11) DEFAULT NULL,
-  `revista_id` int(11) DEFAULT NULL,
-  `trabajo_id` int(11) DEFAULT NULL,
-  `fecha_entrega` datetime DEFAULT NULL,
-  `fecha_fin` datetime DEFAULT NULL,
-  `fecha_devolucion` datetime DEFAULT NULL,
-  `estado` enum('DISPONIBLE','PRESTADO','ATRASADO') DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `ejemplar`
---
-
-INSERT INTO `ejemplar` (`ejemplar_id`, `isbn`, `libro_id`, `revista_id`, `trabajo_id`, `fecha_entrega`, `fecha_fin`, `fecha_devolucion`, `estado`) VALUES
-(1, 1231312, 1, NULL, NULL, NULL, NULL, NULL, 'PRESTADO'),
-(2, 565464, 1, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(3, 868484, 1, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(4, 987498496, 1, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(5, 12345, 2, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(6, 2235, 3, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(7, 2237, 3, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(8, 2239, 3, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(9, 10100, 4, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(10, 10102, 4, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(12, 222, 6, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE'),
-(13, 224, 6, NULL, NULL, NULL, NULL, NULL, 'DISPONIBLE');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `facultades`
---
-
-CREATE TABLE `facultades` (
-  `facultad_id` int(11) NOT NULL,
-  `nombre_facultad` varchar(200) NOT NULL,
-  `descripcion_facultad` varchar(500) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `facultades`
---
-
-INSERT INTO `facultades` (`facultad_id`, `nombre_facultad`, `descripcion_facultad`) VALUES
-(1, 'Ingenieria', 'Facultad de ingienerias'),
-(2, 'Salud', 'Facultad salud'),
-(3, 'Humanidades', 'Facultad de humanidades'),
-(4, 'Educacion', 'Facultad de educacion');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `libros`
---
-
-CREATE TABLE `libros` (
-  `libro_id` int(11) NOT NULL,
-  `isbn_tipo` varchar(200) NOT NULL,
-  `nombre` varchar(200) NOT NULL,
-  `editorial` varchar(200) NOT NULL,
-  `edicion` varchar(200) NOT NULL,
-  `fecha_publicacion` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `libros`
---
-
-INSERT INTO `libros` (`libro_id`, `isbn_tipo`, `nombre`, `editorial`, `edicion`, `fecha_publicacion`) VALUES
-(1, 'tapa dura', 'Harry Potter y la Piedra Filosofal', 'Salamandra', '101101', '1990-01-02'),
-(2, 'TAPA DURA', 'Libro de prueba', 'Editorial de prueba', 'Edicion de prueba', '0000-00-00'),
-(3, 'TAPA DURA', 'Libro de prueba (5)', 'Editorial de demo', 'Edicion de demo', '0000-00-00'),
-(4, 'TAPA DURA', 'Libro Pancho (3)', 'Editorial panchito', 'Edicion de Panchober27', '0000-00-00'),
-(6, 'TAPA DURA', 'AAAA', 'Editorial aaaaa', 'Edicion de asasasasas', '0000-00-00');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `libro_autores`
---
-
-CREATE TABLE `libro_autores` (
-  `libro_autor_id` int(11) NOT NULL,
-  `libro_id` int(11) NOT NULL,
-  `autor_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `libro_stock`
---
-
-CREATE TABLE `libro_stock` (
-  `libro_stock_id` int(11) NOT NULL,
-  `libro_id` int(11) NOT NULL,
-  `total` int(11) NOT NULL,
-  `en_biblioteca` int(11) NOT NULL,
-  `en_prestamo` int(11) NOT NULL,
-  `en_atraso` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `libro_stock`
---
-
-INSERT INTO `libro_stock` (`libro_stock_id`, `libro_id`, `total`, `en_biblioteca`, `en_prestamo`, `en_atraso`) VALUES
-(1, 1, 0, 0, 0, 0),
-(2, 2, 1, 1, 0, 0),
-(3, 3, 5, 5, 0, 0),
-(4, 4, 4, 4, 0, 0),
-(5, 6, 3, 3, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `perfiles`
---
-
-CREATE TABLE `perfiles` (
-  `perfil_id` int(11) NOT NULL,
-  `perfil_nombre` varchar(45) NOT NULL,
-  `perfil_opciones` varchar(200) DEFAULT NULL,
-  `timestamp` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `perfiles`
---
-
-INSERT INTO `perfiles` (`perfil_id`, `perfil_nombre`, `perfil_opciones`, `timestamp`) VALUES
-(1, 'ADMINISTRADOR', NULL, '2022-07-09 16:58:52'),
-(2, 'USUARIO', NULL, '2022-07-09 16:58:52');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `perfiles_permisos`
---
-
-CREATE TABLE `perfiles_permisos` (
-  `perfil_permiso_id` int(11) NOT NULL,
-  `permiso_id` int(11) NOT NULL,
-  `perfil_id` int(11) NOT NULL,
-  `timestamp` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `perfiles_permisos`
---
-
-INSERT INTO `perfiles_permisos` (`perfil_permiso_id`, `permiso_id`, `perfil_id`, `timestamp`) VALUES
-(1, 1, 1, '2022-07-09 16:59:54'),
-(2, 2, 2, '2022-07-09 16:59:54');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `permisos`
---
-
-CREATE TABLE `permisos` (
-  `permiso_id` int(11) NOT NULL,
-  `permiso_nombre` varchar(50) NOT NULL,
-  `permiso_tag` varchar(50) NOT NULL,
-  `permiso_descripcion` varchar(100) DEFAULT NULL,
-  `timestamp` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `permisos`
---
-
-INSERT INTO `permisos` (`permiso_id`, `permiso_nombre`, `permiso_tag`, `permiso_descripcion`, `timestamp`) VALUES
-(1, 'administrador', 'administrador', NULL, '2022-07-09 16:59:31'),
-(2, 'usuario', 'usuario', NULL, '2022-07-09 16:59:31');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `prestamos`
---
-
-CREATE TABLE `prestamos` (
-  `prestamo_id` int(11) NOT NULL,
-  `alumno_id` int(11) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
-  `fecha_inicio` datetime NOT NULL,
-  `fecha_fin` datetime NOT NULL,
-  `estado` enum('PRESTADO','ATRASADO','FINALIZADO','FINALIZADO_ATRASADO') DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `prestamos`
---
-
-INSERT INTO `prestamos` (`prestamo_id`, `alumno_id`, `usuario_id`, `fecha_inicio`, `fecha_fin`, `estado`) VALUES
-(1, 1, 2, '2022-06-16 08:40:55', '2022-06-23 02:40:55', 'PRESTADO');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `prestamo_ejemplar`
---
-
-CREATE TABLE `prestamo_ejemplar` (
-  `prestamo_ejemplar_id` int(11) NOT NULL,
-  `prestamo_id` int(11) NOT NULL,
-  `ejemplar_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `prestamo_ejemplar`
---
-
-INSERT INTO `prestamo_ejemplar` (`prestamo_ejemplar_id`, `prestamo_id`, `ejemplar_id`) VALUES
-(1, 1, 1);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `revistas`
---
-
-CREATE TABLE `revistas` (
-  `revista_id` int(11) NOT NULL,
-  `nombre` varchar(200) NOT NULL,
-  `editorial` varchar(200) NOT NULL,
-  `edicion` varchar(200) NOT NULL,
-  `fecha_publicacion` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `revista_autor`
---
-
-CREATE TABLE `revista_autor` (
-  `revista_autor_id` int(11) NOT NULL,
-  `revista_id` int(11) NOT NULL,
-  `autor_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `revista_stock`
---
-
-CREATE TABLE `revista_stock` (
-  `revista_stock_id` int(11) NOT NULL,
-  `revista_id` int(11) NOT NULL,
-  `total` int(11) NOT NULL,
-  `en_biblioteca` int(11) NOT NULL,
-  `en_prestamo` int(11) NOT NULL,
-  `en_atraso` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `trabajos`
---
-
-CREATE TABLE `trabajos` (
-  `trabajo_id` int(11) NOT NULL,
-  `nombre` varchar(200) NOT NULL,
-  `editorial` varchar(200) NOT NULL,
-  `edicion` varchar(200) NOT NULL,
-  `fecha_publicacion` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `trabajo_autor`
---
-
-CREATE TABLE `trabajo_autor` (
-  `trabajo_autor_id` int(11) NOT NULL,
-  `trabajo_id` int(11) NOT NULL,
-  `autor_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `trabajo_stock`
---
-
-CREATE TABLE `trabajo_stock` (
-  `trabajo_stock_id` int(11) NOT NULL,
-  `trabajo_id` int(11) NOT NULL,
-  `total` int(11) NOT NULL,
-  `en_biblioteca` int(11) NOT NULL,
-  `en_prestamo` int(11) NOT NULL,
-  `en_atraso` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuarios`
---
-
-CREATE TABLE `usuarios` (
-  `usuario_id` int(11) NOT NULL,
-  `usuario` varchar(200) NOT NULL,
-  `nombre` varchar(200) DEFAULT NULL,
-  `apellido` varchar(200) DEFAULT NULL,
-  `password` varchar(200) NOT NULL,
-  `usuario_token` varchar(1000) DEFAULT NULL,
-  `usuario_salt` varchar(100) DEFAULT NULL,
-  `usuario_mail` varchar(150) NOT NULL,
-  `usuario_tipo` enum('USUARIO','ADMINISTRADOR') DEFAULT NULL,
-  `usuario_activo` tinyint(1) DEFAULT 1,
-  `timestamp` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `usuarios`
---
-
-INSERT INTO `usuarios` (`usuario_id`, `usuario`, `nombre`, `apellido`, `password`, `usuario_token`, `usuario_salt`, `usuario_mail`, `usuario_tipo`, `usuario_activo`, `timestamp`) VALUES
-(1, 'carla', 'Carla', 'Gonzalez', '9OQislUkF/gYQjCO4R78gfyDMDtmdpQGlxKyoCNy5PWASP8iD0eDG6VpMLIwQ8bJkXi5fLtfw7oqFmeWI3VKgA==', NULL, 'lGxQCW49SWl7uFEfQuB5DQ==', 'carlagon@gmail.com', 'ADMINISTRADOR', 1, '2022-06-16 06:24:01'),
-(2, 'pancho', 'Francisco', 'Berwart', '/4TT+KVPMCtG8QAGney8y2Q5L5Ge4EcidzmrtIGbKlPxv5FWb13CmY5fKWUtX3DHO83uUXqP384+gYKqS9xAXw==', NULL, 'NMnDAdPkXv/hdx2m8Fwb5A==', 'panchober27@gmail.com', 'ADMINISTRADOR', 1, '2022-06-16 06:35:05'),
-(4, 'maxi', 'Maximiliano', 'Machuca', 'MpQDA5xc7H++0JYIyJkAJ5zs1Auhcv3bPwDnN0pw0gynayLDDVkifdvnsiCEiSZGDc3s7Pm10pYsr1S10FbOhw==', NULL, 'heEaTMhU85SLNpsg+glxww==', 'maxi@mail.com', 'USUARIO', 1, '2022-07-09 17:39:18');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuarios_perfiles`
---
-
-CREATE TABLE `usuarios_perfiles` (
-  `usuario_perfil_id` int(11) NOT NULL,
-  `perfil_id` int(11) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
-  `timestamp` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `usuarios_perfiles`
---
-
-INSERT INTO `usuarios_perfiles` (`usuario_perfil_id`, `perfil_id`, `usuario_id`, `timestamp`) VALUES
-(1, 1, 1, '2022-07-09 17:00:27'),
-(2, 1, 2, '2022-07-09 17:00:27');
-
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `alumnos`
---
-ALTER TABLE `alumnos`
-  ADD PRIMARY KEY (`alumno_id`),
-  ADD UNIQUE KEY `rut_alumno` (`rut_alumno`),
-  ADD KEY `fk_alumno_carrera` (`carrera_id`);
-
---
--- Indices de la tabla `autor`
---
-ALTER TABLE `autor`
-  ADD PRIMARY KEY (`autor_id`);
-
---
--- Indices de la tabla `carreras`
---
-ALTER TABLE `carreras`
-  ADD PRIMARY KEY (`carrera_id`),
-  ADD KEY `fk_carrera_facultad` (`facultad_id`);
-
---
--- Indices de la tabla `ejemplar`
---
-ALTER TABLE `ejemplar`
-  ADD PRIMARY KEY (`ejemplar_id`),
-  ADD UNIQUE KEY `isbn` (`isbn`),
-  ADD KEY `fk_ejemplar_libro` (`libro_id`),
-  ADD KEY `fk_ejemplar_revista` (`revista_id`),
-  ADD KEY `fk_ejemplar_ensayo` (`trabajo_id`);
-
---
--- Indices de la tabla `facultades`
---
-ALTER TABLE `facultades`
-  ADD PRIMARY KEY (`facultad_id`);
-
---
--- Indices de la tabla `libros`
---
-ALTER TABLE `libros`
-  ADD PRIMARY KEY (`libro_id`);
-
---
--- Indices de la tabla `libro_autores`
---
-ALTER TABLE `libro_autores`
-  ADD PRIMARY KEY (`libro_autor_id`),
-  ADD KEY `fk_libro_autores_autores1_idx` (`autor_id`),
-  ADD KEY `fk_libro_autores_libros1_idx` (`libro_id`);
-
---
--- Indices de la tabla `libro_stock`
---
-ALTER TABLE `libro_stock`
-  ADD PRIMARY KEY (`libro_stock_id`),
-  ADD KEY `fk_libro_stock_libros1_idx` (`libro_id`);
-
---
--- Indices de la tabla `perfiles`
---
-ALTER TABLE `perfiles`
-  ADD PRIMARY KEY (`perfil_id`);
-
---
--- Indices de la tabla `perfiles_permisos`
---
-ALTER TABLE `perfiles_permisos`
-  ADD PRIMARY KEY (`perfil_permiso_id`),
-  ADD UNIQUE KEY `perfiles_permisos_UN` (`permiso_id`,`perfil_id`),
-  ADD KEY `fk_perfiles_permisos_permisos1_idx` (`permiso_id`),
-  ADD KEY `fk_perfiles_permisos_perfiles1_idx` (`perfil_id`);
-
---
--- Indices de la tabla `permisos`
---
-ALTER TABLE `permisos`
-  ADD PRIMARY KEY (`permiso_id`),
-  ADD UNIQUE KEY `permisos_tag_UN` (`permiso_tag`);
-
---
--- Indices de la tabla `prestamos`
---
-ALTER TABLE `prestamos`
-  ADD PRIMARY KEY (`prestamo_id`),
-  ADD KEY `fk_prestamo_alumno` (`alumno_id`),
-  ADD KEY `fk_prestamo_usuario` (`usuario_id`);
-
---
--- Indices de la tabla `prestamo_ejemplar`
---
-ALTER TABLE `prestamo_ejemplar`
-  ADD PRIMARY KEY (`prestamo_ejemplar_id`),
-  ADD KEY `fk_prestamo_ejemplar_prestamos1_idx` (`prestamo_id`),
-  ADD KEY `fk_prestamo_ejemplar_ejemplar1_idx` (`ejemplar_id`);
-
---
--- Indices de la tabla `revistas`
---
-ALTER TABLE `revistas`
-  ADD PRIMARY KEY (`revista_id`);
-
---
--- Indices de la tabla `revista_autor`
---
-ALTER TABLE `revista_autor`
-  ADD PRIMARY KEY (`revista_autor_id`),
-  ADD KEY `fk_revista_autor_autores1_idx` (`autor_id`),
-  ADD KEY `fk_revista_autor_revistas1_idx` (`revista_id`);
-
---
--- Indices de la tabla `revista_stock`
---
-ALTER TABLE `revista_stock`
-  ADD PRIMARY KEY (`revista_stock_id`),
-  ADD KEY `fk_revista_stock_revistas1_idx` (`revista_id`);
-
---
--- Indices de la tabla `trabajos`
---
-ALTER TABLE `trabajos`
-  ADD PRIMARY KEY (`trabajo_id`);
-
---
--- Indices de la tabla `trabajo_autor`
---
-ALTER TABLE `trabajo_autor`
-  ADD PRIMARY KEY (`trabajo_autor_id`),
-  ADD KEY `fk_trabajo_autor_autores1_idx` (`autor_id`),
-  ADD KEY `fk_trabajo_autor_trabajos1_idx` (`trabajo_id`);
-
---
--- Indices de la tabla `trabajo_stock`
---
-ALTER TABLE `trabajo_stock`
-  ADD PRIMARY KEY (`trabajo_stock_id`),
-  ADD KEY `fk_trabajo_stock_trabajos1_idx` (`trabajo_id`);
-
---
--- Indices de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`usuario_id`);
-
---
--- Indices de la tabla `usuarios_perfiles`
---
-ALTER TABLE `usuarios_perfiles`
-  ADD PRIMARY KEY (`usuario_perfil_id`),
-  ADD KEY `fk_usuarios_perfiles_perfiles1_idx` (`perfil_id`),
-  ADD KEY `fk_usuarios_perfiles_usuarios1_idx` (`usuario_id`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `alumnos`
---
-ALTER TABLE `alumnos`
-  MODIFY `alumno_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
--- AUTO_INCREMENT de la tabla `autor`
---
-ALTER TABLE `autor`
-  MODIFY `autor_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `carreras`
---
-ALTER TABLE `carreras`
-  MODIFY `carrera_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT de la tabla `ejemplar`
---
-ALTER TABLE `ejemplar`
-  MODIFY `ejemplar_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- AUTO_INCREMENT de la tabla `facultades`
---
-ALTER TABLE `facultades`
-  MODIFY `facultad_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT de la tabla `libros`
---
-ALTER TABLE `libros`
-  MODIFY `libro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT de la tabla `libro_autores`
---
-ALTER TABLE `libro_autores`
-  MODIFY `libro_autor_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `libro_stock`
---
-ALTER TABLE `libro_stock`
-  MODIFY `libro_stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT de la tabla `perfiles`
---
-ALTER TABLE `perfiles`
-  MODIFY `perfil_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `perfiles_permisos`
---
-ALTER TABLE `perfiles_permisos`
-  MODIFY `perfil_permiso_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `permisos`
---
-ALTER TABLE `permisos`
-  MODIFY `permiso_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `prestamos`
---
-ALTER TABLE `prestamos`
-  MODIFY `prestamo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT de la tabla `prestamo_ejemplar`
---
-ALTER TABLE `prestamo_ejemplar`
-  MODIFY `prestamo_ejemplar_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT de la tabla `revistas`
---
-ALTER TABLE `revistas`
-  MODIFY `revista_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `revista_autor`
---
-ALTER TABLE `revista_autor`
-  MODIFY `revista_autor_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `revista_stock`
---
-ALTER TABLE `revista_stock`
-  MODIFY `revista_stock_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `trabajos`
---
-ALTER TABLE `trabajos`
-  MODIFY `trabajo_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `trabajo_autor`
---
-ALTER TABLE `trabajo_autor`
-  MODIFY `trabajo_autor_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `trabajo_stock`
---
-ALTER TABLE `trabajo_stock`
-  MODIFY `trabajo_stock_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  MODIFY `usuario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT de la tabla `usuarios_perfiles`
---
-ALTER TABLE `usuarios_perfiles`
-  MODIFY `usuario_perfil_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `alumnos`
---
-ALTER TABLE `alumnos`
-  ADD CONSTRAINT `fk_alumno_carrera` FOREIGN KEY (`carrera_id`) REFERENCES `carreras` (`carrera_id`);
-
---
--- Filtros para la tabla `carreras`
---
-ALTER TABLE `carreras`
-  ADD CONSTRAINT `fk_carrera_facultad` FOREIGN KEY (`facultad_id`) REFERENCES `facultades` (`facultad_id`);
-
---
--- Filtros para la tabla `ejemplar`
---
-ALTER TABLE `ejemplar`
-  ADD CONSTRAINT `fk_ejemplar_libro` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`libro_id`),
-  ADD CONSTRAINT `fk_ejemplar_revista` FOREIGN KEY (`revista_id`) REFERENCES `revistas` (`revista_id`),
-  ADD CONSTRAINT `fk_ejemplar_trabajo` FOREIGN KEY (`trabajo_id`) REFERENCES `trabajos` (`trabajo_id`);
-
---
--- Filtros para la tabla `libro_autores`
---
-ALTER TABLE `libro_autores`
-  ADD CONSTRAINT `fk_libro_autores_autores1` FOREIGN KEY (`autor_id`) REFERENCES `autor` (`autor_id`),
-  ADD CONSTRAINT `fk_libro_autores_libros1` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`libro_id`);
-
---
--- Filtros para la tabla `libro_stock`
---
-ALTER TABLE `libro_stock`
-  ADD CONSTRAINT `fk_libro_stock_libros1` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`libro_id`);
-
---
--- Filtros para la tabla `perfiles_permisos`
---
-ALTER TABLE `perfiles_permisos`
-  ADD CONSTRAINT `fk_perfiles_permisos_perfiles1` FOREIGN KEY (`perfil_id`) REFERENCES `perfiles` (`perfil_id`),
-  ADD CONSTRAINT `fk_perfiles_permisos_permisos1` FOREIGN KEY (`permiso_id`) REFERENCES `permisos` (`permiso_id`);
-
---
--- Filtros para la tabla `prestamos`
---
-ALTER TABLE `prestamos`
-  ADD CONSTRAINT `fk_prestamo_alumno` FOREIGN KEY (`alumno_id`) REFERENCES `alumnos` (`alumno_id`),
-  ADD CONSTRAINT `fk_prestamo_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`usuario_id`);
-
---
--- Filtros para la tabla `prestamo_ejemplar`
---
-ALTER TABLE `prestamo_ejemplar`
-  ADD CONSTRAINT `fk_prestamo_ejemplar_ejemplar1` FOREIGN KEY (`ejemplar_id`) REFERENCES `ejemplar` (`ejemplar_id`),
-  ADD CONSTRAINT `fk_prestamo_ejemplar_prestamos1` FOREIGN KEY (`prestamo_id`) REFERENCES `prestamos` (`prestamo_id`);
-
---
--- Filtros para la tabla `revista_autor`
---
-ALTER TABLE `revista_autor`
-  ADD CONSTRAINT `fk_revista_autor_autores1` FOREIGN KEY (`autor_id`) REFERENCES `autor` (`autor_id`),
-  ADD CONSTRAINT `fk_revista_autor_revistas1` FOREIGN KEY (`revista_id`) REFERENCES `revistas` (`revista_id`);
-
---
--- Filtros para la tabla `revista_stock`
---
-ALTER TABLE `revista_stock`
-  ADD CONSTRAINT `fk_revista_stock_revistas1` FOREIGN KEY (`revista_id`) REFERENCES `revistas` (`revista_id`);
-
---
--- Filtros para la tabla `trabajo_autor`
---
-ALTER TABLE `trabajo_autor`
-  ADD CONSTRAINT `fk_trabajo_autor_autores1` FOREIGN KEY (`autor_id`) REFERENCES `autor` (`autor_id`),
-  ADD CONSTRAINT `fk_trabajo_autor_trabajos1` FOREIGN KEY (`trabajo_id`) REFERENCES `trabajos` (`trabajo_id`);
-
---
--- Filtros para la tabla `trabajo_stock`
---
-ALTER TABLE `trabajo_stock`
-  ADD CONSTRAINT `fk_trabajo_stock_trabajos1` FOREIGN KEY (`trabajo_id`) REFERENCES `trabajos` (`trabajo_id`);
-
---
--- Filtros para la tabla `usuarios_perfiles`
---
-ALTER TABLE `usuarios_perfiles`
-  ADD CONSTRAINT `fk_usuarios_perfiles_perfiles1` FOREIGN KEY (`perfil_id`) REFERENCES `perfiles` (`perfil_id`),
-  ADD CONSTRAINT `usuarios_perfiles_FK` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`usuario_id`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+  -- MySQL dump 10.13  Distrib 5.5.62, for Win64 (AMD64)
+  --
+  -- Host: localhost    Database: biblioteca
+  -- ------------------------------------------------------
+  -- Server version	5.5.5-10.4.24-MariaDB
+
+  /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+  /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+  /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+  /*!40101 SET NAMES utf8 */;
+  /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+  /*!40103 SET TIME_ZONE='+00:00' */;
+  /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+  /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+  /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+  /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+  --
+  -- Table structure for table `alumnos`
+  --
+
+  DROP TABLE IF EXISTS `alumnos`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `alumnos` (
+    `alumno_id` int(11) NOT NULL AUTO_INCREMENT,
+    `rut_alumno` varchar(15) NOT NULL,
+    `nombre_alumno` varchar(200) NOT NULL,
+    `apellido_alumno` varchar(200) NOT NULL,
+    `email_alumno` varchar(200) NOT NULL,
+    `carrera_id` int(11) NOT NULL,
+    `alumno_activo` tinyint(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (`alumno_id`),
+    UNIQUE KEY `rut_alumno` (`rut_alumno`),
+    KEY `fk_alumno_carrera` (`carrera_id`),
+    CONSTRAINT `fk_alumno_carrera` FOREIGN KEY (`carrera_id`) REFERENCES `carreras` (`carrera_id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `alumnos`
+  --
+
+  LOCK TABLES `alumnos` WRITE;
+  /*!40000 ALTER TABLE `alumnos` DISABLE KEYS */;
+  INSERT INTO `alumnos` VALUES (1,'1111111-1','Daniel','Munoz','d.munoza@gmail.com',5,1),(2,'22222222-2','Benjamin','Meneses','japz@gmail.com',1,1),(3,'33333333-3','Barbara','Fuentealba','barbijs@gmail.com',6,0),(4,'333333-3','Eric','Cartman','ecartman@southpark.com',6,1),(9,'44444-4','Kyle','Brofolwsky','kbrofolwsky@southpark.com',1,1),(10,'55555-5','Kenneth','Mccormic','kmccormic@southpark.com',3,1),(11,'666666-6','Stan','Marsh','smarsh@southpark.com',5,1),(12,'7777777-7','Butters','Stotch','bstotch@southpark.com',4,1);
+  /*!40000 ALTER TABLE `alumnos` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `autor`
+  --
+
+  DROP TABLE IF EXISTS `autor`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `autor` (
+    `autor_id` int(11) NOT NULL AUTO_INCREMENT,
+    `nombres` varchar(100) NOT NULL,
+    `apellidos` varchar(100) NOT NULL,
+    `nacionalidad` varchar(100) NOT NULL,
+    `fecha_nacimiento` date NOT NULL,
+    `fecha_fallecimiento` date DEFAULT NULL,
+    PRIMARY KEY (`autor_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `autor`
+  --
+
+  LOCK TABLES `autor` WRITE;
+  /*!40000 ALTER TABLE `autor` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `autor` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `carreras`
+  --
+
+  DROP TABLE IF EXISTS `carreras`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `carreras` (
+    `carrera_id` int(11) NOT NULL AUTO_INCREMENT,
+    `nombre_carrera` varchar(200) NOT NULL,
+    `descripcion_carrera` varchar(500) NOT NULL,
+    `facultad_id` int(11) NOT NULL,
+    PRIMARY KEY (`carrera_id`),
+    KEY `fk_carrera_facultad` (`facultad_id`),
+    CONSTRAINT `fk_carrera_facultad` FOREIGN KEY (`facultad_id`) REFERENCES `facultades` (`facultad_id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `carreras`
+  --
+
+  LOCK TABLES `carreras` WRITE;
+  /*!40000 ALTER TABLE `carreras` DISABLE KEYS */;
+  INSERT INTO `carreras` VALUES (1,'Ing Informatica','Carrera de ingieneria informatica',1),(2,'Ing Industrial','Carrera de ingieneria informatica',1),(3,'Ing Comercial','Carrera de ingieneria informatica',1),(4,'Enfermeria','Carrera de ingieneria Enfermeria',2),(5,'Medicina','Carrera de ingieneria Medicina',2),(6,'Terapia Ocupacional','Carrera de Terapia Ocupacional',2);
+  /*!40000 ALTER TABLE `carreras` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `ejemplar`
+  --
+
+  DROP TABLE IF EXISTS `ejemplar`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `ejemplar` (
+    `ejemplar_id` int(11) NOT NULL AUTO_INCREMENT,
+    `isbn` int(20) DEFAULT NULL,
+    `libro_id` int(11) DEFAULT NULL,
+    `revista_id` int(11) DEFAULT NULL,
+    `trabajo_id` int(11) DEFAULT NULL,
+    `fecha_entrega` date DEFAULT NULL,
+    `fecha_fin` date DEFAULT NULL,
+    `fecha_devolucion` datetime DEFAULT NULL,
+    `estado` enum('DISPONIBLE','PRESTADO','ATRASADO') DEFAULT NULL,
+    PRIMARY KEY (`ejemplar_id`),
+    UNIQUE KEY `isbn` (`isbn`),
+    KEY `fk_ejemplar_libro` (`libro_id`),
+    KEY `fk_ejemplar_revista` (`revista_id`),
+    KEY `fk_ejemplar_ensayo` (`trabajo_id`),
+    CONSTRAINT `fk_ejemplar_libro` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`libro_id`),
+    CONSTRAINT `fk_ejemplar_revista` FOREIGN KEY (`revista_id`) REFERENCES `revistas` (`revista_id`),
+    CONSTRAINT `fk_ejemplar_trabajo` FOREIGN KEY (`trabajo_id`) REFERENCES `trabajos` (`trabajo_id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=164 DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `ejemplar`
+  --
+
+
+  --
+  -- Table structure for table `facultades`
+  --
+
+  DROP TABLE IF EXISTS `facultades`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `facultades` (
+    `facultad_id` int(11) NOT NULL AUTO_INCREMENT,
+    `nombre_facultad` varchar(200) NOT NULL,
+    `descripcion_facultad` varchar(500) NOT NULL,
+    PRIMARY KEY (`facultad_id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `facultades`
+  --
+
+  LOCK TABLES `facultades` WRITE;
+  /*!40000 ALTER TABLE `facultades` DISABLE KEYS */;
+  INSERT INTO `facultades` VALUES (1,'Ingenieria','Facultad de ingienerias'),(2,'Salud','Facultad salud'),(3,'Humanidades','Facultad de humanidades'),(4,'Educacion','Facultad de educacion');
+  /*!40000 ALTER TABLE `facultades` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `libro_autores`
+  --
+
+  DROP TABLE IF EXISTS `libro_autores`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `libro_autores` (
+    `libro_autor_id` int(11) NOT NULL AUTO_INCREMENT,
+    `libro_id` int(11) NOT NULL,
+    `autor_id` int(11) NOT NULL,
+    PRIMARY KEY (`libro_autor_id`),
+    KEY `fk_libro_autores_autores1_idx` (`autor_id`),
+    KEY `fk_libro_autores_libros1_idx` (`libro_id`),
+    CONSTRAINT `fk_libro_autores_autores1` FOREIGN KEY (`autor_id`) REFERENCES `autor` (`autor_id`),
+    CONSTRAINT `fk_libro_autores_libros1` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`libro_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `libro_autores`
+  --
+
+  LOCK TABLES `libro_autores` WRITE;
+  /*!40000 ALTER TABLE `libro_autores` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `libro_autores` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `libro_stock`
+  --
+
+  DROP TABLE IF EXISTS `libro_stock`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `libro_stock` (
+    `libro_stock_id` int(11) NOT NULL AUTO_INCREMENT,
+    `libro_id` int(11) NOT NULL,
+    `total` int(11) NOT NULL,
+    `en_biblioteca` int(11) NOT NULL,
+    `en_prestamo` int(11) NOT NULL,
+    `en_atraso` int(11) NOT NULL,
+    PRIMARY KEY (`libro_stock_id`),
+    KEY `fk_libro_stock_libros1_idx` (`libro_id`),
+    CONSTRAINT `fk_libro_stock_libros1` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`libro_id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `libro_stock`
+  --
+
+
+  --
+  -- Table structure for table `libros`
+  --
+
+  DROP TABLE IF EXISTS `libros`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `libros` (
+    `libro_id` int(11) NOT NULL AUTO_INCREMENT,
+    `isbn_tipo` varchar(200) NOT NULL,
+    `nombre` varchar(200) NOT NULL,
+    `editorial` varchar(200) NOT NULL,
+    `edicion` varchar(200) NOT NULL,
+    `fecha_publicacion` date NOT NULL,
+    PRIMARY KEY (`libro_id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `libros`
+  --
+
+
+  --
+  -- Table structure for table `perfiles`
+  --
+
+  DROP TABLE IF EXISTS `perfiles`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `perfiles` (
+    `perfil_id` int(11) NOT NULL AUTO_INCREMENT,
+    `perfil_nombre` varchar(45) NOT NULL,
+    `perfil_opciones` varchar(200) DEFAULT NULL,
+    `timestamp` timestamp NULL DEFAULT current_timestamp(),
+    PRIMARY KEY (`perfil_id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `perfiles`
+  --
+
+  LOCK TABLES `perfiles` WRITE;
+  /*!40000 ALTER TABLE `perfiles` DISABLE KEYS */;
+  INSERT INTO `perfiles` VALUES (1,'ADMINISTRADOR',NULL,'2022-07-09 16:58:52'),(2,'USUARIO',NULL,'2022-07-09 16:58:52');
+  /*!40000 ALTER TABLE `perfiles` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `perfiles_permisos`
+  --
+
+  DROP TABLE IF EXISTS `perfiles_permisos`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `perfiles_permisos` (
+    `perfil_permiso_id` int(11) NOT NULL AUTO_INCREMENT,
+    `permiso_id` int(11) NOT NULL,
+    `perfil_id` int(11) NOT NULL,
+    `timestamp` timestamp NULL DEFAULT current_timestamp(),
+    PRIMARY KEY (`perfil_permiso_id`),
+    UNIQUE KEY `perfiles_permisos_UN` (`permiso_id`,`perfil_id`),
+    KEY `fk_perfiles_permisos_permisos1_idx` (`permiso_id`),
+    KEY `fk_perfiles_permisos_perfiles1_idx` (`perfil_id`),
+    CONSTRAINT `fk_perfiles_permisos_perfiles1` FOREIGN KEY (`perfil_id`) REFERENCES `perfiles` (`perfil_id`),
+    CONSTRAINT `fk_perfiles_permisos_permisos1` FOREIGN KEY (`permiso_id`) REFERENCES `permisos` (`permiso_id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `perfiles_permisos`
+  --
+
+  LOCK TABLES `perfiles_permisos` WRITE;
+  /*!40000 ALTER TABLE `perfiles_permisos` DISABLE KEYS */;
+  INSERT INTO `perfiles_permisos` VALUES (1,1,1,'2022-07-09 16:59:54'),(2,2,2,'2022-07-09 16:59:54');
+  /*!40000 ALTER TABLE `perfiles_permisos` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `permisos`
+  --
+
+  DROP TABLE IF EXISTS `permisos`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `permisos` (
+    `permiso_id` int(11) NOT NULL AUTO_INCREMENT,
+    `permiso_nombre` varchar(50) NOT NULL,
+    `permiso_tag` varchar(50) NOT NULL,
+    `permiso_descripcion` varchar(100) DEFAULT NULL,
+    `timestamp` timestamp NULL DEFAULT current_timestamp(),
+    PRIMARY KEY (`permiso_id`),
+    UNIQUE KEY `permisos_tag_UN` (`permiso_tag`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `permisos`
+  --
+
+  LOCK TABLES `permisos` WRITE;
+  /*!40000 ALTER TABLE `permisos` DISABLE KEYS */;
+  INSERT INTO `permisos` VALUES (1,'administrador','administrador',NULL,'2022-07-09 16:59:31'),(2,'usuario','usuario',NULL,'2022-07-09 16:59:31');
+  /*!40000 ALTER TABLE `permisos` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `prestamo_ejemplar`
+  --
+
+  DROP TABLE IF EXISTS `prestamo_ejemplar`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `prestamo_ejemplar` (
+    `prestamo_ejemplar_id` int(11) NOT NULL AUTO_INCREMENT,
+    `prestamo_id` int(11) NOT NULL,
+    `ejemplar_id` int(11) NOT NULL,
+    PRIMARY KEY (`prestamo_ejemplar_id`),
+    KEY `fk_prestamo_ejemplar_prestamos1_idx` (`prestamo_id`),
+    KEY `fk_prestamo_ejemplar_ejemplar1_idx` (`ejemplar_id`),
+    CONSTRAINT `fk_prestamo_ejemplar_ejemplar1` FOREIGN KEY (`ejemplar_id`) REFERENCES `ejemplar` (`ejemplar_id`),
+    CONSTRAINT `fk_prestamo_ejemplar_prestamos1` FOREIGN KEY (`prestamo_id`) REFERENCES `prestamos` (`prestamo_id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `prestamo_ejemplar`
+  --
+
+  --
+  -- Table structure for table `prestamos`
+  --
+
+  DROP TABLE IF EXISTS `prestamos`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `prestamos` (
+    `prestamo_id` int(11) NOT NULL AUTO_INCREMENT,
+    `alumno_id` int(11) NOT NULL,
+    `usuario_id` int(11) NOT NULL,
+    `fecha_inicio` date NOT NULL,
+    `fecha_fin` date NOT NULL,
+    `estado` enum('PRESTADO','ATRASADO','FINALIZADO','FINALIZADO_ATRASADO') DEFAULT NULL,
+    PRIMARY KEY (`prestamo_id`),
+    KEY `fk_prestamo_alumno` (`alumno_id`),
+    KEY `fk_prestamo_usuario` (`usuario_id`),
+    CONSTRAINT `fk_prestamo_alumno` FOREIGN KEY (`alumno_id`) REFERENCES `alumnos` (`alumno_id`),
+    CONSTRAINT `fk_prestamo_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`usuario_id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `prestamos`
+  --
+
+
+  --
+  -- Table structure for table `revista_autor`
+  --
+
+  DROP TABLE IF EXISTS `revista_autor`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `revista_autor` (
+    `revista_autor_id` int(11) NOT NULL AUTO_INCREMENT,
+    `revista_id` int(11) NOT NULL,
+    `autor_id` int(11) NOT NULL,
+    PRIMARY KEY (`revista_autor_id`),
+    KEY `fk_revista_autor_autores1_idx` (`autor_id`),
+    KEY `fk_revista_autor_revistas1_idx` (`revista_id`),
+    CONSTRAINT `fk_revista_autor_autores1` FOREIGN KEY (`autor_id`) REFERENCES `autor` (`autor_id`),
+    CONSTRAINT `fk_revista_autor_revistas1` FOREIGN KEY (`revista_id`) REFERENCES `revistas` (`revista_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `revista_autor`
+  --
+
+  LOCK TABLES `revista_autor` WRITE;
+  /*!40000 ALTER TABLE `revista_autor` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `revista_autor` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `revista_stock`
+  --
+
+  DROP TABLE IF EXISTS `revista_stock`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `revista_stock` (
+    `revista_stock_id` int(11) NOT NULL AUTO_INCREMENT,
+    `revista_id` int(11) NOT NULL,
+    `total` int(11) NOT NULL,
+    `en_biblioteca` int(11) NOT NULL,
+    `en_prestamo` int(11) NOT NULL,
+    `en_atraso` int(11) NOT NULL,
+    PRIMARY KEY (`revista_stock_id`),
+    KEY `fk_revista_stock_revistas1_idx` (`revista_id`),
+    CONSTRAINT `fk_revista_stock_revistas1` FOREIGN KEY (`revista_id`) REFERENCES `revistas` (`revista_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `revista_stock`
+  --
+
+  LOCK TABLES `revista_stock` WRITE;
+  /*!40000 ALTER TABLE `revista_stock` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `revista_stock` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `revistas`
+  --
+
+  DROP TABLE IF EXISTS `revistas`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `revistas` (
+    `revista_id` int(11) NOT NULL AUTO_INCREMENT,
+    `nombre` varchar(200) NOT NULL,
+    `editorial` varchar(200) NOT NULL,
+    `edicion` varchar(200) NOT NULL,
+    `fecha_publicacion` date NOT NULL,
+    PRIMARY KEY (`revista_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `revistas`
+  --
+
+  LOCK TABLES `revistas` WRITE;
+  /*!40000 ALTER TABLE `revistas` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `revistas` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `trabajo_autor`
+  --
+
+  DROP TABLE IF EXISTS `trabajo_autor`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `trabajo_autor` (
+    `trabajo_autor_id` int(11) NOT NULL AUTO_INCREMENT,
+    `trabajo_id` int(11) NOT NULL,
+    `autor_id` int(11) NOT NULL,
+    PRIMARY KEY (`trabajo_autor_id`),
+    KEY `fk_trabajo_autor_autores1_idx` (`autor_id`),
+    KEY `fk_trabajo_autor_trabajos1_idx` (`trabajo_id`),
+    CONSTRAINT `fk_trabajo_autor_autores1` FOREIGN KEY (`autor_id`) REFERENCES `autor` (`autor_id`),
+    CONSTRAINT `fk_trabajo_autor_trabajos1` FOREIGN KEY (`trabajo_id`) REFERENCES `trabajos` (`trabajo_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `trabajo_autor`
+  --
+
+  LOCK TABLES `trabajo_autor` WRITE;
+  /*!40000 ALTER TABLE `trabajo_autor` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `trabajo_autor` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `trabajo_stock`
+  --
+
+  DROP TABLE IF EXISTS `trabajo_stock`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `trabajo_stock` (
+    `trabajo_stock_id` int(11) NOT NULL AUTO_INCREMENT,
+    `trabajo_id` int(11) NOT NULL,
+    `total` int(11) NOT NULL,
+    `en_biblioteca` int(11) NOT NULL,
+    `en_prestamo` int(11) NOT NULL,
+    `en_atraso` int(11) NOT NULL,
+    PRIMARY KEY (`trabajo_stock_id`),
+    KEY `fk_trabajo_stock_trabajos1_idx` (`trabajo_id`),
+    CONSTRAINT `fk_trabajo_stock_trabajos1` FOREIGN KEY (`trabajo_id`) REFERENCES `trabajos` (`trabajo_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `trabajo_stock`
+  --
+
+  LOCK TABLES `trabajo_stock` WRITE;
+  /*!40000 ALTER TABLE `trabajo_stock` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `trabajo_stock` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `trabajos`
+  --
+
+  DROP TABLE IF EXISTS `trabajos`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `trabajos` (
+    `trabajo_id` int(11) NOT NULL AUTO_INCREMENT,
+    `nombre` varchar(200) NOT NULL,
+    `editorial` varchar(200) NOT NULL,
+    `edicion` varchar(200) NOT NULL,
+    `fecha_publicacion` date NOT NULL,
+    PRIMARY KEY (`trabajo_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `trabajos`
+  --
+
+  LOCK TABLES `trabajos` WRITE;
+  /*!40000 ALTER TABLE `trabajos` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `trabajos` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `usuarios`
+  --
+
+  DROP TABLE IF EXISTS `usuarios`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `usuarios` (
+    `usuario_id` int(11) NOT NULL AUTO_INCREMENT,
+    `usuario` varchar(200) NOT NULL,
+    `nombre` varchar(200) DEFAULT NULL,
+    `apellido` varchar(200) DEFAULT NULL,
+    `password` varchar(200) NOT NULL,
+    `usuario_token` varchar(1000) DEFAULT NULL,
+    `usuario_salt` varchar(100) DEFAULT NULL,
+    `usuario_mail` varchar(150) NOT NULL,
+    `usuario_tipo` enum('USUARIO','ADMINISTRADOR') DEFAULT NULL,
+    `usuario_activo` tinyint(1) DEFAULT 1,
+    `timestamp` timestamp NULL DEFAULT current_timestamp(),
+    PRIMARY KEY (`usuario_id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `usuarios`
+  --
+
+  LOCK TABLES `usuarios` WRITE;
+  /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+  INSERT INTO `usuarios` VALUES (1,'carla','Carla','Gonzalez','9OQislUkF/gYQjCO4R78gfyDMDtmdpQGlxKyoCNy5PWASP8iD0eDG6VpMLIwQ8bJkXi5fLtfw7oqFmeWI3VKgA==',NULL,'lGxQCW49SWl7uFEfQuB5DQ==','carlagon@gmail.com','ADMINISTRADOR',1,'2022-06-16 06:24:01'),(2,'pancho','Francisco','Berwart','/4TT+KVPMCtG8QAGney8y2Q5L5Ge4EcidzmrtIGbKlPxv5FWb13CmY5fKWUtX3DHO83uUXqP384+gYKqS9xAXw==',NULL,'NMnDAdPkXv/hdx2m8Fwb5A==','panchober27@gmail.com','ADMINISTRADOR',1,'2022-06-16 06:35:05'),(4,'maxi','Maximiliano','Machuca','MpQDA5xc7H++0JYIyJkAJ5zs1Auhcv3bPwDnN0pw0gynayLDDVkifdvnsiCEiSZGDc3s7Pm10pYsr1S10FbOhw==',NULL,'heEaTMhU85SLNpsg+glxww==','maxi@mail.com','USUARIO',1,'2022-07-09 17:39:18');
+  /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Table structure for table `usuarios_perfiles`
+  --
+
+  DROP TABLE IF EXISTS `usuarios_perfiles`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+  CREATE TABLE `usuarios_perfiles` (
+    `usuario_perfil_id` int(11) NOT NULL AUTO_INCREMENT,
+    `perfil_id` int(11) NOT NULL,
+    `usuario_id` int(11) NOT NULL,
+    `timestamp` timestamp NULL DEFAULT current_timestamp(),
+    PRIMARY KEY (`usuario_perfil_id`),
+    KEY `fk_usuarios_perfiles_perfiles1_idx` (`perfil_id`),
+    KEY `fk_usuarios_perfiles_usuarios1_idx` (`usuario_id`),
+    CONSTRAINT `fk_usuarios_perfiles_perfiles1` FOREIGN KEY (`perfil_id`) REFERENCES `perfiles` (`perfil_id`),
+    CONSTRAINT `usuarios_perfiles_FK` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`usuario_id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
+
+  --
+  -- Dumping data for table `usuarios_perfiles`
+  --
+
+  LOCK TABLES `usuarios_perfiles` WRITE;
+  /*!40000 ALTER TABLE `usuarios_perfiles` DISABLE KEYS */;
+  INSERT INTO `usuarios_perfiles` VALUES (1,1,1,'2022-07-09 17:00:27'),(2,1,2,'2022-07-09 17:00:27');
+  /*!40000 ALTER TABLE `usuarios_perfiles` ENABLE KEYS */;
+  UNLOCK TABLES;
+
+  --
+  -- Dumping routines for database 'biblioteca'
+  --
+  /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+  /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+  /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+  /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+  /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+  /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+  /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+  /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+  -- Dump completed on 2022-07-14 14:07:28

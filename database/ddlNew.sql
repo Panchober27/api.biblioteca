@@ -31,7 +31,7 @@ CREATE TABLE `libros` (
   `edicion` varchar(200) NOT NULL,
   `fecha_publicacion` date NOT NULL,
   PRIMARY KEY (`libro_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4;
 
 
 -- demo_bib.perfiles definition
@@ -133,7 +133,7 @@ CREATE TABLE `ejemplar` (
   CONSTRAINT `fk_ejemplar_libro` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`libro_id`),
   CONSTRAINT `fk_ejemplar_revista` FOREIGN KEY (`revista_id`) REFERENCES `revistas` (`revista_id`),
   CONSTRAINT `fk_ejemplar_trabajo` FOREIGN KEY (`trabajo_id`) REFERENCES `trabajos` (`trabajo_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8mb4;
 
 
 -- demo_bib.libro_autores definition
@@ -162,7 +162,7 @@ CREATE TABLE `libro_stock` (
   PRIMARY KEY (`libro_stock_id`),
   KEY `fk_libro_stock_libros1_idx` (`libro_id`),
   CONSTRAINT `fk_libro_stock_libros1` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`libro_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4;
 
 
 -- demo_bib.perfiles_permisos definition
@@ -277,15 +277,15 @@ CREATE TABLE `prestamos` (
   `prestamo_id` int(11) NOT NULL AUTO_INCREMENT,
   `alumno_id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
-  `fecha_inicio` datetime NOT NULL,
-  `fecha_fin` datetime NOT NULL,
+  `fecha_inicio` date NOT NULL,
+  `fecha_fin` date NOT NULL,
   `estado` enum('PRESTADO','ATRASADO','FINALIZADO','FINALIZADO_ATRASADO') DEFAULT NULL,
   PRIMARY KEY (`prestamo_id`),
   KEY `fk_prestamo_alumno` (`alumno_id`),
   KEY `fk_prestamo_usuario` (`usuario_id`),
   CONSTRAINT `fk_prestamo_alumno` FOREIGN KEY (`alumno_id`) REFERENCES `alumnos` (`alumno_id`),
   CONSTRAINT `fk_prestamo_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
 
 
 -- demo_bib.prestamo_ejemplar definition
@@ -299,4 +299,4 @@ CREATE TABLE `prestamo_ejemplar` (
   KEY `fk_prestamo_ejemplar_ejemplar1_idx` (`ejemplar_id`),
   CONSTRAINT `fk_prestamo_ejemplar_ejemplar1` FOREIGN KEY (`ejemplar_id`) REFERENCES `ejemplar` (`ejemplar_id`),
   CONSTRAINT `fk_prestamo_ejemplar_prestamos1` FOREIGN KEY (`prestamo_id`) REFERENCES `prestamos` (`prestamo_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4;

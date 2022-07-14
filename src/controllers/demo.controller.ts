@@ -41,6 +41,27 @@ export class DemoController {
 
 
 
+    validarEjemplar = async (req: Request, res: Response): Promise<Response>=> {
+
+        const ejemplarRepo = getRepository(Ejemplar);
+
+        const ejemplar = await ejemplarRepo.findOne({where : {isbn : 859225}});
+        
+        //x const ejemplar = await ejemplarRepo.update(
+        //     {isbn : 859225},
+        //     {fechaFin: new Date()}
+        // );
+
+        if(!ejemplar) return res.send('ejemplar no encontrado');
+
+
+        return res.send(ejemplar);
+
+    }
+
+
+
+
     
     insertLibros = async (req: Request, res: Response): Promise<Response> => {
         const runner = getConnection().createQueryRunner();

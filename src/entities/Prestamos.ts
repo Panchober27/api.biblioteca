@@ -38,10 +38,10 @@ export class Prestamos {
   @Column("int", { name: "usuario_id" })
   usuarioId: number;
 
-  @Column("datetime", { name: "fecha_inicio" })
+  @Column("date", { name: "fecha_inicio" })
   fechaInicio: Date;
 
-  @Column("datetime", { name: "fecha_fin" })
+  @Column("date", { name: "fecha_fin" })
   fechaFin: Date;
 
   @Column("enum", {

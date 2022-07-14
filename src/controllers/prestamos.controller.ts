@@ -69,6 +69,19 @@ export class PrestamosController {
             const { libros, alumno } = prestamo;
             const fechaInicioPrestamo = new Date();
 
+            if (!alumno || !libros || libros.length === 0) {
+                return res.status(400).json({ error: 'Faltan datos' });
+            }
+
+            // se recuperan las fechas de termino de los libros?.
+            const fechasRetornos = libros.map(l => {
+                return l.fechaRetorno;
+            });
+            
+
+            console.log(fechasRetornos);
+
+
             // se iteran los ejemplares y se guarda el primero en el array.
             libros.forEach(l => ejemplaresArr.push(l.ejemplars.shift()));
 
@@ -87,7 +100,7 @@ export class PrestamosController {
                 alumnoId: alumno.alumnoId,
                 usuarioId: req.user.usuarioId,
                 fechaInicio: fechaInicioPrestamo,
-                fechaFin: fechaDevolucion, // 
+                fechaFin: moment(fechaDevolucion).format('YYYY-MM-DD'), // 
                 estado: 'PRESTADO',
             });
             // 4. Actualizar el stock de los ejemplares.
@@ -115,17 +128,38 @@ export class PrestamosController {
                 });
             });
 
+
+
+            // TODO: Esto no esta funcionando che!!!!!!!
+            // Actualizar la fecha de fin para los ejemplares, usando fechasRetornos.
+            // await ejemplaresArr.forEach(async ejemplar => {
+            //     await runner.manager.update(Ejemplar, { ejemplarId: ejemplar.ejemplarId }, {
+            //         // fechaFin: '2022-12-31',
+            //         fechaFin: fechasRetornos[ejemplaresArr.indexOf(ejemplar)],
+            //     });
+            // });
+
+
+
+
+
+            // editar los ejemplares ya existentes, remplazandolos por los ejemplares dentro ejemplarsArr
+
+
+
+
             // 3. Actualizar el estado de los ejemplares a prestado.
-            await ejemplaresArr.forEach(async ejemplar => {
-                await runner.manager.update(Ejemplar,
-                    { ejemplarId: ejemplar.ejemplarId },
-                    {
-                        estado: 'PRESTADO',
-                        fechaEntrega: fechaInicioPrestamo,
-                        fechaFin: '25-12-2020',
-                    }
-                );
-            });
+            // await ejemplaresArr.forEach(async ejemplar => {
+            //     await runner.manager.update(Ejemplar,
+            //         { ejemplarId: ejemplar.ejemplarId },
+            //         {
+            //             estado: 'PRESTADO',
+            //             fechaEntrega: fechaInicioPrestamo,
+            //             // fechaFin: moment(fechasRetornos[ejemplaresArr.indexOf(ejemplar)]).format('YYYY-MM-DD'),
+            //             fechaFin: '25-12-2020',
+            //         }
+            //     );
+            // });
 
 
             await runner.commitTransaction();
@@ -275,7 +309,7 @@ export class PrestamosController {
 
     // Funcion encargada de realizar el retorno de 1 o mas ejemplares del prestamo.
     // al retornar un ejemplar se debe actualizar el stock de ese libro
-    updatePrestamo = async (req: Request, res: Response): Promise<Response>=> {
+    updatePrestamo = async (req: Request, res: Response): Promise<Response> => {
         // const runner = getConnection().createQueryRunner();
         // await runner.connect();
         try {
@@ -296,7 +330,7 @@ export class PrestamosController {
 
             // ejemplar.fechaFin
             // ejemplar.fechaDevolucion
-    
+
 
             // Aramado de la logica 🐱‍👤
 

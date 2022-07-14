@@ -51,10 +51,10 @@ export class Ejemplar {
   @Column("int", { name: "trabajo_id", nullable: true })
   trabajoId: number | null;
 
-  @Column("datetime", { name: "fecha_entrega", nullable: true })
+  @Column("date", { name: "fecha_entrega", nullable: true })
   fechaEntrega: Date | null;
 
-  @Column("datetime", { name: "fecha_fin", nullable: true })
+  @Column("date", { name: "fecha_fin", nullable: true })
   fechaFin: Date | null;
 
   @Column("datetime", { name: "fecha_devolucion", nullable: true })

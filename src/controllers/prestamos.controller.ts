@@ -273,7 +273,43 @@ export class PrestamosController {
     }
 
 
-    updatePrestamo = async (req: Request, res: Response) => {
+    // Funcion encargada de realizar el retorno de 1 o mas ejemplares del prestamo.
+    // al retornar un ejemplar se debe actualizar el stock de ese libro
+    updatePrestamo = async (req: Request, res: Response): Promise<Response>=> {
+        // const runner = getConnection().createQueryRunner();
+        // await runner.connect();
+        try {
+            // await runner.startTransaction();
+            // await runner.commitTransaction();
+
+
+            // se recibira desde el body un arreglo con los ejemplares que se retornaron.
+
+
+
+            // una vez se haya finalizado el retorno de los ejemplares se debe actualizar el estado de los ejemplares a disponible.
+            // se debe actualizar el stock de los libros
+
+            // se debe validar si todos los ejemplares del prestamo al que estan asociados fueron retornados.
+
+            // se debe revisar si alguna de las fechas ejemplar.fechaFin 
+
+            // ejemplar.fechaFin
+            // ejemplar.fechaDevolucion
+    
+
+            // Aramado de la logica 🐱‍👤
+
+            return res.send('ok');
+
+        } catch (err: any) {
+            // await runner.rollbackTransaction();
+            console.error(err);
+            return res.status(500).json({ errror: err.message });
+        }
+        // finally {
+        //     await runner.release();
+        // }
     }
 
 

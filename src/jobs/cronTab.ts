@@ -2,10 +2,17 @@
 // Language: typescript
 // Path: src\jobs\cronTab.ts
 import mjml2html from 'mjml';
-import { getRepository } from 'typeorm';
-import { Usuarios } from '../entities';
+import { getRepository, getConnection } from 'typeorm';
+import { Usuarios, Prestamos, Ejemplar } from '../entities';
 import { NodeMailer } from './mailer';
 const cron = require('node-cron');
+
+
+/**
+ * @module CronTabs
+ * @description CronTab para distintas tareas.
+ */
+
 
 const serverEnvironment: string =
   process.env.SERVER_ENVIRONMENT || 'PRODUCTION';
@@ -19,10 +26,61 @@ const task = cron.schedule(
 );
 
 
+
+/**
+ * @function FlowTask
+ * @description Tarea que se ejecuta cada 30 segundos.
+ */
 const FlowTask = async () => {
-  const mailer = new NodeMailer(); // instancia de nodemailer
-  const usersRepo = getRepository(Usuarios); // repo de usuarios para obtener su o sus correos.
-  let toAddresses = null; // direcciones de correo a enviar
+  // const mailer = new NodeMailer(); // instancia de nodemailer
+  // const usersRepo = getRepository(Usuarios); // repo de usuarios para obtener su o sus correos.
+  // let toAddresses = null; // direcciones de correo a enviar
+  // console.log('SOY UN CRONTAB 💖');
+  const runner = getConnection().createQueryRunner();
+  await runner.connect();
+  try {
+    const prestmamosRepo = getRepository(Prestamos);
+
+    // const prestamos = await prestmamosRepo.createQueryBuilder('p')
+    //   .leftJoinAndSelect('p.prestamoEjemplars', 'pe')
+    //   .leftJoinAndSelect('pe.ejemplar', 'e')
+    //   .leftJoinAndSelect('e.libro', 'l')
+    //   .where('p.fecha_fin > NOW()')
+    //   .getMany();
+    const prestamosAtrasados = await prestmamosRepo.createQueryBuilder('p')
+      .leftJoinAndSelect('p.prestamoEjemplars', 'pe')
+      .leftJoinAndSelect('pe.ejemplar', 'e')
+      .where('p.estado = :estado', { estado: 'PRESTADO' })
+      .andWhere('p.fecha_fin < NOW()')
+      .getMany();
+
+    if (prestamosAtrasados.length <= 0) {
+      console.log('No hay prestamos atrasados');
+      return;
+    }
+    await runner.startTransaction();
+
+    // Se cambian a atrasado los prestamos, pero los ejemplares asociados se debe
+    // hacer de manera independiente!
+    prestamosAtrasados.forEach(async prestamo => {
+      await runner.manager.update(Prestamos,
+        { prestamoId: prestamo.prestamoId },
+        { estado: 'ATRASADO' }
+      );
+    });
+
+    await runner.commitTransaction();
+
+    // console.table(prestamos);
+
+  } catch (err: any) {
+    await runner.rollbackTransaction();
+    console.log(err.message);
+  } finally {
+    await runner.release();
+  }
+
+
 
 };
 

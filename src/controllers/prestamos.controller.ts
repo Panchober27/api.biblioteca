@@ -69,7 +69,7 @@ export class PrestamosController {
             const { libros, alumno } = prestamo;
             const fechaInicioPrestamo = new Date();
 
-            if (!alumno || !libros || libros.length === 0) {
+            if (!alumno || !libros || libros.length === 0 || !libros || libros.length === 0) {
                 return res.status(400).json({ error: 'Faltan datos' });
             }
 
@@ -77,9 +77,7 @@ export class PrestamosController {
             const fechasRetornos = libros.map(l => {
                 return l.fechaRetorno;
             });
-            
 
-            console.log(fechasRetornos);
 
 
             // se iteran los ejemplares y se guarda el primero en el array.
@@ -89,10 +87,10 @@ export class PrestamosController {
             // logica para encontrar la fecha mas tardia, para ser asginada como la fecha fin del prestamo.
             const fechaDevolucion = libros.reduce((fechaDev, l) => {
                 // console.log(l.fechaRetorno)
-                const fecha = moment(l.fechaRetorno, "DD-MM-YYYY").valueOf()
+                const fecha = moment(l.fechaRetorno, 'DD-MM-YYYY').valueOf()
                 return fecha > fechaDev ? fecha : fechaDev
             }, 0)
-            console.log('fecha de devolucion: ' + moment(fechaDevolucion).format("DD-MM-YYYY"))
+            // console.log('fecha de devolucion: ' + moment(fechaDevolucion).format('DD-MM-YYYY'))
 
             await runner.startTransaction();
 
@@ -117,7 +115,6 @@ export class PrestamosController {
                             enPrestamo: libroStock.enPrestamo + 1,
                         });
                 }
-
             });
 
             // ejemplaresArr array de con los ejemplares a relacionar en prestamoEjemplar.
@@ -130,36 +127,17 @@ export class PrestamosController {
 
 
 
-            // TODO: Esto no esta funcionando che!!!!!!!
             // Actualizar la fecha de fin para los ejemplares, usando fechasRetornos.
-            // await ejemplaresArr.forEach(async ejemplar => {
-            //     await runner.manager.update(Ejemplar, { ejemplarId: ejemplar.ejemplarId }, {
-            //         // fechaFin: '2022-12-31',
-            //         fechaFin: fechasRetornos[ejemplaresArr.indexOf(ejemplar)],
-            //     });
-            // });
-
-
-
-
-
-            // editar los ejemplares ya existentes, remplazandolos por los ejemplares dentro ejemplarsArr
-
-
-
-
-            // 3. Actualizar el estado de los ejemplares a prestado.
-            // await ejemplaresArr.forEach(async ejemplar => {
-            //     await runner.manager.update(Ejemplar,
-            //         { ejemplarId: ejemplar.ejemplarId },
-            //         {
-            //             estado: 'PRESTADO',
-            //             fechaEntrega: fechaInicioPrestamo,
-            //             // fechaFin: moment(fechasRetornos[ejemplaresArr.indexOf(ejemplar)]).format('YYYY-MM-DD'),
-            //             fechaFin: '25-12-2020',
-            //         }
-            //     );
-            // });
+            ejemplaresArr.forEach(async ejemplar => {
+                // forameteo la fecha desde un formato a otro para ser valido para la base de datos 🐱‍👤
+                const date = new Date(moment(fechasRetornos[ejemplaresArr.indexOf(ejemplar)], 'DD-MM-YYYY').format('YYYY-MM-DD'));
+                // actualizar la fechas de los ejemplares.
+                await runner.manager.update(Ejemplar, { ejemplarId: ejemplar.ejemplarId }, {
+                    estado: 'PRESTADO',
+                    fechaEntrega: new Date(),
+                    fechaFin: date,
+                })
+            });
 
 
             await runner.commitTransaction();

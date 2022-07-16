@@ -1,8 +1,31 @@
 import { Request, Response } from 'express';
+import moment from 'moment';
 import { getRepository, Repository, getManager, getConnection } from 'typeorm';
 import { Ejemplar, Libros, PrestamoEjemplar, Trabajos, Revistas, LibroStock, RevistaStock, TrabajoStock, Prestamos } from '../entities';
 
 export class DemoController {
+
+
+
+
+    // play with dates formats
+    checkDateFormat = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            // const oriDate = '26-07-2022';
+            const oriDate = '2022-07-26';
+
+            const date = new Date(moment(oriDate, 'DD-MM-YYYY').format('YYYY-MM-DD'));
+
+            return res.send(date);
+
+            
+
+        } catch (err: any) {
+            return res.status(500).json({
+                message: err.message
+            });
+        }
+    }
 
 
 

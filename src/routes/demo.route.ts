@@ -12,6 +12,7 @@ router.get('/demo', c.checkDateFormat);
 
 // funcion para incertar libros con ejemplares.
 router.post('/demo', c.insertLibros);
+// router.post('/demo', c.insertarDemosPrestamos);
 
 // funcion para genera prestamo.
 // router.post('/demo', c.generarPrestamo);

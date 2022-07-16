@@ -7,6 +7,48 @@ export class DemoController {
 
 
 
+    insertarDemosPrestamos = async (req: Request, res: Response) => {
+
+        try {
+
+            const manager = getManager();
+
+            for (let i = 0; i < 10; i++) {
+                const query1 = await manager.query(
+                    `INSERT INTO
+                prestamos(
+                    prestamo_id,
+                    alumno_id,
+                    usuario_id,
+                    fecha_inicio,
+                    fecha_fin,
+                    estado
+                )
+            VALUES
+                (${i}, 2, 2, "2022-07-0${i}", "2022-07-0${i}", "PRESTADO")`)
+
+                const query2 = await manager.query(
+                    `INSERT INTO
+                    prestamo_ejemplar(
+                        prestamo_ejemplar_id,
+                        prestamo_id,
+                        ejemplar_id
+                        )
+                        VALUES
+                        (${i+11}, ${i}, 164)`)
+            }
+
+            return res.send({ message: 'ok' });
+
+
+        } catch (err: any) {
+            return res.status(500).json({
+                message: err.message,
+            });
+        }
+    }
+
+
 
     // play with dates formats
     checkDateFormat = async (req: Request, res: Response): Promise<Response> => {
@@ -18,7 +60,7 @@ export class DemoController {
 
             return res.send(date);
 
-            
+
 
         } catch (err: any) {
             return res.status(500).json({
@@ -30,19 +72,19 @@ export class DemoController {
 
 
 
-    
-    validateCounts = async (req: Request, res: Response): Promise<Response>=> {
+
+    validateCounts = async (req: Request, res: Response): Promise<Response> => {
         try {
-           
+
             const librosRepository: Repository<Libros> = getRepository(Libros);
             const ejemplaresRepository: Repository<Ejemplar> = getRepository(Ejemplar);
 
-            const libros = await librosRepository.findOne({where : {libroId : 38}});
-    
-            const ejemplares = await ejemplaresRepository.find({where : {libroId : 37}});
-            
-            const stocks = await getRepository(LibroStock).find({where : {libroId : 37}});
-            
+            const libros = await librosRepository.findOne({ where: { libroId: 38 } });
+
+            const ejemplares = await ejemplaresRepository.find({ where: { libroId: 37 } });
+
+            const stocks = await getRepository(LibroStock).find({ where: { libroId: 37 } });
+
             // ahora contar que stock total === cantidad de ejemplares
 
             console.log(`stockTotal: ${stocks[0].total}  ||  cantidad de ejemplares: ${ejemplares.length}  || del libro ${libros?.nombre}`);
@@ -64,18 +106,18 @@ export class DemoController {
 
 
 
-    validarEjemplar = async (req: Request, res: Response): Promise<Response>=> {
+    validarEjemplar = async (req: Request, res: Response): Promise<Response> => {
 
         const ejemplarRepo = getRepository(Ejemplar);
 
-        const ejemplar = await ejemplarRepo.findOne({where : {isbn : 859225}});
-        
+        const ejemplar = await ejemplarRepo.findOne({ where: { isbn: 859225 } });
+
         //x const ejemplar = await ejemplarRepo.update(
         //     {isbn : 859225},
         //     {fechaFin: new Date()}
         // );
 
-        if(!ejemplar) return res.send('ejemplar no encontrado');
+        if (!ejemplar) return res.send('ejemplar no encontrado');
 
 
         return res.send(ejemplar);
@@ -85,7 +127,7 @@ export class DemoController {
 
 
 
-    
+
     insertLibros = async (req: Request, res: Response): Promise<Response> => {
         const runner = getConnection().createQueryRunner();
         await runner.connect();
@@ -108,8 +150,8 @@ export class DemoController {
                 { isbnTipo: 'tapa_dura', nombre: 'Musica 2', editorial: 'Google', edicion: 'Estudiantil', fechaPublicacion: new Date().toDateString() },
             ];
 
-            for(let i = 0; i < libros.length; i++) {
-                const {libroId} = await runner.manager.save(Libros, {
+            for (let i = 0; i < libros.length; i++) {
+                const { libroId } = await runner.manager.save(Libros, {
                     isbnTipo: libros[i].isbnTipo,
                     nombre: libros[i].nombre,
                     editorial: libros[i].editorial,
@@ -119,13 +161,13 @@ export class DemoController {
                 librosIds.push(libroId);
             }
 
-            for(let i = 0; i < librosIds.length; i++){
+            for (let i = 0; i < librosIds.length; i++) {
                 console.log(`Id de nuevo libro: ${librosIds[i]}`);
             }
-            
+
             // por cada libro se generaran 5 ejemplares.
-            for(let i = 0; i < 5; i++) {
-                for(let i = 0; i < librosIds.length; i++){
+            for (let i = 0; i < 5; i++) {
+                for (let i = 0; i < librosIds.length; i++) {
                     // crear variable que aumente en base a la iteracion para asignar distintos isbn a cada ejemplar.
                     const { ejemplarId } = await runner.manager.save(Ejemplar, {
                         libroId: librosIds[i],
@@ -141,7 +183,7 @@ export class DemoController {
             }
 
             // por cada libro generar la relacion libro stock.
-            for(let i = 0; i < librosIds.length; i++){
+            for (let i = 0; i < librosIds.length; i++) {
                 const { libroStockId } = await runner.manager.save(LibroStock, {
                     libroId: librosIds[i],
                     total: 5,
@@ -170,7 +212,7 @@ export class DemoController {
 
     // funcion para gnerar prestamos.
     generarPrestamo = async (req: Request, res: Response): Promise<Response> => {
-        
+
         // Para generar el prestamo debo tener las fechas de cada ejemplar
         // el prestamo tendra 3 ejemplares. mat, leng, ciencias.
         const runner = getConnection().createQueryRunner();
@@ -228,7 +270,7 @@ export class DemoController {
 
 
 
-            
+
 
 
 
@@ -249,10 +291,10 @@ export class DemoController {
         } finally {
             await runner.release();
         }
-            
+
     }
 
 
-    
+
 
 }

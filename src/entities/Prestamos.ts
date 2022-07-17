@@ -44,6 +44,9 @@ export class Prestamos {
   @Column("date", { name: "fecha_fin" })
   fechaFin: Date;
 
+  @Column("date",{ name: "fecha_devolucion" })
+  fechaDevolucion: Date;
+
   @Column("enum", {
     name: "estado",
     nullable: true,

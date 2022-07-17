@@ -16,8 +16,14 @@ const c = new RankingController();
 
 
 // direnciamos rutas por verbo, pero post no realiza inserciones
+<<<<<<< Updated upstream
 router.get('/rankings', c.getEjemplaresPrestado);
 router.post('/rankings', c.getCountLibroPrestadoXMes);
+=======
+// router.get('/rankings', c.getEjemplaresPrestado);
+router.get('/rankings', c.getAtrasadosData);
+router.post('/rankings');
+>>>>>>> Stashed changes
 
 
 

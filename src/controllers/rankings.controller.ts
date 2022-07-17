@@ -69,6 +69,42 @@ export class RankingController {
 
 
 
+
+
+    // funcion para obtener los prestamos atrasados y sacarles datos para metricas.
+
+    // TODO: 
+    // crear muchos mas, siguiendo la misma logica.
+    // y obtener las carreras en un arreglo (contarlas en base a su aparicion)
+    // aramar objeto para graficos en frontend.
+    getAtrasadosData = async (req: Request, res: Response) => {
+        const prestamosRepository = getRepository(Prestamos);
+
+        try {
+            const prestamosAtrasados = await prestamosRepository.createQueryBuilder('p')
+                .leftJoinAndSelect('p.alumno', 'a')
+                .leftJoinAndSelect('a.carrera', 'carr')
+                .where('p.estado = :estado', { estado: 'FINALIZADO_ATRASADO'})
+                .getMany();
+
+            if(!prestamosAtrasados || prestamosAtrasados.length === 0){
+                return res.send('no hay prestamos con esas caracteristicas.');
+            }
+
+            return res.send(prestamosAtrasados);
+            
+        } catch (err: any) {
+            console.log(err);
+            return res.sendStatus(500).send({error: err.message});
+        }
+    };
+
+
+
+
+
+
+
     getBadStudents = async (req: Request, res: Response) => {
 
         try {
@@ -138,6 +174,7 @@ export class RankingController {
             const ejemplar = await EjemplaresRepository.createQueryBuilder('e')
                 .leftJoinAndSelect('e.libro', 'li')
                 .where('e.estado = "PRESTADO"')
+                //hacer el leftjoin a la tabla preejemplar a la tabla prestamo y de prestamo a alumno.
                 .getMany();
 
             if (!ejemplar || ejemplar.length === 0) return res.send({ message: 'No hay ejemplares prestados' });

@@ -29,7 +29,7 @@ if (process.env.SERVER_ENVIRONMENT === 'DEVELOPMENT') {
 }
 app.use(cors());
 app.use(bodyParser.json());
-// app.use(auth);
+app.use(auth);
 
 // Rutas del servidor.
 app.use('/api', baseRoutes);

@@ -11,13 +11,10 @@ const c = new DemoController();
 router.get('/demo', c.checkDateFormat);
 
 // funcion para incertar libros con ejemplares.
-<<<<<<< Updated upstream
-router.post('/demo', c.insertLibros);
-// router.post('/demo', c.insertarDemosPrestamos);
-=======
 // router.post('/demo', c.insertLibros);
-router.post('/demo', c.historicPrestamos);
->>>>>>> Stashed changes
+// router.post('/demo', c.insertarDemosPrestamos);
+router.post('/demo', c.insertLibros);
+// router.post('/demo', c.historicPrestamos);
 
 // funcion para genera prestamo.
 // router.post('/demo', c.generarPrestamo);

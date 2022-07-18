@@ -9,7 +9,6 @@ export class DemoController {
 
     insertarDemosPrestamos = async (req: Request, res: Response) => {
 
-<<<<<<< Updated upstream
         try {
 
             const manager = getManager();
@@ -77,12 +76,6 @@ export class DemoController {
     validateCounts = async (req: Request, res: Response): Promise<Response> => {
         try {
 
-=======
-
-    validateCounts = async (req: Request, res: Response): Promise<Response> => {
-        try {
-
->>>>>>> Stashed changes
             const librosRepository: Repository<Libros> = getRepository(Libros);
             const ejemplaresRepository: Repository<Ejemplar> = getRepository(Ejemplar);
 
@@ -134,8 +127,6 @@ export class DemoController {
 
 
 
-<<<<<<< Updated upstream
-=======
     // Funcion que genera prestamos historicos.
     // TODO: 
     // crear muchos mas....
@@ -251,7 +242,6 @@ export class DemoController {
 
 
 
->>>>>>> Stashed changes
 
     insertLibros = async (req: Request, res: Response): Promise<Response> => {
         const runner = getConnection().createQueryRunner();

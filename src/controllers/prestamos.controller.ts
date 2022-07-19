@@ -36,6 +36,7 @@ export class PrestamosController {
                 .leftJoinAndSelect('e.libro', 'l')
                 .leftJoinAndSelect('e.trabajo', 't')
                 .leftJoinAndSelect('e.revista', 'r')
+                .where('p.estado != :estado', { estado: 'FINALIZADO' })
                 // .where('u.usuario_id = :id', { id: userLogged.usuarioId })
                 // .andWhere('p.estado = :estado', { estado: 'PRESTADO' })
                 // .orWhere('p.estado = :estado', { estado: 'ATRASADO' })

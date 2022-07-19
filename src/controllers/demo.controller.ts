@@ -73,6 +73,7 @@ export class DemoController {
 
 
 
+
     validateCounts = async (req: Request, res: Response): Promise<Response> => {
         try {
 
@@ -131,107 +132,107 @@ export class DemoController {
     // TODO: 
     // crear muchos mas....
     // 
-    // historicPrestamos = async (req: Request, res: Response): Promise<Response> => {
+    historicPrestamos = async (req: Request, res: Response): Promise<Response> => {
 
-    //     const runner = getConnection().createQueryRunner();
-    //     await runner.connect();
+        const runner = getConnection().createQueryRunner();
+        await runner.connect();
 
-    //     // crear 2 prestamos hisoticos 1 que este sin atrasos y otro con todo atrasado.
+        // crear 2 prestamos hisoticos 1 que este sin atrasos y otro con todo atrasado.
 
-    //     // usuario: 4
-    //     // alumno: 1
-    //     // los ejemplares.
+        // usuario: 4
+        // alumno: 1
+        // los ejemplares.
 
-    //     // alumno - daniel muñoz
-    //     // usuario maximiliano
-    //     // prestamo1.
-
-
-    //     // prestamo1 :   desde 2022-03-01  hasta 2022-03-10
-    //     // libro 1[47]:  desde 2022-03-01  hasta 2022-03-07  || 2022-03-07 || idsEjemplares: [174,190,206,222,238]
-    //     // libro 3[48]:  desde 2022-03-01  hasta 2022-03-08  || 2022-03-12 || idsEjemplares: [175,191,207,223,239]
-    //     // libro 2[49]:  desde 2022-03-01  hasta 2022-03-10  || 2022-03-12 || idsEjemplares: [176,192,208,224,240]
+        // alumno - daniel muñoz
+        // usuario maximiliano
+        // prestamo1.
 
 
-    //     // libro 1 [50]
-    //     // libro 2 [51]
-    //     // libro 3 [52]
+        // prestamo1 :   desde 2022-03-01  hasta 2022-03-10
+        // libro 1[47]:  desde 2022-03-01  hasta 2022-03-07  || 2022-03-07 || idsEjemplares: [174,190,206,222,238]
+        // libro 3[48]:  desde 2022-03-01  hasta 2022-03-08  || 2022-03-12 || idsEjemplares: [175,191,207,223,239]
+        // libro 2[49]:  desde 2022-03-01  hasta 2022-03-10  || 2022-03-12 || idsEjemplares: [176,192,208,224,240]
 
 
-    //     try {
+        // libro 1 [50]
+        // libro 2 [51]
+        // libro 3 [52]
 
-    //         await runner.startTransaction();
+
+        try {
+
+            await runner.startTransaction();
 
 
-    //         // crear el prestamo con los datos de alumno,usuario y fechas de inicio / fin
-    //         const { prestamoId } = await runner.manager.save(Prestamos, {
-    //             alumnoId: 1,
-    //             usuarioId: 4,
-    //             fechaInicio: '2022-03-01',
-    //             fechaFin: '2022-03-10',
-    //             fechaDevolucion: '2022-03-12',
-    //             estado: "FINALIZADO_ATRASADO",
-    //         })
+            // crear el prestamo con los datos de alumno,usuario y fechas de inicio / fin
+            const { prestamoId } = await runner.manager.save(Prestamos, {
+                alumnoId: 1,
+                usuarioId: 4,
+                fechaInicio: '2022-03-01',
+                fechaFin: '2022-03-10',
+                //fechaDevolucion: '2022-03-12',
+                estado: "FINALIZADO_ATRASADO",
+            })
 
-    //         // Asociar los ejemplares al prestamo, creando la tabla relacionadora prestamoEjmplar.
-    //         await runner.manager.save(PrestamoEjemplar, {
-    //             prestamoId,
-    //             ejemplarId: 174
-    //         })
+            // Asociar los ejemplares al prestamo, creando la tabla relacionadora prestamoEjmplar.
+            await runner.manager.save(PrestamoEjemplar, {
+                prestamoId,
+                ejemplarId: 174
+            })
 
-    //         await runner.manager.save(PrestamoEjemplar, {
-    //             prestamoId,
-    //             ejemplarId: 175
-    //         })
+            await runner.manager.save(PrestamoEjemplar, {
+                prestamoId,
+                ejemplarId: 175
+            })
 
-    //         await runner.manager.save(PrestamoEjemplar, {
-    //             prestamoId,
-    //             ejemplarId: 176
-    //         })
+            await runner.manager.save(PrestamoEjemplar, {
+                prestamoId,
+                ejemplarId: 176
+            })
 
 
             
-    //         // Actualizar las fechas de los ejemplares asociados al prestamo.
-    //         await runner.manager.update(Ejemplar,
-    //             { ejemplarId: 174 },
-    //             {
-    //                 fechaEntrega: '2022-03-01',
-    //                 fechaFin: '2022-03-07',
-    //                 fechaDevolucion: '2022-03-07'
-    //             }
-    //         )
+            // Actualizar las fechas de los ejemplares asociados al prestamo.
+            await runner.manager.update(Ejemplar,
+                { ejemplarId: 174 },
+                {
+                    fechaEntrega: '2022-03-01',
+                    fechaFin: '2022-03-07',
+                    fechaDevolucion: '2022-03-07'
+                }
+            )
             
-    //         await runner.manager.update(Ejemplar,
-    //             { ejemplarId: 175 },
-    //             {
-    //                 fechaEntrega: '2022-03-01',
-    //                 fechaFin: '2022-03-08',
-    //                 fechaDevolucion: '2022-03-12'
-    //             }
-    //         )
+            await runner.manager.update(Ejemplar,
+                { ejemplarId: 175 },
+                {
+                    fechaEntrega: '2022-03-01',
+                    fechaFin: '2022-03-08',
+                    fechaDevolucion: '2022-03-12'
+                }
+            )
             
-    //         await runner.manager.update(Ejemplar,
-    //             { ejemplarId: 174 },
-    //             {
-    //                 fechaEntrega: '2022-03-01',
-    //                 fechaFin: '2022-03-10',
-    //                 fechaDevolucion: '2022-03-12'
-    //             }
-    //         )
+            await runner.manager.update(Ejemplar,
+                { ejemplarId: 174 },
+                {
+                    fechaEntrega: '2022-03-01',
+                    fechaFin: '2022-03-10',
+                    fechaDevolucion: '2022-03-12'
+                }
+            )
 
 
-    //         await runner.commitTransaction();
+            await runner.commitTransaction();
 
-    //         return res.send('Funcion que genera prestamos historicos.')
+            return res.send('Funcion que genera prestamos historicos.')
 
-    //     } catch (err: any) {
-    //         await runner.rollbackTransaction();
-    //         console.error(err);
-    //         return res.status(500).json({ error: err.message });
-    //     } finally {
-    //         await runner.release();
-    //     }
-    // };
+        } catch (err: any) {
+            await runner.rollbackTransaction();
+            console.error(err);
+            return res.status(500).json({ error: err.message });
+        } finally {
+            await runner.release();
+        }
+    };
 
 
 

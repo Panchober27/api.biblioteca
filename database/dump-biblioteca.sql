@@ -357,6 +357,7 @@
     `usuario_id` int(11) NOT NULL,
     `fecha_inicio` date NOT NULL,
     `fecha_fin` date NOT NULL,
+    `fecha_termino` date,
     `estado` enum('PRESTADO','ATRASADO','FINALIZADO','FINALIZADO_ATRASADO') DEFAULT NULL,
     PRIMARY KEY (`prestamo_id`),
     KEY `fk_prestamo_alumno` (`alumno_id`),

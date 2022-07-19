@@ -200,6 +200,12 @@ export class PrestamosController {
             // });
 
 
+            // si la fecha de devolucion es mayor a la fecha fin [el prestamo debe tener el estado ATRASADO.]
+
+            // si no quedan libros(ejemplares por retornar se termina el prestamo y si tiene estado ATRASADO
+            // se termina como FINALIZADO_ATRASADO)
+
+
             // // 2. actualizar el stock de los ejemplares.
             // ejemplares.forEach(async (ejemplar) => {
             //     const libroStock = await runner.manager.findOne(LibroStock, {

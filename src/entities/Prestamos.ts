@@ -45,8 +45,8 @@ export class Prestamos {
   fechaFin: Date;
 
   // TODO: agregar esta columna a la base de datos para que no falle la peticion!
-  // @Column("date",{ name: "fecha_devolucion" })
-  // fechaDevolucion: Date;
+  @Column("date",{ name: "fecha_termino" })
+  fechaTermino: Date;
 
   @Column("enum", {
     name: "estado",

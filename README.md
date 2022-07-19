@@ -21,8 +21,7 @@ Primero deben entrar en el repositorio para clonar/descargarlo pueden elegir la 
 si lo descargan les dejara una carpeta .zip que deben descomprimir.
 
 
-
-
+Esto dejara 2 carpetas: api.biblioteca y front.biblioteca siendo backend y frontend respectivamente.
 
 
 ## Desarrollo 🚀

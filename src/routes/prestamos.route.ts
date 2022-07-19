@@ -11,6 +11,6 @@ router.get('/user-prestamos', c.getPrestamosByLoggedUser); // prestamos del usua
 
 router.post('/prestamos', c.insertPrestamo);
 
-// router.put('/prestamos/:id', c.updatePrestamo);
+router.put('/prestamos/:id', c.updatePrestamo);
 
 export default router;

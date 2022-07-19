@@ -36,33 +36,27 @@ const FlowTask = async () => {
   // const usersRepo = getRepository(Usuarios); // repo de usuarios para obtener su o sus correos.
   // let toAddresses = null; // direcciones de correo a enviar
   // console.log('SOY UN CRONTAB 💖');
+  let updatedPrestamos = 0;
   const runner = getConnection().createQueryRunner();
   await runner.connect();
   try {
     const prestmamosRepo = getRepository(Prestamos);
-
-    // const prestamos = await prestmamosRepo.createQueryBuilder('p')
-    //   .leftJoinAndSelect('p.prestamoEjemplars', 'pe')
-    //   .leftJoinAndSelect('pe.ejemplar', 'e')
-    //   .leftJoinAndSelect('e.libro', 'l')
-    //   .where('p.fecha_fin > NOW()')
-    //   .getMany();
     const prestamosAtrasados = await prestmamosRepo.createQueryBuilder('p')
       .leftJoinAndSelect('p.prestamoEjemplars', 'pe')
       .leftJoinAndSelect('pe.ejemplar', 'e')
-      .where('p.estado = :estado', { estado: 'PRESTADO' })
-      .andWhere('p.fecha_fin < NOW()')
+      .where('p.fecha_fin < NOW()')
+      .andWhere('p.estado = :estado', { estado: 'PRESTADO' })
       .getMany();
-
-    if (prestamosAtrasados.length <= 0) {
+    if (!prestamosAtrasados || prestamosAtrasados.length === 0) {
       console.log('No hay prestamos atrasados');
-      return;
     }
     await runner.startTransaction();
 
-    // Se cambian a atrasado los prestamos, pero los ejemplares asociados se debe
-    // hacer de manera independiente!
+
+    // // Se cambian a atrasado los prestamos, pero los ejemplares asociados se debe
+    // // hacer de manera independiente!
     prestamosAtrasados.forEach(async prestamo => {
+      updatedPrestamos++;
       await runner.manager.update(Prestamos,
         { prestamoId: prestamo.prestamoId },
         { estado: 'ATRASADO' }
@@ -71,16 +65,21 @@ const FlowTask = async () => {
 
     await runner.commitTransaction();
 
-    // console.table(prestamos);
+    const info = {
+      message: 'Prestamos atrasados',
+      data: prestamosAtrasados,
+      updatedPrestamos
+    };
+
+    console.log(`CRONTAB EJECUTADO🐱‍👤✌`);
+    console.log(info);
 
   } catch (err: any) {
     await runner.rollbackTransaction();
-    console.log(err.message);
+    console.log(err);
   } finally {
     await runner.release();
   }
-
-
 
 };
 

@@ -6,6 +6,58 @@ import { Ejemplar, Libros, PrestamoEjemplar, Trabajos, Revistas, LibroStock, Rev
 export class DemoController {
 
 
+    // Funcion para probar efectividad de los crontabs.
+    demo = async (req: Request, res: Response) => {
+        let updatedPrestamos = 0;
+        const runner = getConnection().createQueryRunner();
+        await runner.connect();
+        try {
+            const prestmamosRepo = getRepository(Prestamos);
+            const prestamosAtrasados = await prestmamosRepo.createQueryBuilder('p')
+                .leftJoinAndSelect('p.prestamoEjemplars', 'pe')
+                .leftJoinAndSelect('pe.ejemplar', 'e')
+                .where('p.fecha_fin < NOW()')
+                .andWhere('p.estado = :estado', { estado: 'PRESTADO' })
+                .getMany();
+            if (!prestamosAtrasados || prestamosAtrasados.length === 0) {
+                console.log('No hay prestamos atrasados');
+                return res.sendStatus(204);
+            }
+            await runner.startTransaction();
+
+            
+            // // Se cambian a atrasado los prestamos, pero los ejemplares asociados se debe
+            // // hacer de manera independiente!
+            prestamosAtrasados.forEach(async prestamo => {
+                updatedPrestamos ++;
+                await runner.manager.update(Prestamos,
+                    { prestamoId: prestamo.prestamoId },
+                    { estado: 'ATRASADO' }
+                );
+            });
+
+            await runner.commitTransaction();
+
+            res.status(200).json({
+                message: 'Prestamos atrasados',
+                data: prestamosAtrasados,
+                updatedPrestamos
+            });
+
+        } catch (err: any) {
+            await runner.rollbackTransaction();
+            console.log(err.message);
+        } finally {
+            await runner.release();
+        }
+
+    };
+
+
+
+
+
+
 
     insertarDemosPrestamos = async (req: Request, res: Response) => {
 
@@ -35,7 +87,7 @@ export class DemoController {
                         ejemplar_id
                         )
                         VALUES
-                        (${i+11}, ${i}, 164)`)
+                        (${i + 11}, ${i}, 164)`)
             }
 
             return res.send({ message: 'ok' });
@@ -191,7 +243,7 @@ export class DemoController {
             })
 
 
-            
+
             // Actualizar las fechas de los ejemplares asociados al prestamo.
             await runner.manager.update(Ejemplar,
                 { ejemplarId: 174 },
@@ -201,7 +253,7 @@ export class DemoController {
                     fechaDevolucion: '2022-03-07'
                 }
             )
-            
+
             await runner.manager.update(Ejemplar,
                 { ejemplarId: 175 },
                 {
@@ -210,7 +262,7 @@ export class DemoController {
                     fechaDevolucion: '2022-03-12'
                 }
             )
-            
+
             await runner.manager.update(Ejemplar,
                 { ejemplarId: 174 },
                 {

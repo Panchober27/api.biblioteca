@@ -1,0 +1,37 @@
+Plan de Pruebas para biblioteca...
+
+1. pruebas de ejecucion de usuario.
+2. pruebas de fiabilidad del sistema.
+3. pruebas de crones de sistema.
+
+
+
+PRUEBAS DE EJECUCION DE USUARIO.
+
+1- prueba de ejecucion de usuario.
+
+    A. Login de usuario.🟢
+    B. Sesion de usuario se mantiene activa si no cierra sesion.🟢
+    C. Logout de usuario.🟢
+    D. Usuario puede ver listado de alumnos en el sistema.🟢
+    E. Usuario puede ver listado de libros en el sistema.🟢
+    F. Usuario puede ver listado de prestamos en el sistema.🟢
+    G. Usuario puede generar prestamos en el sistema.🟢
+    H. Usuario puede generar devoluciones en el sistema.🟡
+
+
+
+
+
+PRUEBAS DE CRONES DE SISTEMA.
+
+1- prueba de cron de sistema.
+    Cron revisa si existen prestamos en estado 'PRESTADO' cuya fecha_fin sea mayor a la fecha actual.
+    si el cron encuentra prestamos con estas caracteristicas realizara las siguentes acciones(consultas)
+
+    A. Se actualizara el estado de el o los prestamos a 'ATRASADO' 🟢
+    B. PORHACER: revisar las fechas de retorno 'o como se llamen' de los ejemplares y actulizarlos.🟡
+    C.
+
+
+

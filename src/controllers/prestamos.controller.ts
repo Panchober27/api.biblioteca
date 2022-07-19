@@ -175,103 +175,108 @@ export class PrestamosController {
      * @param {Response} res Objeto con los datos de la respuesta.
      * @returns {Status} Objeto con el status de la petición.
      */
-    // updatePrestamo = async (req: Request, res: Response): Promise<Response> => {
-    //     const runner = getConnection().createQueryRunner();
-    //     await runner.connect();
-    //     let ejemplares: any[] = [];
+    updatePrestamo = async (req: Request, res: Response): Promise<Response> => {
+        const runner = getConnection().createQueryRunner();
+        await runner.connect();
+        let ejemplares: any[] = [];
 
-    //     try {
+        try {
 
-    //         const prestamoId = req.params.id;
-    //         let keys = Object.keys(req.body);
-    //         for (let i = 0; i < keys.length; i++) {
-    //             let key = keys[i];
-    //             ejemplares.push(req.body[key].ejemplar);
-    //         }
+            const prestamoId = req.params.id;
+            let keys = Object.keys(req.body);
+            for (let i = 0; i < keys.length; i++) {
+                let key = keys[i];
+                ejemplares.push(req.body[key].ejemplar);
+            }
             
-    //         await runner.startTransaction();
+            // await runner.startTransaction();
 
-    //         // 1. actualizar los ejemplares. cambiando el estado y asignando la fecha de entrega.
-    //         ejemplares.forEach(async (ejemplar) => {
-    //             await runner.manager.update(Ejemplar, { ejemplarId: ejemplar.ejemplarId }, {
-    //                 estado: 'DISPONIBLE',
-    //                 fechaDevolucion: new Date()
-    //             });
-    //         });
-
-
-    //         // 2. actualizar el stock de los ejemplares.
-    //         ejemplares.forEach(async (ejemplar) => {
-    //             const libroStock = await runner.manager.findOne(LibroStock, {
-    //                 where: {
-    //                     libroId: ejemplar.libroId,
-    //                 },
-    //             })
-    //             if (libroStock) {
-    //                 await runner.manager.update(LibroStock, { libroStockId: libroStock.libroStockId },
-    //                     {
-    //                         enBiblioteca: libroStock.enBiblioteca + 1,
-    //                         enPrestamo: libroStock.enPrestamo - 1,
-    //                     });
-    //             }
-    //         });
+            // // 1. actualizar los ejemplares. cambiando el estado y asignando la fecha de entrega.
+            // ejemplares.forEach(async (ejemplar) => {
+            //     await runner.manager.update(Ejemplar, { ejemplarId: ejemplar.ejemplarId }, {
+            //         estado: 'DISPONIBLE',
+            //         fechaDevolucion: new Date()
+            //     });
+            // });
 
 
-    //         // 3. actualizar el estado del prestamo.
-    //         // 3.1 Obtener los ejemplares relacionados al prestamo. y si todos estan todos con estado DISPONIBLE
-    //         // se cambia el estado del prestamo a FINALIZADO.
-    //         // 3.2 Si la fecheDevolucion es mayor a fechaFin en alguno de los ejemplares, se cambia el estado del prestamo a FINAlIZADO_ATRASADO.
-    //         const ejemplaresPrestamo = await runner.manager.find(PrestamoEjemplar, {
-    //             where: {
-    //                 prestamoId: prestamoId,
-    //             },
-    //         });
-
-    //         let estadoPrestamo = 'FINALIZADO';
-
-    //         ejemplaresPrestamo.forEach(async (ejemplar) => {
-    //             const ejemplarActualizado = await runner.manager.findOne(Ejemplar, {
-    //                 where: {
-    //                     ejemplarId: ejemplar.ejemplarId,
-    //                     estado: 'PRESTADO',
-    //                 },
-    //             });
-
-    //             if (ejemplarActualizado) {
-    //                 if (ejemplarActualizado.fechaDevolucion && ejemplarActualizado.fechaFin ? ejemplarActualizado.fechaDevolucion > ejemplarActualizado.fechaFin : null) {
-    //                     estadoPrestamo = 'FINALIZADO_ATRASADO';
-    //                 }
-
-    //                 if(ejemplarActualizado.fechaFin < new Date() && ejemplarActualizado.fechaDevolucion == null) {
-    //                     estadoPrestamo = 'PRESTADO';
-    //                 }
-    //             }
-    //         });
-
-    //         if (estadoPrestamo === 'FINALIZADO_ATRASADO') {
-    //             await runner.manager.update(Prestamos, { prestamoId: prestamoId }, {
-    //                 estado: 'FINALIZADO_ATRASADO',
-    //             });
-    //         } else {
-    //             await runner.manager.update(Prestamos, { prestamoId: prestamoId }, {
-    //                 estado: 'FINALIZADO',
-    //             });
-    //         }
-
-    //         await runner.commitTransaction();
+            // // 2. actualizar el stock de los ejemplares.
+            // ejemplares.forEach(async (ejemplar) => {
+            //     const libroStock = await runner.manager.findOne(LibroStock, {
+            //         where: {
+            //             libroId: ejemplar.libroId,
+            //         },
+            //     })
+            //     if (libroStock) {
+            //         await runner.manager.update(LibroStock, { libroStockId: libroStock.libroStockId },
+            //             {
+            //                 enBiblioteca: libroStock.enBiblioteca + 1,
+            //                 enPrestamo: libroStock.enPrestamo - 1,
+            //             });
+            //     }
+            // });
 
 
-    //         return res.sendStatus(200);
+            // // 3. actualizar el estado del prestamo.
+            // // 3.1 Obtener los ejemplares relacionados al prestamo. y si todos estan todos con estado DISPONIBLE
+            // // se cambia el estado del prestamo a FINALIZADO.
+            // // 3.2 Si la fecheDevolucion es mayor a fechaFin en alguno de los ejemplares, se cambia el estado del prestamo a FINAlIZADO_ATRASADO.
+            // const ejemplaresPrestamo = await runner.manager.find(PrestamoEjemplar, {
+            //     where: {
+            //         prestamoId: prestamoId,
+            //     },
+            // });
+
+            // let estadoPrestamo = 'FINALIZADO';
+
+            // ejemplaresPrestamo.forEach(async (ejemplar) => {
+            //     const ejemplarActualizado = await runner.manager.findOne(Ejemplar, {
+            //         where: {
+            //             ejemplarId: ejemplar.ejemplarId,
+            //             estado: 'PRESTADO',
+            //         },
+            //     });
+
+            //     if (ejemplarActualizado) {
+            //         if (ejemplarActualizado.fechaDevolucion && ejemplarActualizado.fechaFin ? ejemplarActualizado.fechaDevolucion > ejemplarActualizado.fechaFin : null) {
+            //             estadoPrestamo = 'FINALIZADO_ATRASADO';
+            //         }
+
+            //         if(ejemplarActualizado.fechaFin < new Date() && ejemplarActualizado.fechaDevolucion == null) {
+            //             estadoPrestamo = 'PRESTADO';
+            //         }
+            //     }
+            // });
+
+            // if (estadoPrestamo === 'FINALIZADO_ATRASADO') {
+            //     await runner.manager.update(Prestamos, { prestamoId: prestamoId }, {
+            //         estado: 'FINALIZADO_ATRASADO',
+            //     });
+            // } else {
+            //     await runner.manager.update(Prestamos, { prestamoId: prestamoId }, {
+            //         estado: 'FINALIZADO',
+            //     });
+            // }
+
+            // await runner.commitTransaction();
+
+            const response = {
+                prestamoId,
+                ejemplares,
+            }
+
+            return res.send(response);
 
 
-    //     } catch (err: any) {
-    //         await runner.rollbackTransaction();
-    //         console.error(err);
-    //         return res.status(500).json({ errror: err.message });
-    //     } finally {
-    //         await runner.release();
-    //     }
-    // }
+        } catch (err: any) {
+            // await runner.rollbackTransaction();
+            console.error(err);
+            return res.status(500).json({ errror: err.message });
+        } 
+        // finally {
+        //     await runner.release();
+        // }
+    }
 
 
 

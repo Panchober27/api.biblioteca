@@ -23,11 +23,28 @@ si lo descargan les dejara una carpeta .zip que deben descomprimir.
 
 Esto dejara 2 carpetas: api.biblioteca y front.biblioteca siendo backend y frontend respectivamente.
 
+Iniciar una consola en sus computadoras, luego ubicados en los proyectos ejecutar
+```
+npm install
+```
+Esto instalara las dependencias del proyecto localmente en sus computadoras.
+
+Luego correr los siguientes comandos.
+
+##### En api.biblioteca
+```
+npm run dev
+```
+
+
+#### En front.biblioteca
+```
+npm run start
+```
+
 
 ## Desarrollo 🚀
-
-
 ## Desarrollado por [Francisco Berwart](https://github.com/Panchober27) ✒️
-## Desarrollado por [Maximiliano Machuca](https://github.com/nicoseba) ✒️
-## Desarrollado por [Carla González] ✒️
+## Desarrollado por [Maximiliano Machuca](https://github.com/tttmaximiliano) ✒️
+## Desarrollado por [Carla González](https://github.com/xxaannax) ✒️
 

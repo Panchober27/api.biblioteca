@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import moment from 'moment';
 import { getRepository, Repository, getManager, getConnection } from 'typeorm';
-import { Ejemplar, Libros, PrestamoEjemplar, Trabajos, Revistas, LibroStock, RevistaStock, TrabajoStock, Prestamos } from '../entities';
+import { Ejemplar, Libros, PrestamoEjemplar, Trabajos, Revistas, LibroStock, RevistaStock, TrabajoStock, Prestamos, Alumnos } from '../entities';
 
 export class DemoController {
 
@@ -25,11 +25,11 @@ export class DemoController {
             }
             await runner.startTransaction();
 
-            
+
             // // Se cambian a atrasado los prestamos, pero los ejemplares asociados se debe
             // // hacer de manera independiente!
             prestamosAtrasados.forEach(async prestamo => {
-                updatedPrestamos ++;
+                updatedPrestamos++;
                 await runner.manager.update(Prestamos,
                     { prestamoId: prestamo.prestamoId },
                     { estado: 'ATRASADO' }
@@ -53,6 +53,67 @@ export class DemoController {
 
     };
 
+
+
+
+    // funcion para probar el crontab de que multa y desmulta a los alumnos.
+    multas = async (req: Request, res: Response) => {
+        const runner = getConnection().createQueryRunner();
+        await runner.connect();
+        let alumnosMultadosCount = 0;
+
+        try {
+            //Ponemos a "Dormir" el programa durante los ms que queremos
+            // setTimeout(() => {
+            //     console.log("Hola Mundo");
+            // }, 2000);
+
+            await runner.startTransaction();
+
+
+            const alumnosRepo = getRepository(Alumnos);
+
+            // realizar una consuta que busque a todos los alumnos con mas de 2 prestamos atrasados!
+            const alumnosMultados = await alumnosRepo.createQueryBuilder('a')
+                .leftJoinAndSelect('a.prestamos', 'p')
+                // seleccionar el prestamo donde el estado = ATRASADO o FINALIZADO_ATRASADO
+                .where('p.estado IN (:estado1, :estado2)', { estado1: 'ATRASADO', estado2: 'FINALIZADO_ATRASADO' })
+                .andWhere('p.fecha_fin < NOW()')
+                .andWhere('MONTH(p.fecha_fin) = MONTH(NOW())')
+                .getMany();
+
+            if (!alumnosMultados || alumnosMultados.length === 0) {
+                console.log('No hay alumnos multados');
+                return res.sendStatus(204);
+            }
+
+            // Se cambian a multado los alumnos, pero los prestamos asociados se debe
+            // hacer de manera independiente!
+            alumnosMultados.forEach(async alumno => {
+                alumnosMultadosCount++;
+                await runner.manager.update(Alumnos,
+                    { alumnoId: alumno.alumnoId },
+                    { alumnoActivo: false }
+                );
+            });
+
+            console.log(`Total de alumnos multados: ${alumnosMultadosCount}`);
+            await runner.commitTransaction();
+
+        } catch (err: any) {
+            await runner.rollbackTransaction();
+            console.log(err);
+            return res.send({ error: err.message });
+        } finally {
+            await runner.release();
+        }
+
+
+
+
+
+        return res.send('funcion para probar el crontab de que multa y desmulta a los alumnos.');
+    }
 
 
 

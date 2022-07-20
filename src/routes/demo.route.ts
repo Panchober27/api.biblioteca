@@ -9,7 +9,8 @@ const c = new DemoController();
 // router.get('/demo', c.insertLibros);
 // router.get('/demo', c.validateCounts);
 // router.get('/demo', c.checkDateFormat);
-router.get('/demo', c.demo);
+// router.get('/demo', c.demo);
+router.get('/demo', c.multas);
 
 // funcion para incertar libros con ejemplares.
 // router.post('/demo', c.insertLibros);

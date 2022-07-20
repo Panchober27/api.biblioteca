@@ -180,6 +180,12 @@ export class PrestamosController {
         await runner.connect();
         let ejemplares: any[] = [];
 
+
+
+
+        /**
+         * AGREGAR LOGICA PARA ELIMINAR DE SUS MULTAS  A LOS ALUMNOS!!!!
+         */
         try {
 
             const prestamoId = req.params.id;

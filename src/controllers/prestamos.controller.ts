@@ -474,7 +474,7 @@ export class PrestamosController {
             let cantidadOriginal = ejemplaresPrestamo.length;
             let cantidadRetornados = ejemplares.length;
 
-            if (cantidadOriginal === cantidadRetornados || cantidadOriginal < cantidadRetornados) {
+            if (cantidadOriginal === cantidadRetornados) {
                 const prestamo = await getRepository(Prestamos).findOne({
                     where: {
                         prestamoId: prestamoId,

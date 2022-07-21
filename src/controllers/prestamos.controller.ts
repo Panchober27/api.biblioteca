@@ -410,6 +410,12 @@ export class PrestamosController {
         return res.sendStatus(200);
     }
 
+
+    /**
+     * @function updatePrestamo
+     * @description Funcion que actualiza los ejemplares relacionados a un prestamo y en caso
+     * de ser necesario actualiza el estado del prestamo, utilizando validaciones por los posibles atrasos.
+     */
     updatePrestamo = async (req: Request, res: Response): Promise<Response> => {
 
         let ejemplares: any[] = [];
@@ -492,11 +498,6 @@ export class PrestamosController {
                     });
                 }
             }
-
-
-
-
-
 
         } catch (err: any) {
             console.error(err);

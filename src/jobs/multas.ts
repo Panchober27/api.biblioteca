@@ -5,6 +5,10 @@ import { Ejemplar, Libros, PrestamoEjemplar, Trabajos, Revistas, LibroStock, Rev
 export class Multas {
 
 
+    demoMultas = () => {
+        console.log('Demo Multas');
+    };
+
     multarAlumnos = async () => {
         const runner = getConnection().createQueryRunner();
         await runner.connect();

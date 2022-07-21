@@ -7,11 +7,16 @@ import { Usuarios, Prestamos, Ejemplar } from '../entities';
 import { NodeMailer } from './mailer';
 const cron = require('node-cron');
 
+import { Multas } from './multas';
+
 
 /**
  * @module CronTabs
  * @description CronTab para distintas tareas.
  */
+
+
+const multas = new Multas();
 
 
 const serverEnvironment: string =
@@ -36,49 +41,53 @@ const FlowTask = async () => {
   // const usersRepo = getRepository(Usuarios); // repo de usuarios para obtener su o sus correos.
   // let toAddresses = null; // direcciones de correo a enviar
   // console.log('SOY UN CRONTAB 💖');
-  let updatedPrestamos = 0;
-  const runner = getConnection().createQueryRunner();
-  await runner.connect();
+  // let updatedPrestamos = 0;
+  // const runner = getConnection().createQueryRunner();
+  // await runner.connect();
   try {
-    const prestmamosRepo = getRepository(Prestamos);
-    const prestamosAtrasados = await prestmamosRepo.createQueryBuilder('p')
-      .leftJoinAndSelect('p.prestamoEjemplars', 'pe')
-      .leftJoinAndSelect('pe.ejemplar', 'e')
-      .where('p.fecha_fin < NOW()')
-      .andWhere('p.estado = :estado', { estado: 'PRESTADO' })
-      .getMany();
-    if (!prestamosAtrasados || prestamosAtrasados.length === 0) {
-      console.log('No hay prestamos atrasados');
-    }
-    await runner.startTransaction();
+  //   const prestmamosRepo = getRepository(Prestamos);
+  //   const prestamosAtrasados = await prestmamosRepo.createQueryBuilder('p')
+  //     .leftJoinAndSelect('p.prestamoEjemplars', 'pe')
+  //     .leftJoinAndSelect('pe.ejemplar', 'e')
+  //     .where('p.fecha_fin < NOW()')
+  //     .andWhere('p.estado = :estado', { estado: 'PRESTADO' })
+  //     .getMany();
+  //   if (!prestamosAtrasados || prestamosAtrasados.length === 0) {
+  //     console.log('No hay prestamos atrasados');
+  //   }
+  //   await runner.startTransaction();
 
 
-    // // Se cambian a atrasado los prestamos, pero los ejemplares asociados se debe
-    // // hacer de manera independiente!
-    prestamosAtrasados.forEach(async prestamo => {
-      updatedPrestamos++;
-      await runner.manager.update(Prestamos,
-        { prestamoId: prestamo.prestamoId },
-        { estado: 'ATRASADO' }
-      );
-    });
+  //   // // Se cambian a atrasado los prestamos, pero los ejemplares asociados se debe
+  //   // // hacer de manera independiente!
+  //   prestamosAtrasados.forEach(async prestamo => {
+  //     updatedPrestamos++;
+  //     await runner.manager.update(Prestamos,
+  //       { prestamoId: prestamo.prestamoId },
+  //       { estado: 'ATRASADO' }
+  //     );
+  //   });
 
-    await runner.commitTransaction();
+  //   await runner.commitTransaction();
 
-    const info = {
-      message: 'Prestamos atrasados',
-      data: prestamosAtrasados,
-      updatedPrestamos
-    };
+  //   const info = {
+  //     message: 'Prestamos atrasados',
+  //     data: prestamosAtrasados,
+  //     updatedPrestamos
+  //   };
 
-    console.log(`CRONTAB EJECUTADO🐱‍👤✌`);
-    console.log(info);
+  //   console.log(`CRONTAB EJECUTADO🐱‍👤✌`);
+  //   console.log(info);
+
+  multas.demoMultas();
+
+
 
   } catch (err: any) {
-    await runner.rollbackTransaction();
+    // await runner.rollbackTransaction();
     console.log(err);
   } finally {
-    await runner.release();
+    // await runner.release();
   }
 
 };
